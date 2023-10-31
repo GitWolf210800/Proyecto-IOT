@@ -8,6 +8,9 @@ const neutral = '#8F8F8F';
 const alertFiltro  = '#DC5252';
 const okFiltro = '#24A024';
 
+const textOk = '#7DD129';
+const textNotOk = '#DF1111';
+
 const offline = '#DE7511';
 
 const mouseOver = '#58B7D3';
@@ -16,17 +19,83 @@ const mouseOut = '#333';
 
 const fab6ClimaPrep = document.getElementById('filtroPrepFab6');
 
+const fab1FiltroColor = document.getElementById('filtroColorFab1');
+
 const ventanaFlotante = document.getElementById('ventanaFlotante');
 
+const ventanaFlotanteFiltro = (direccion,boton,e,tipo) => {
+    const sector = new XMLHttpRequest();
+    let x = e.clientX + 0; // Agregar un desplazamiento a la derecha
+    let y = e.clientY;
+    boton.style.fill = mouseOver;
 
+    if (e.clientY > 45 && e.clientY < 100) y = y + 30;
 
-fab6ClimaPrep.addEventListener("mouseover", ()=>{
-    fab6ClimaPrep.style.fill = mouseOver;
-    let x = event.clientX + 10; // Agregar un desplazamiento a la derecha
-    let y = event.clientY + 8; // Agregar un desplazamiento hacia abajo
+    else if (e.clientY > 100 && e.clientY < 200) y = y + 30;
+
+   else if (e.clientY > 200 && e.clientY < 300) y = y + 10;
+
+   else if (e.clientY > 300 && e.clientY < 400) y = y + 20;
+
+   else if (e.clientY > 400 && e.clientY < 500) {
+    y = y - 40;
+    x = x + 20;
+    }
+
+   else if (e.clientY > 500 && e.clientY < 600) y = y - 250;
+
+   else if(e.clientY > 600 && e.clientY < 700) y = y - 250;
+
+    else y = y - 50;
+
     ventanaFlotante.style.left = x + "px";
     ventanaFlotante.style.top = y + "px";
     ventanaFlotante.style.display = "block";
+    sector.onreadystatechange = () => {
+        if (sector.readyState == XMLHttpRequest.DONE){
+            if(sector.status == 200) {
+                const date = JSON.parse(sector.responseText);
+                const dataTempReal = date.datos[0];
+                const infoFiltroVent = `${dataTempReal.filtroVentilador.toFixed(2)} Pa, Limite Sup:(${dataTempReal.limFiltroVentilador}Pa)`;
+                const infoVent = `${dataTempReal.presVentilador.toFixed(2)} Pa, Limite Inf:(${dataTempReal.limVentilador}Pa)`
+                const infoPicos = `${dataTempReal.presPicos.toFixed(2)} Pa, Limite Inf:(${dataTempReal.limPicos}Pa)`;
+                const infoRpm = `${dataTempReal.rpmFiltro}, Limite Inf:(${dataTempReal.limRpmFiltro}RPM)`;
+                const infoCarro = `${dataTempReal.Carro}, Limite Inf:(${dataTempReal.limCarro})`;
+                const inst = document.getElementById('instalacion');
+                const diferencial = document.getElementById('filtroVent');
+                const vent = document.getElementById('vent');
+                const pico = document.getElementById('pico');
+                const rpm = document.getElementById('rpm');
+                const carro = document.getElementById('carro');
+                inst.textContent = `${date.instalacion}`;
+                if(tipo === 1) {
+                    diferencial.textContent = infoFiltroVent;
+                    (dataTempReal.filtroVentilador > dataTempReal.limFiltroVentilador) ? diferencial.style.color = textNotOk : diferencial.style.color = textOk;
+                    vent.textContent = infoVent;
+                    (dataTempReal.presVentilador < dataTempReal.limVentilador) ? vent.style.color = textNotOk : vent.style.color = textOk;
+                    pico.textContent = infoPicos;
+                    (dataTempReal.presPicos < dataTempReal.limPicos) ? pico.style.color = textNotOk : pico.style.color = textOk;
+                    rpm.textContent = infoRpm;
+                    (dataTempReal.rpmFiltro < dataTempReal.limRpmFiltro) ? rpm.style.color = textNotOk : rpm.style.color = textOk;
+                    carro.textContent = infoCarro;
+                    (dataTempReal.carro < dataTempReal.limCarro) ? carro.style.color = textNotOk : carro.style.color = textOk;
+                }
+            } else console.log('error',sector);
+        }
+    }
+
+    sector.open("GET",direccion, true);
+    sector.send();
+}
+
+
+
+
+
+fab6ClimaPrep.addEventListener("mousemove", (e)=>{
+    const fab6prepFilV = ventanaFlotanteFiltro("http://192.168.3.122:1880/dataFab6prepFiltro12hs",fab6ClimaPrep,e,1);
+    console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);
 });
 
 
@@ -38,6 +107,8 @@ fab6ClimaPrep.addEventListener("mouseout", ()=>{
 fab6ClimaPrep.addEventListener("click", ()=>{
     window.location.href = 'filtroPrepFab6/index.html'; // Cambia esta URL a la que desees redirigir
 });
+
+
 
 const puestoClimaRef = (botonTemp,botonHum,textTemp,textHum,direccion) => {
     const sector = new XMLHttpRequest();
@@ -82,7 +153,7 @@ const puestoClima = (botonTemp,botonHum,textTemp,textHum,direccion) =>{
 
         if (sector.readyState == XMLHttpRequest.DONE){
             if(sector.status == 200) {
-                console.log(sector.responseText);
+                //console.log(sector.responseText);
                 const date = JSON.parse(sector.responseText);
                 const temp = parseInt(date.datos[0].tempFabrica);
                 const hum = parseInt(date.datos[0].humedad);
