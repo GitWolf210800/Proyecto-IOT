@@ -21,11 +21,11 @@ const sector = new XMLHttpRequest();
                 const data = JSON.parse(sector.responseText);
 
                 const instalacion = data.instalacion;
-                const ventilador = parseInt(data.datos[0].presVentilador);
+                const ventilador = parseInt(data.datos[0].ventilador);
                 const limitVentilador = data.datos[0].limVentilador;
                 const filtroVentilador = parseInt(data.datos[0].filtroVentilador);
                 const limitFiltroVentilador = data.datos[0].limFiltroVentilador;
-                const picos = parseInt(data.datos[0].presPicos);
+                const picos = parseInt(data.datos[0].picos);
                 const limitPicos = data.datos[0].limPicos;
                 const rpmFiltro = data.datos[0].rpmFiltro;
                 const limitRpmFiltro = data.datos[0].limRpmFiltro;
