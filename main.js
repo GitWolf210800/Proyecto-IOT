@@ -33,6 +33,38 @@ const mouseOver = "#58B7D3";
 
 const mouseOut = "#333";
 
+const fab1filtroCoton = document.getElementById("filtroCotoniaFab1");
+const fab1FiltroBatan = document.getElementById("filtroBatanFab1");
+const fab1FiltroCard = document.getElementById("filtroCardasFab1");
+const fab1FiltroPrep = document.getElementById("filtroPrepFab1");
+const fab1ClimaPeiT = document.getElementById("climaGpeinadorasTFab1");
+const fab1ClimaPeiH = document.getElementById("climaGpeinadorasHFab1");
+const fab1ClimaManT = document.getElementById("climaGmanuaresTFab1");
+const fab1ClimaManH = document.getElementById("climaGmanuaresHFab1");
+const fab1FiltroCont = document.getElementById("filtroContinuasFab1");
+const fab1ClimaCont1T = document.getElementById("climaGcontinuas-1TFab1");
+const fab1ClimaCont1H = document.getElementById("climaGcontinuas-1HFab1");
+const fab1ClimaCont2T = document.getElementById("climaGcontinuas-2TFab1");
+const fab1ClimaCont2H = document.getElementById("climaGcontinuas-2HFab1");
+const fab1ClimaVortex1T = document.getElementById("climaGvortex-1TFab1");
+const fab1ClimaVortex1H = document.getElementById("climaGvortex-1HFab1");
+const fab1ClimaVortex2T = document.getElementById("climaGvortex-2TFab1");
+const fab1ClimaVortex2H = document.getElementById("climaGvortex-2HFab1");
+const fab1ClimaVortex3T = document.getElementById("climaGvortex-3TFab1");
+const fab1ClimaVortex3H = document.getElementById("climaGvortex-3HFab1");
+const fab1ClimaVortex4T = document.getElementById("climaGvortexTFab1");
+const fab1ClimaVortex4H = document.getElementById("climaGvortexHFab1");
+
+
+const fab1ClimaBobT = document.getElementById("climaGbobinajeTFab1");
+const fab1ClimaBobH = document.getElementById("climaGbobinajeHFab1");
+const fab1ClimaEmpT = document.getElementById("climaGempaqueTFab1");
+const fab1ClimaEmpH = document.getElementById("climaGempaqueHFab1");
+const fab1FiltroColor = document.getElementById("filtroColorFab1");
+const fab1ClimaColorT = document.getElementById("climaGcolorTFab1");
+const fab1ClimaColorH = document.getElementById("climaGcolorHFab1");
+
+
 const fab3FiltroEx8 = document.getElementById("filtroEX-8Fab3");
 const fab3ClimaC80T = document.getElementById("climaGc80TFab3");
 const fab3ClimaC80H = document.getElementById("climaGc80HFab3");
@@ -41,7 +73,19 @@ const fab3ClimaPeiH = document.getElementById("climaGpeinadorasHFab3");
 const fab3ClimaManT = document.getElementById("climaGmanuaresTFab3");
 const fab3ClimaManH = document.getElementById("climaGmanuaresHFab3");
 const fab3FiltroPei = document.getElementById("filtroPrepFab3-5");
+const fab3FiltroPrep = document.getElementById("filtroPrepFab3");
+const fab3FiltroCardas = document.getElementById("filtroCardasFab3");
+const fab3FiltroCont = document.getElementById("filtroContFab3");
+const fab3FiltroBob = document.getElementById("filtroBobFab3");
+const fab3FiltroG33 = document.getElementById("filtroG33Fab3");
+const fab3ClimaG30T = document.getElementById("climaGg30TFab3");
+const fab3ClimaG30H = document.getElementById("climaGg30HFab3");
+const fab3ClimaBobT = document.getElementById("climaGbobTFab3");
+const fab3ClimaBobH = document.getElementById("climaGbobHFab3");
+const fab3ClimaG33T = document.getElementById("climaGg33TFab3");
+const fab3ClimaG33H = document.getElementById("climaGg33HFab3");
 
+const fab4FiltroBatan = document.getElementById("filtroBatanFab4");
 const fab4FiltroClima = document.getElementById("filtroClimaFab4");
 const fab4ClimaPrepT = document.getElementById("climaGprepTFab4");
 const fab4ClimaPrepH = document.getElementById("climaGprepHFab4");
@@ -65,14 +109,26 @@ const fab6FiltroBob = document.getElementById("filtroBobFab6");
 const fab6ClimaBobT = document.getElementById("climaGBobTFab6");
 const fab6ClimaBobH = document.getElementById("climaGBobHFab6");
 
+const fab9ClimaCarda1T = document.getElementById("climaGCardas-1TFab9");
+const fab9ClimaCarda1H = document.getElementById("climaGBobHFab6-6");
+const fab9ClimaCarda2T = document.getElementById("climaGCardas-2TFab9");
+const fab9ClimaCarda2H = document.getElementById("climaGCardas-2HFab9");
+const fab9FiltroPrep = document.getElementById("filtroPrepFab9");
+const fab9ClimaPrepT = document.getElementById("climaGPrepTFab9");
+const fab9ClimaPrepH = document.getElementById("climaGPrepHFab9");
+const fab9FiltroOE = document.getElementById("filtroOpenEndFab9");
+const fab9ClimaOET = document.getElementById("climaGPrepTFab9-3");
+const fab9ClimaOEH = document.getElementById("climaGPrepTFab9-3-2");
+const fab9ClimaEmpT = document.getElementById("climaGEmpTFab9");
+const fab9ClimaEmpH = document.getElementById("climaGEmpHFab9");
 
-const fab1FiltroColor = document.getElementById("filtroColorFab1");
+
 
 const climaExt = (direccion) => {
-  const tempExteriortext = document.getElementById("tspan4870");
-  const tempExt = document.getElementById("tspan4870");
-  const humExterior = document.getElementById("tspan4872");
-  const fecha = document.getElementById("tspan4876");
+  const tempExteriortext = document.getElementById("tempExt");
+  const tempExt = document.getElementById("tempExt");
+  const humExterior = document.getElementById("humExt");
+  const fecha = document.getElementById("fecha");
   const fechaActual = new Date();
   const fechaText = `${fechaActual.getDate()} / ${
     fechaActual.getMonth() + 1
@@ -122,11 +178,11 @@ const ventanaFlotanteFiltro = (direccion, boton, e, tipo) => {
   if (e.clientY >= 45 && e.clientY < 100) y = y + 30;
   else if (e.clientY >= 100 && e.clientY < 200) y = y + 30;
   else if (e.clientY >= 200 && e.clientY < 300) {
-    y = y + 10;
-    x = x - 205;
+    y = y - 200;
+    x = x + 25;
   } else if (e.clientY >= 300 && e.clientY < 400) {
-    y = y - 360;
-  
+    y = y - 330;
+    x = x + 20;
   }
   else if (e.clientY >= 400 && e.clientY < 500) {
     y = y - 360;
@@ -149,7 +205,6 @@ const ventanaFlotanteFiltro = (direccion, boton, e, tipo) => {
   ventanaFlotante.style.top = y + "px";
   ventanaFlotante.style.display = "block";
   sector.onreadystatechange = () => {
-    if (paso === 1) {
       if (sector.readyState == XMLHttpRequest.DONE) {
         if (sector.status == 200) {
           let date = JSON.parse(sector.responseText);
@@ -180,7 +235,8 @@ const ventanaFlotanteFiltro = (direccion, boton, e, tipo) => {
           let datoss = [];
           let limite = [];
           inst.textContent = `${date.instalacion}`;
-
+    //if (paso === 1) {
+          //paso = 0;
           if (this.chart) {
             this.chart.destroy();
           }
@@ -258,37 +314,97 @@ const ventanaFlotanteFiltro = (direccion, boton, e, tipo) => {
               },
             },
           });
+          //}
 
           //console.log(datoss);
           //console.log(tiempo);
+        //if (tipo === 1) {
+          diferencial.textContent = infoFiltroVent;
+          dataTempReal.filtroVentilador > dataTempReal.limFiltroVentilador
+            ? (diferencial.style.color = textNotOk)
+            : (diferencial.style.color = textOk);
+          vent.textContent = infoVent;
+          dataTempReal.ventilador < dataTempReal.limVentilador
+            ? (vent.style.color = textNotOk)
+            : (vent.style.color = textOk);
+          pico.textContent = infoPicos;
+          dataTempReal.picos < dataTempReal.limPicos
+            ? (pico.style.color = textNotOk)
+            : (pico.style.color = textOk);
+          rpm.textContent = infoRpm;
+          dataTempReal.rpmFiltro < dataTempReal.limRpmFiltro
+            ? (rpm.style.color = textNotOk)
+            : (rpm.style.color = textOk);
+          carro.textContent = infoCarro;
+          dataTempReal.carro < dataTempReal.limCarro
+            ? (carro.style.color = textNotOk)
+            : (carro.style.color = textOk);
+        //}
+           /*if (tipo === 2) {
+            if (e.clientY >= 45 && e.clientY < 100) y = y + 30;
+            else if (e.clientY >= 100 && e.clientY < 200) y = y + 30;
+            else if (e.clientY >= 200 && e.clientY < 300) {
+              y = y + 10;
+              x = x - 205;
+            } else if (e.clientY >= 300 && e.clientY < 400) {
+              y = y - 360;
+            
+            }
+            else if (e.clientY >= 400 && e.clientY < 500) {
+              y = y - 950;
+              x = x - 280;
+            } else if (e.clientY >= 500 && e.clientY < 600) {
+              y = y - 360;
+              x = x - 205;
+            } else if (e.clientY >= 600 && e.clientY < 700) {
+              y = y - 400;
+              x = x - 35;
+            } else y = y - 50;
+            console.log('entro');
 
-          if (tipo === 1) {
-            diferencial.textContent = infoFiltroVent;
-            dataTempReal.filtroVentilador > dataTempReal.limFiltroVentilador
-              ? (diferencial.style.color = textNotOk)
-              : (diferencial.style.color = textOk);
-            vent.textContent = infoVent;
-            dataTempReal.ventilador < dataTempReal.limVentilador
-              ? (vent.style.color = textNotOk)
-              : (vent.style.color = textOk);
-            pico.textContent = infoPicos;
-            dataTempReal.picos < dataTempReal.limPicos
-              ? (pico.style.color = textNotOk)
-              : (pico.style.color = textOk);
-            rpm.textContent = infoRpm;
-            dataTempReal.rpmFiltro < dataTempReal.limRpmFiltro
-              ? (rpm.style.color = textNotOk)
-              : (rpm.style.color = textOk);
-            carro.textContent = infoCarro;
-            dataTempReal.carro < dataTempReal.limCarro
-              ? (carro.style.color = textNotOk)
-              : (carro.style.color = textOk);
-          }
+            const infoTpicos2 = `Picos-2: (Limite Inf: ${dataTempReal.limPicos} Pa)`;
+            const infoPicos2 = `${dataTempReal.picos2.toFixed(2)} Pa`;
+            const infoTCarro2 = `Carro-2: (Limite Inf: ${dataTempReal.limCarro})`;
+            const infoCarro2 = `${dataTempReal.carro}`;
+            const infoTRpm2 = `RPM-2: (Limite Inf: ${dataTempReal.limRpmFiltro} RPM)`;
+            const rpm2Title = document.getElementById('RPM2H');
+            const rpm2 = document.getElementById('rpm2');
+            const carro2 = document.getElementById('carro2H');
+            const carro2Title = document.getElementById('carro2H');
+            const picos2 = document.getElementById('pico2');            
+            const picos2Title = document.getElementById('titlePicos2');
+
+            rpm2Title.style.display = "block";
+            rpm2.style.display = "block";
+            carro2Title.style.display = "block";
+            carro2.style.display = "block";
+            picos2Title.style.display = "block";
+            picos2.style.display = "block";
+
+            rpm2Title.textContent = infoTRpm2;
+
+            carro2Title.textContent = infoTCarro2;
+
+            picos2Title.textContent = infoTpicos2;
+
+            picos2.textContent = infoPicos2;
+            dataTempReal.picos2 < dataTempReal.limPicos
+              ? (picos2.style.color = textNotOk)
+              : (picos2.style.color = textOk);
+            rpm2.textContent = infoRpm;
+            dataTempReal.rpmFiltro2 < dataTempReal.limRpmFiltro
+              ? (rpm2.style.color = textNotOk)
+              : (rpm2.style.color = textOk);
+            carro2.textContent = infoCarro2;
+            dataTempReal.carro2 < dataTempReal.limCarro
+              ? (carro2.style.color = textNotOk)
+              : (carro2.style.color = textOk);
+
+
+          }*/
         } else console.log("error", sector);
 
-        paso = 0;
       }
-    }
   };
 
   sector.open("GET", direccion, true);
@@ -305,28 +421,40 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
   boton.style.fill = mouseOver;
 
   if (e.clientY >= 45 && e.clientY < 100) y = y + 30;
+
+  else if (e.clientY >= 300 && e.clientY < 400 && e.clientX >= 200 && e.clientX < 400) {
+    y = y - 310;
+    x = x - 200;
+  }
+
+  else if (e.clientY >= 300 && e.clientY < 400 && e.clientX >= 1100) {
+    y = y - 330;
+    x = x - 300;
+  }
+
   else if (e.clientY >= 400 && e.clientY < 500 && e.clientX >= 1100) {
-    y = y - 240;
+    y = y - 320;
     x = x - 250;
   } else if (e.clientY >= 500 && e.clientY < 600 && e.clientX >= 1100) {
     y = y - 340;
     x = x - 400;
   } else if (e.clientY >= 100 && e.clientY < 200) y = y + 30;
-  else if (e.clientY >= 200 && e.clientY < 300) y = y + 10;
+  else if (e.clientY >= 200 && e.clientY < 300) y = y + 5;
   else if (e.clientY >= 300 && e.clientY < 400) {
-    y = y - 325;
-    x = x - 305;
+    y = y - 310;
+    x = x - 280;
   }
   else if (e.clientY >= 400 && e.clientY < 500) {
     y = y - 325;
-    x = x - 290;
+    x = x - 250;
   } else if (e.clientY >= 500 && e.clientY < 600) {
     y = y - 340;
     x = x - 305;
   } else if (e.clientY >= 600 && e.clientY < 800) {
     y = y - 340;
     x = x - 305;
-  } else y = y - 50;
+  }
+  else y = y - 50;
 
   /*else if((e.clientY > 400) && (e.clientX > 1100)) {
     y = y - 360;
@@ -339,9 +467,7 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
   ventanaFlotanteclima.style.display = "block";
 
   sector.onreadystatechange = () => {
-    if (pasoCl === 1) {
       if (sector.readyState == XMLHttpRequest.DONE) {
-        pasoCl = 0;
         if (sector.status === 200) {
           const date = JSON.parse(sector.responseText);
           const dataTempRealcl = date.datos[0];
@@ -358,6 +484,8 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
           let colorG;
           let limiteColor;
 
+      if (pasoCl === 1) {
+            pasoCl = 0;
           if (this.chartCl) {
             this.chartCl.destroy();
           }
@@ -388,7 +516,7 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
 
           if (date.variable === "temperatura") {
             limiteSupT = `Limite Superior: ${dataTempRealcl.maxTemp}°C`;
-            limiteSupG = dataTempRealcl.maxtemp;
+            limiteSupG = dataTempRealcl.maxTemp;
             limtieInfT = `Limite Inferior: ${dataTempRealcl.minTemp}°C`;
             limiteInfG = dataTempRealcl.minTemp;
             colorG = "#FA7D07";
@@ -467,29 +595,28 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
               },
             },
           });
+           }
         } else console.log("error", sector);
       }
-    }
+
   };
 
   sector.open("GET", direccion, true);
   sector.send();
 };
 
-
-
 const mouseOutf = (e, boton) => {
   boton.style.fill = mouseOut;
   ventanaFlotante.style.display = "none";
   paso = 1;
-  this.chart.destroy();
+  if (chart) this.chart.destroy();
 };
 
 const mouseOutfCl = (e, boton) => {
   boton.style.fill = "#333";
   ventanaFlotanteclima.style.display = "none";
   pasoCl = 1;
-  this.chartCl.destroy();
+  if(chart) this.chartCl.destroy();
 };
 
 
@@ -624,10 +751,17 @@ const actualizarDatos = () => {
     "humPrepFab4",
     `${server}/dataFab4prepClima`
   );
+
+  const fab4BatanFiltro = botonF(
+    "filtroBatanFab4",
+    `${server}/dataFab4batanFiltro`
+  );
+
   const fab4ClimaFiltro = botonF(
     "filtroClimaFab4",
     `${server}/dataFab4climaFiltro`
   );
+
   const fab4OpenEndClima = puestoClima(
     "climaOpen-EndTFab4",
     "climaOpen-EndHFab4",
@@ -867,7 +1001,7 @@ const actualizarDatos = () => {
 
 ///////// Fabrica 6
 
-fab6FiltroPrep.addEventListener("mousemove", (e) => {
+fab6FiltroPrep.addEventListener("mouseover", (e) => {
   const fab6prepFilV = ventanaFlotanteFiltro(
     `${server}/dataFab6prepFiltro24hs`,
     fab6FiltroPrep,
@@ -910,9 +1044,7 @@ fab6ClimaPrepH.addEventListener("mouseout", (e) => {
   const fab6prepHClimaVo = mouseOutfCl(e, fab6ClimaPrepH);
 });
 
-
-
-fab6FiltroCont.addEventListener("mousemove", (e)=> {
+fab6FiltroCont.addEventListener("mouseover", (e)=> {
   const fab6ContFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab6contFiltro24hs`,
     fab6FiltroCont,
@@ -955,7 +1087,7 @@ fab6ClimaContH.addEventListener("mouseout", (e) => {
 
 
 
-fab6FiltroBob.addEventListener("mousemove", (e)=> {
+fab6FiltroBob.addEventListener("mouseover", (e)=> {
   const fab6BobFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab6bobFiltro24hs`,
     fab6FiltroBob,
@@ -998,13 +1130,32 @@ fab6ClimaBobH.addEventListener("mouseout", (e) => {
 
 //////Fabrica 4
 
-fab4FiltroClima.addEventListener("mousemove", (e)=> {
+fab4FiltroBatan.addEventListener("mouseover", (e)=> {
+  const fab4batanFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab4batanFiltro24hs`,
+    fab4FiltroBatan,
+    e,
+    2
+  );
+
+  /* console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab4FiltroBatan.addEventListener("mouseout", (e) => {
+  const fab4batanFilVo = mouseOutf(e, fab4FiltroBatan);
+});
+
+fab4FiltroClima.addEventListener("mouseover", (e)=> {
   const fab4climaFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab4climaFiltro24hs`,
     fab4FiltroClima,
     e,
-    1
+    2
   );
+
+   /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
 });
 
 fab4FiltroClima.addEventListener("mouseout", (e) => {
@@ -1067,7 +1218,7 @@ fab4ClimaOpenEndH.addEventListener("mouseout", (e) => {
   const fab4prepTClimaVo = mouseOutfCl(e, fab4ClimaOpenEndH);
 });
 
-fab4FiltroRetor.addEventListener("mousemove", (e)=> {
+fab4FiltroRetor.addEventListener("mouseover", (e)=> {
   const fab4retorFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab4retorFiltro24hs`,
     fab4FiltroRetor,
@@ -1108,7 +1259,11 @@ fab4ClimaRetorH.addEventListener("mouseout", (e) => {
   const fab4retorcidoTClimaVo = mouseOutfCl(e, fab4ClimaRetorH);
 });
 
-fab3FiltroEx8.addEventListener("mousemove", (e)=> {
+
+//fabrica 3/////////////////////
+
+
+fab3FiltroEx8.addEventListener("mouseover", (e)=> {
   const fab3ex8FiltV = ventanaFlotanteFiltro(
     `${server}/dataFab3ex8Filtro24hs`,
     fab3FiltroEx8,
@@ -1207,6 +1362,749 @@ fab3ClimaManH.addEventListener("mouseout", (e) => {
 });
 
 
+fab3FiltroPei.addEventListener("mouseover", (e)=> {
+  const fab3ex8FiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab3peiFiltro24hs`,
+    fab3FiltroPei,
+    e,
+    1
+  );
+  /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3FiltroPei.addEventListener("mouseout", (e) => {
+  const fab3ex8FilVo = mouseOutf(e, fab3FiltroPei);
+});
+
+fab3FiltroPrep.addEventListener("mouseover", (e)=> {
+  const fab3prepFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab3prepFiltro24hs`,
+    fab3FiltroPrep,
+    e,
+    1
+  );
+});
+
+fab3FiltroPrep.addEventListener("mouseout", (e) => {
+  const fab3prepFilVo = mouseOutf(e, fab3FiltroPrep);
+});
+
+fab3FiltroCardas.addEventListener("mouseover", (e)=> {
+  const fab3prepFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab3cardaFiltro24hs`,
+    fab3FiltroCardas,
+    e,
+    1
+  );
+});
+
+fab3FiltroCardas.addEventListener("mouseout", (e) => {
+  const fab3prepFilVo = mouseOutf(e, fab3FiltroCardas);
+});
+
+fab3FiltroCont.addEventListener("mouseover", (e)=> {
+  const fab3contFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab3contFiltro24hs`,
+    fab3FiltroCont,
+    e,
+    1
+  );
+   /* console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3FiltroCont.addEventListener("mouseout", (e) => {
+  const fab3contFilVo = mouseOutf(e, fab3FiltroCont);
+});
+
+fab3ClimaG30T.addEventListener("mouseover", (e) => {
+  const fab3g30TClimaV = ventanaFlotanteClima(
+    `${server}/dataFab3g30ClimaT24hs`,
+    fab3ClimaG30T,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3ClimaG30T.addEventListener("mouseout", (e) => {
+  const fab3g30TClimaVo = mouseOutfCl(e, fab3ClimaG30T);
+});
+
+fab3ClimaG30H.addEventListener("mouseover", (e) => {
+  const fab3g30HClimaV = ventanaFlotanteClima(
+    `${server}/dataFab3g30ClimaH24hs`,
+    fab3ClimaG30H,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3ClimaG30H.addEventListener("mouseout", (e) => {
+  const fab3g30HClimaVo = mouseOutfCl(e, fab3ClimaG30H);
+});
+
+fab3FiltroBob.addEventListener("mouseover", (e)=> {
+  const fab3bobFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab3bobFiltro24hs`,
+    fab3FiltroBob,
+    e,
+    1
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3FiltroBob.addEventListener("mouseout", (e) => {
+  const fab3contFilVo = mouseOutf(e, fab3FiltroBob);
+});
+
+fab3ClimaBobT.addEventListener("mouseover", (e) => {
+  const fab3bobTClimaV = ventanaFlotanteClima(
+    `${server}/dataFab3bobClimaT24hs`,
+    fab3ClimaBobT,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3ClimaBobT.addEventListener("mouseout", (e) => {
+  const fab3bobTClimaVo = mouseOutfCl(e, fab3ClimaBobT);
+});
+
+fab3ClimaBobH.addEventListener("mouseover", (e) => {
+  const fab3bobHClimaV = ventanaFlotanteClima(
+    `${server}/dataFab3bobClimaH24hs`,
+    fab3ClimaBobH,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3ClimaBobH.addEventListener("mouseout", (e) => {
+  const fab3bobHClimaVo = mouseOutfCl(e, fab3ClimaBobH);
+});
+
+
+fab3FiltroG33.addEventListener("mouseover", (e)=> {
+  const fab3g33FiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab3g33Filtro24hs`,
+    fab3FiltroG33,
+    e,
+    1
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3FiltroG33.addEventListener("mouseout", (e) => {
+  const fab3g33FilVo = mouseOutf(e, fab3FiltroG33);
+});
+
+fab3ClimaG33T.addEventListener("mouseover", (e) => {
+  const fab3g33TClimaV = ventanaFlotanteClima(
+    `${server}/dataFab3g33ClimaT24hs`,
+    fab3ClimaG33T,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3ClimaG33T.addEventListener("mouseout", (e) => {
+  const fab3g33TClimaVo = mouseOutfCl(e, fab3ClimaG33T);
+});
+
+fab3ClimaG33H.addEventListener("mouseover", (e) => {
+  const fab3g33HClimaV = ventanaFlotanteClima(
+    `${server}/dataFab3g33ClimaH24hs`,
+    fab3ClimaG33H,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3ClimaG33H.addEventListener("mouseout", (e) => {
+  const fab3g33HClimaVo = mouseOutfCl(e, fab3ClimaG33H);
+});
+
+//fabrica 9 //////////////
+
+fab9FiltroPrep.addEventListener("mouseover", (e)=> {
+  const fab9prepFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab9prepFiltro24hs`,
+    fab9FiltroPrep,
+    e,
+    1
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab9FiltroPrep.addEventListener("mouseout", (e) => {
+  const fab9prepFilVo = mouseOutf(e, fab9FiltroPrep);
+});
+
+fab9ClimaPrepT.addEventListener("mouseover", (e) => {
+  const fab9prepTClimaV = ventanaFlotanteClima(
+    `${server}/dataFab9prepClimaT24hs`,
+    fab9ClimaPrepT,
+    e
+  );
+    console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);
+});
+
+fab9ClimaPrepT.addEventListener("mouseout", (e) => {
+  const fab9prepTClimaVo = mouseOutfCl(e, fab9ClimaPrepT);
+});
+
+fab9ClimaPrepH.addEventListener("mouseover", (e) => {
+  const fab9prepHClimaV = ventanaFlotanteClima(
+    `${server}/dataFab9prepClimaH24hs`,
+    fab9ClimaPrepH,
+    e
+  );
+    console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);
+});
+
+fab9ClimaPrepH.addEventListener("mouseout", (e) => {
+  const fab9prepHClimaVo = mouseOutfCl(e, fab9ClimaPrepH);
+});
+
+fab9ClimaCarda1T.addEventListener("mouseover", (e) => {
+  const fab9carda1TClimaV = ventanaFlotanteClima(
+    `${server}/dataFab9cardas1ClimaT24hs`,
+    fab9ClimaCarda1T,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab9ClimaCarda1T.addEventListener("mouseout", (e) => {
+  const fab9carda1TClimaVo = mouseOutfCl(e, fab9ClimaCarda1T);
+});
+
+fab9ClimaCarda1H.addEventListener("mouseover", (e) => {
+  const fab9carda1HClimaV = ventanaFlotanteClima(
+    `${server}/dataFab9cardas1ClimaH24hs`,
+    fab9ClimaCarda1H,
+    e
+  );
+   /* console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab9ClimaCarda1H.addEventListener("mouseout", (e) => {
+  const fab9carda1HClimaVo = mouseOutfCl(e, fab9ClimaCarda1H);
+});
+
+fab9ClimaCarda2T.addEventListener("mouseover", (e) => {
+  const fab9carda2TClimaV = ventanaFlotanteClima(
+    `${server}/dataFab9cardas2ClimaT24hs`,
+    fab9ClimaCarda2T,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab9ClimaCarda2T.addEventListener("mouseout", (e) => {
+  const fab9carda2TClimaVo = mouseOutfCl(e, fab9ClimaCarda1T);
+});
+
+fab9ClimaCarda2H.addEventListener("mouseover", (e) => {
+  const fab9carda2HClimaV = ventanaFlotanteClima(
+    `${server}/dataFab9cardas2ClimaH24hs`,
+    fab9ClimaCarda2H,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab9ClimaCarda2H.addEventListener("mouseout", (e) => {
+  const fab9carda2TClimaVo = mouseOutfCl(e, fab9ClimaCarda2H);
+});
+
+fab9FiltroOE.addEventListener("mouseover", (e)=> {
+  const fab9oeFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab9oeFiltro24hs`,
+    fab9FiltroOE,
+    e,
+    1
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab9FiltroOE.addEventListener("mouseout", (e) => {
+  const fab9oeFilVo = mouseOutf(e, fab9FiltroOE);
+});
+
+fab9ClimaOET.addEventListener("mouseover", (e) => {
+  const fab9oeTClimaV = ventanaFlotanteClima(
+    `${server}/dataFab9oeClimaT24hs`,
+    fab9ClimaOET,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab9ClimaOET.addEventListener("mouseout", (e) => {
+  const fab9oeTClimaVo = mouseOutfCl(e, fab9ClimaOET);
+});
+
+fab9ClimaOEH.addEventListener("mouseover", (e) => {
+  const fab9oeHClimaV = ventanaFlotanteClima(
+    `${server}/dataFab9oeClimaH24hs`,
+    fab9ClimaOEH,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab9ClimaOEH.addEventListener("mouseout", (e) => {
+  const fab9oeHClimaVo = mouseOutfCl(e, fab9ClimaOEH);
+});
+
+fab9ClimaEmpT.addEventListener("mouseover", (e) => {
+  const fab9empTClimaV = ventanaFlotanteClima(
+    `${server}/dataFab9empClimaT24hs`,
+    fab9ClimaEmpT,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab9ClimaEmpT.addEventListener("mouseout", (e) => {
+  const fab9empTClimaVo = mouseOutfCl(e, fab9ClimaEmpT);
+});
+
+fab9ClimaEmpH.addEventListener("mouseover", (e) => {
+  const fab9empHClimaV = ventanaFlotanteClima(
+    `${server}/dataFab9empClimaH24hs`,
+    fab9ClimaEmpH,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab9ClimaEmpH.addEventListener("mouseout", (e) => {
+  const fab9empHClimaVo = mouseOutfCl(e, fab9ClimaEmpH);
+});
+
+/// fabrica 1/////////////
+
+fab1FiltroCard.addEventListener("mouseover", (e)=> {
+  const fab1cardasFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab1cardasFiltro24hs`,
+    fab1FiltroCard,
+    e,
+    1
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1FiltroCard.addEventListener("mouseout", (e) => {
+  const fab1cardasFilVo = mouseOutf(e, fab1FiltroCard);
+});
+
+fab1FiltroPrep.addEventListener("mouseover", (e)=> {
+  const fab1prepFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab1prepFiltro24hs`,
+    fab1FiltroPrep,
+    e,
+    1
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1FiltroPrep.addEventListener("mouseout", (e) => {
+  const fab1prepFilVo = mouseOutf(e, fab1FiltroPrep);
+});
+
+fab1ClimaPeiT.addEventListener("mouseover", (e) => {
+  const fab1peiTClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1peiClimaT24hs`,
+    fab1ClimaPeiT,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaPeiT.addEventListener("mouseout", (e) => {
+  const fab1peiTClimaVo = mouseOutfCl(e, fab1ClimaPeiT);
+});
+
+fab1ClimaPeiH.addEventListener("mouseover", (e) => {
+  const fab1peiHClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1peiClimaH24hs`,
+    fab1ClimaPeiH,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaPeiH.addEventListener("mouseout", (e) => {
+  const fab1peiHClimaVo = mouseOutfCl(e, fab1ClimaPeiH);
+});
+
+fab1ClimaManT.addEventListener("mouseover", (e) => {
+  const fab1manTClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1manClimaT24hs`,
+    fab1ClimaManT,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaManT.addEventListener("mouseout", (e) => {
+  const fab1manTClimaVo = mouseOutfCl(e, fab1ClimaManT);
+});
+
+fab1ClimaManH.addEventListener("mouseover", (e) => {
+  const fab1manHClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1manClimaH24hs`,
+    fab1ClimaManH,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaManH.addEventListener("mouseout", (e) => {
+  const fab1manHClimaVo = mouseOutfCl(e, fab1ClimaManH);
+});
+
+fab1FiltroCont.addEventListener("mouseover", (e)=> {
+  const fab1contFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab1contFiltro24hs`,
+    fab1FiltroCont,
+    e,
+    1
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1FiltroCont.addEventListener("mouseout", (e) => {
+  const fab1contFilVo = mouseOutf(e, fab1FiltroCont);
+});
+
+fab1ClimaCont1T.addEventListener("mouseover", (e) => {
+  const fab1cont1TClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1cont1ClimaT24hs`,
+    fab1ClimaCont1T,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaCont1T.addEventListener("mouseout", (e) => {
+  const fab1cont1TClimaVo = mouseOutfCl(e, fab1ClimaCont1T);
+});
+
+fab1ClimaCont1H.addEventListener("mouseover", (e) => {
+  const fab1cont1HClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1cont1ClimaH24hs`,
+    fab1ClimaCont1H,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaCont1H.addEventListener("mouseout", (e) => {
+  const fab1cont1HClimaVo = mouseOutfCl(e, fab1ClimaCont1H);
+});
+
+fab1ClimaCont2T.addEventListener("mouseover", (e) => {
+  const fab1cont2TClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1cont2ClimaT24hs`,
+    fab1ClimaCont2T,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaCont2T.addEventListener("mouseout", (e) => {
+  const fab1cont2TClimaVo = mouseOutfCl(e, fab1ClimaCont2T);
+});
+
+fab1ClimaVortex1T.addEventListener("mouseover", (e) => {
+  const fab1vortex1TClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1vortex1ClimaT24hs`,
+    fab1ClimaVortex1T,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaVortex1T.addEventListener("mouseout", (e) => {
+  const fab1vortex1TClimaVo = mouseOutfCl(e, fab1ClimaVortex1T);
+});
+
+fab1ClimaVortex1H.addEventListener("mouseover", (e) => {
+  const fab1vortex1HClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1vortex1ClimaH24hs`,
+    fab1ClimaVortex1H,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaVortex1H.addEventListener("mouseout", (e) => {
+  const fab1vortex1HClimaVo = mouseOutfCl(e, fab1ClimaVortex1H);
+});
+
+fab1ClimaVortex2T.addEventListener("mouseover", (e) => {
+  const fab1vortex2TClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1vortex2ClimaT24hs`,
+    fab1ClimaVortex2T,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaVortex2T.addEventListener("mouseout", (e) => {
+  const fab1vortex2TClimaVo = mouseOutfCl(e, fab1ClimaVortex2T);
+});
+
+fab1ClimaVortex2H.addEventListener("mouseover", (e) => {
+  const fab1vortex2HClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1vortex2ClimaH24hs`,
+    fab1ClimaVortex2H,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaVortex2H.addEventListener("mouseout", (e) => {
+  const fab1vortex2HClimaVo = mouseOutfCl(e, fab1ClimaVortex2H);
+});
+
+fab1ClimaVortex3T.addEventListener("mouseover", (e) => {
+  const fab1vortex3TClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1vortex3ClimaT24hs`,
+    fab1ClimaVortex3T,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaVortex3T.addEventListener("mouseout", (e) => {
+  const fab1vortex3TClimaVo = mouseOutfCl(e, fab1ClimaVortex3T);
+});
+
+fab1ClimaVortex3H.addEventListener("mouseover", (e) => {
+  const fab1vortex3TClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1vortex3ClimaH24hs`,
+    fab1ClimaVortex3H,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaVortex3H.addEventListener("mouseout", (e) => {
+  const fab1vortex3TClimaVo = mouseOutfCl(e, fab1ClimaVortex3H);
+});
+
+fab1ClimaVortex4T.addEventListener("mouseover", (e) => {
+  const fab1vortex3TClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1vortex4ClimaT24hs`,
+    fab1ClimaVortex4T,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaVortex4T.addEventListener("mouseout", (e) => {
+  const fab1vortex3TClimaVo = mouseOutfCl(e, fab1ClimaVortex4T);
+});
+
+fab1ClimaVortex4H.addEventListener("mouseover", (e) => {
+  const fab1vortex4TClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1vortex4ClimaH24hs`,
+    fab1ClimaVortex4H,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaVortex4H.addEventListener("mouseout", (e) => {
+  const fab1vortex4TClimaVo = mouseOutfCl(e, fab1ClimaVortex4H);
+});
+
+
+fab1ClimaCont2H.addEventListener("mouseover", (e) => {
+  const fab1cont2HClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1cont2ClimaH24hs`,
+    fab1ClimaCont2H,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaCont2H.addEventListener("mouseout", (e) => {
+  const fab1cont2HClimaVo = mouseOutfCl(e, fab1ClimaCont2H);
+});
+
+fab1FiltroColor.addEventListener("mouseover", (e)=> {
+  const fab1colorFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab1colorFiltro24hs`,
+    fab1FiltroColor,
+    e,
+    1
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1FiltroColor.addEventListener("mouseout", (e) => {
+  const fab1colorFilVo = mouseOutf(e, fab1FiltroColor);
+});
+
+fab1ClimaColorT.addEventListener("mouseover", (e) => {
+  const fab1colorTClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1colorClimaT24hs`,
+    fab1ClimaColorT,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaColorT.addEventListener("mouseout", (e) => {
+  const fab1colorTClimaVo = mouseOutfCl(e, fab1ClimaColorT);
+});
+
+fab1ClimaColorH.addEventListener("mouseover", (e) => {
+  const fab1colorHClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1colorClimaH24hs`,
+    fab1ClimaColorH,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaColorH.addEventListener("mouseout", (e) => {
+  const fab1colorHClimaVo = mouseOutfCl(e, fab1ClimaColorH);
+});
+
+fab1ClimaBobT.addEventListener("mouseover", (e) => {
+  const fab1bobTClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1bobClimaT24hs`,
+    fab1ClimaBobT,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaBobT.addEventListener("mouseout", (e) => {
+  const fab1bobTClimaVo = mouseOutfCl(e, fab1ClimaBobT);
+});
+
+fab1ClimaBobH.addEventListener("mouseover", (e) => {
+  const fab1bobHClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1bobClimaH24hs`,
+    fab1ClimaBobH,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaBobH.addEventListener("mouseout", (e) => {
+  const fab1bobHClimaVo = mouseOutfCl(e, fab1ClimaBobH);
+});
+
+fab1ClimaEmpT.addEventListener("mouseover", (e) => {
+  const fab1empTClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1empClimaT24hs`,
+    fab1ClimaEmpT,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaEmpT.addEventListener("mouseout", (e) => {
+  const fab1empTClimaVo = mouseOutfCl(e, fab1ClimaEmpT);
+});
+
+fab1ClimaEmpH.addEventListener("mouseover", (e) => {
+  const fab1empHClimaV = ventanaFlotanteClima(
+    `${server}/dataFab1empClimaH24hs`,
+    fab1ClimaEmpH,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaEmpH.addEventListener("mouseout", (e) => {
+  const fab1empHClimaVo = mouseOutfCl(e, fab1ClimaEmpH);
+});
+
+fab1FiltroBatan.addEventListener("mouseover", (e)=> {
+  const fab1batanFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab1batanFiltro24hs`,
+    fab1FiltroBatan,
+    e,
+    1
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1FiltroBatan.addEventListener("mouseout", (e) => {
+  const fab1batanFilVo = mouseOutf(e, fab1FiltroBatan);
+});
+
+fab1filtroCoton.addEventListener("mouseover", (e)=> {
+  const fab1cotonFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab1cotonFiltro24hs`,
+    fab1filtroCoton,
+    e,
+    1
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1filtroCoton.addEventListener("mouseout", (e) => {
+  const fab1cotonFilVo = mouseOutf(e, fab1filtroCoton);
+});
 
 
 
