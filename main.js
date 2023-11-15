@@ -33,6 +33,7 @@ const mouseOver = "#58B7D3";
 
 const mouseOut = "#333";
 
+const fab1FiltroPrensa = document.getElementById("filtroPrensaFab1");
 const fab1filtroCoton = document.getElementById("filtroCotoniaFab1");
 const fab1FiltroBatan = document.getElementById("filtroBatanFab1");
 const fab1FiltroCard = document.getElementById("filtroCardasFab1");
@@ -230,7 +231,7 @@ const ventanaFlotanteFiltro = (direccion, boton, e, tipo) => {
           const pico = document.getElementById("pico");
           const titleRpm = (document.getElementById("titleRpm").textContent = infoTRpm);
           const rpm = document.getElementById("rpm");
-          const titleCarrp = (document.getElementById("titleCarro").textContent = infoTCarro);
+          const titleCarro = (document.getElementById("titleCarro").textContent = infoTCarro);
           const carro = document.getElementById("carro");
           let datoss = [];
           let limite = [];
@@ -339,6 +340,14 @@ const ventanaFlotanteFiltro = (direccion, boton, e, tipo) => {
           dataTempReal.carro < dataTempReal.limCarro
             ? (carro.style.color = textNotOk)
             : (carro.style.color = textOk);
+
+            (dataTempReal.carro === undefined) 
+            ? (carro.style.display = "none", document.getElementById("titleCarro").style.display = "none") 
+            : (carro.style.display = "block", document.getElementById("titleCarro").style.display = "block");
+
+            (dataTempReal.rpmFiltro === undefined)
+            ? (rpm.style.display = "none", document.getElementById("titleRpm").style.display = "none")
+            : (rpm.style.display = "block", document.getElementById("titleRpm").style.display = "block");
         //}
            /*if (tipo === 2) {
             if (e.clientY >= 45 && e.clientY < 100) y = y + 30;
@@ -426,20 +435,22 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
     y = y - 310;
     x = x - 200;
   }
-
   else if (e.clientY >= 300 && e.clientY < 400 && e.clientX >= 1100) {
     y = y - 330;
     x = x - 300;
   }
-
   else if (e.clientY >= 400 && e.clientY < 500 && e.clientX >= 1100) {
     y = y - 320;
     x = x - 250;
   } else if (e.clientY >= 500 && e.clientY < 600 && e.clientX >= 1100) {
     y = y - 340;
     x = x - 400;
-  } else if (e.clientY >= 100 && e.clientY < 200) y = y + 30;
-  else if (e.clientY >= 200 && e.clientY < 300) y = y + 5;
+  } else if (e.clientY >= 100 && e.clientY < 200) {
+    y = y + 30;
+  }
+  else if (e.clientY >= 200 && e.clientY < 300) {
+    y = y + 5;
+  }
   else if (e.clientY >= 300 && e.clientY < 400) {
     y = y - 310;
     x = x - 280;
@@ -455,12 +466,6 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
     x = x - 305;
   }
   else y = y - 50;
-
-  /*else if((e.clientY > 400) && (e.clientX > 1100)) {
-    y = y - 360;
-    
-    console.log('entra');
-   }*/
 
   ventanaFlotanteclima.style.left = x + "px";
   ventanaFlotanteclima.style.top = y + "px";
@@ -501,6 +506,7 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
               let hora = fecha.getHours().toString().padStart(2, "0");
               let minuto = fecha.getMinutes().toString().padStart(2, "0");
               let horaText = `${hora}:${minuto}`;
+              ultIDcl = ultIDcl - 30;
               if (date.variable === "temperatura") {
                 limiteInf.push({ x: horaText, y: `${datos[i].minTemp}` });
                 historial.push({ x: horaText, y: `${datos[i].tempFabrica}` });
@@ -510,7 +516,11 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
                 historial.push({ x: horaText, y: `${datos[i].humedad}` });
                 limiteSup.push({ x: horaText, y: `${datos[i].maxHum}` });
               }
-              ultIDcl = ultIDcl - 30;
+              else if (date.variable === "prensa_filtro") {
+                historial.push({ x: horaText, y: `${datos[i].filtro}` });
+                ultIDcl = ultIDcl - 15; 
+              }
+              
             }
           }
 
@@ -521,7 +531,7 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
             limiteInfG = dataTempRealcl.minTemp;
             colorG = "#FA7D07";
             limiteColor = "#A507FA";
-          } else {
+          } else if (date.variable === "humedad") {
             limiteSupT = `Limite Superior: ${dataTempRealcl.maxHum}%`;
             (limiteSupG = dataTempRealcl.maxHum),
               (limtieInfT = `Limite Inferior: ${dataTempRealcl.minHum}%`);
@@ -529,12 +539,12 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
             colorG = "#417CDF";
             limiteColor = "#20A907";
           }
+          else if (date.variable === "prensa_filtro") colorG = "#31BD00";
 
           limiteInf.reverse();
           historial.reverse();
           limiteSup.reverse();
 
-          //chartCl.update();
 
           this.chartCl = new Chart(ctxCL, {
             type: "line",
@@ -545,21 +555,18 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
                   borderColor: limiteColor,
                   borderWidth: 1.5,
                   data: limiteInf,
-                  //yAxisID: 'y1',
                 },
                 {
                   label: date.variable,
                   borderColor: colorG,
                   borderWidth: 2,
                   data: historial,
-                  //yAxisID: 'y1',
                 },
                 {
                   label: limiteSupT,
                   borderColor: limiteColor,
                   borderWidth: 1.5,
                   data: limiteSup,
-                  //yAxisID: 'y1',
                 }
               ],
             },
@@ -571,13 +578,6 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
               },
               animations: {
                 duration: 0,
-                /*tension: {
-                                  duration: 1000,
-                                  easing: 'easeInQuad',
-                                  from: 1,
-                                  to: 0,
-                                  loop: false
-                                }*/
               },
               scales: {
                 x: {
@@ -585,12 +585,7 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
                 },
                 y: {
                   max: limiteSupG + 2,
-                  //beginAtZero: true,
                   min: limiteInfG - 2,
-                  /* title: {
-                                    display: true,
-                                    text: 'Valores',
-                                  },*/
                 },
               },
             },
@@ -2106,6 +2101,19 @@ fab1filtroCoton.addEventListener("mouseout", (e) => {
   const fab1cotonFilVo = mouseOutf(e, fab1filtroCoton);
 });
 
+fab1FiltroPrensa.addEventListener("mouseover", (e) => {
+  const fab1prensaFiltroV = ventanaFlotanteClima(
+    `${server}/dataFabxprensaFiltro24hs`,
+    fab1FiltroPrensa,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1FiltroPrensa.addEventListener("mouseout", (e) => {
+  const fab1prensaFiltroVo = mouseOutfCl(e, fab1FiltroPrensa);
+});
 
 
 
