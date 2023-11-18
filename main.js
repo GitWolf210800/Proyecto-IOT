@@ -17,6 +17,7 @@ const tempHotExt = "#F43B2F";
 const humOkExt = "#37AED8";
 
 const alertClima = "#BD1F1F";
+const preAlertClima = "#E4C500";
 const okClima = "#2bc12cff";
 
 const neutral = "#8F8F8F";
@@ -87,6 +88,7 @@ const fab3ClimaG33T = document.getElementById("climaGg33TFab3");
 const fab3ClimaG33H = document.getElementById("climaGg33HFab3");
 
 const fab4FiltroBatan = document.getElementById("filtroBatanFab4");
+const fab4FiltroCardas = document.getElementById("filtroCardaFab4");
 const fab4FiltroClima = document.getElementById("filtroClimaFab4");
 const fab4ClimaPrepT = document.getElementById("climaGprepTFab4");
 const fab4ClimaPrepH = document.getElementById("climaGprepHFab4");
@@ -169,7 +171,7 @@ const climaExt = (direccion) => {
   sector.send();
 };
 
-const ventanaFlotanteFiltro = (direccion, boton, e, tipo) => {
+const ventanaFlotanteFiltro = (direccion, boton, e) => {
   let ctx = document.getElementById("myChartfiltro");
   const sector = new XMLHttpRequest();
   let x = e.clientX + 15; // Agregar un desplazamiento a la derecha
@@ -177,7 +179,37 @@ const ventanaFlotanteFiltro = (direccion, boton, e, tipo) => {
   boton.style.fill = mouseOver;
 
   if (e.clientY >= 45 && e.clientY < 100) y = y + 30;
-  else if (e.clientY >= 100 && e.clientY < 200) y = y + 30;
+  else if (e.clientY >= 400 && e.clientY < 500 && e.clientX >= 200 && e.clientX < 300) {
+    y = y - 360;
+    x = x + 50;
+  } 
+  else if (e.clientY >= 400 && e.clientY < 500 && e.clientX >= 400 && e.clientX < 500) {
+    y = y - 360;
+    x = x - 350;
+  }
+  else if (e.clientY >= 600 && e.clientY < 700 && e.clientX >= 500 && e.clientX < 600){
+    x = x - 345;
+    y = y - 430;
+  }
+  else if (e.clientY >= 500 && e.clientY < 700 && e.clientX >= 200 && e.clientX < 500) {
+    y = y - 360;
+    x = x + 25;
+  }
+  else if (e.clientY >= 400 && e.clientY < 700 && e.clientX >= 500) {
+    y = y - 360;
+    x = x - 345;
+  }
+  else if (e.clientY >= 400 && e.clientY < 600 && e.clientX >= 780) {
+    y = y - 360;
+    x = x - 330;
+  }
+  else if (e.clientY >= 700 && e.clientY < 900 && e.clientX >= 800 && e.clientX < 900) {
+    y = y - 360;
+    x = x + 40;
+  }
+  else if (e.clientY >= 100 && e.clientY < 200) {
+    y = y + 30;
+  }
   else if (e.clientY >= 200 && e.clientY < 300) {
     y = y - 200;
     x = x + 25;
@@ -187,20 +219,15 @@ const ventanaFlotanteFiltro = (direccion, boton, e, tipo) => {
   }
   else if (e.clientY >= 400 && e.clientY < 500) {
     y = y - 360;
-    x = x - 180;
+    x = x - 310;
   } else if (e.clientY >= 500 && e.clientY < 600) {
     y = y - 360;
-    x = x - 205;
+    x = x - 310;
   } else if (e.clientY >= 600 && e.clientY < 700) {
     y = y - 360;
     x = x - 35;
   } else y = y - 50;
 
-  /* else if((e.clientY > 400) && (e.clientX > 1100)) {
-    y = y - 360;
-    x = x - 205;
-    console.log('entra');
-   }*/
 
   ventanaFlotante.style.left = x + "px";
   ventanaFlotante.style.top = y + "px";
@@ -222,6 +249,14 @@ const ventanaFlotanteFiltro = (direccion, boton, e, tipo) => {
           const infoRpm = `${dataTempReal.rpmFiltro} RPM`;
           const infoTCarro = `Carro: (Limite Inf: ${dataTempReal.limCarro})`;
           const infoCarro = `${dataTempReal.carro}`;
+          const preFiltroData = dataTempReal.preFiltro;
+          const limPreFiltroData = dataTempReal.limPreFiltro;
+          const picos2Data = dataTempReal.picos2;
+          const limPicos = dataTempReal.limPicos;
+          const rpm2Data = dataTempReal.rpmFiltro2;
+          const limRpmFiltro = dataTempReal.limRpmFiltro;
+          const carro2Data = dataTempReal.carro2;
+          const limCarro = dataTempReal.limCarro;
           const inst = document.getElementById("instalacion");
           const titleFiltroV = (document.getElementById("titleTela").textContent = infoTFiltroV);
           const diferencial = document.getElementById("filtroVent");
@@ -232,12 +267,17 @@ const ventanaFlotanteFiltro = (direccion, boton, e, tipo) => {
           const titleRpm = (document.getElementById("titleRpm").textContent = infoTRpm);
           const rpm = document.getElementById("rpm");
           const titleCarro = (document.getElementById("titleCarro").textContent = infoTCarro);
+          const picos2Title = document.getElementById("titlePicos2");
+          const picos2 = document.getElementById("pico2");
           const carro = document.getElementById("carro");
+          const rpm2Title = document.getElementById("RPM2H");
+          const rpm2 = document.getElementById("rpm2");
+          const carro2Title = document.getElementById("carro2H");
+          const carro2 = document.getElementById("carro2");
           let datoss = [];
           let limite = [];
           inst.textContent = `${date.instalacion}`;
-    //if (paso === 1) {
-          //paso = 0;
+
           if (this.chart) {
             this.chart.destroy();
           }
@@ -267,10 +307,6 @@ const ventanaFlotanteFiltro = (direccion, boton, e, tipo) => {
 
           limite.reverse();
           datoss.reverse();
-          //console.log(dataTempReal);
-          //console.log(datoss);
-
-          //chart.update();
 
           this.chart = new Chart(ctx, {
             type: "line",
@@ -315,11 +351,7 @@ const ventanaFlotanteFiltro = (direccion, boton, e, tipo) => {
               },
             },
           });
-          //}
 
-          //console.log(datoss);
-          //console.log(tiempo);
-        //if (tipo === 1) {
           diferencial.textContent = infoFiltroVent;
           dataTempReal.filtroVentilador > dataTempReal.limFiltroVentilador
             ? (diferencial.style.color = textNotOk)
@@ -348,69 +380,96 @@ const ventanaFlotanteFiltro = (direccion, boton, e, tipo) => {
             (dataTempReal.rpmFiltro === undefined)
             ? (rpm.style.display = "none", document.getElementById("titleRpm").style.display = "none")
             : (rpm.style.display = "block", document.getElementById("titleRpm").style.display = "block");
-        //}
-           /*if (tipo === 2) {
-            if (e.clientY >= 45 && e.clientY < 100) y = y + 30;
-            else if (e.clientY >= 100 && e.clientY < 200) y = y + 30;
-            else if (e.clientY >= 200 && e.clientY < 300) {
-              y = y + 10;
-              x = x - 205;
-            } else if (e.clientY >= 300 && e.clientY < 400) {
-              y = y - 360;
-            
+
+            if (date.instalacion === "Filtro Fabrica 4 Cardas 24Hs"){
+              const preFiltroTitle = document.getElementById("preFiltroH");
+              const preFiltro = document.getElementById("preFiltro");
+              const ventTitle = document.getElementById("titleVent").style.display = "none";
+              const vent = document.getElementById("vent").style.display = "none";
+              const picosTitle = document.getElementById("titlePicos");
+              const picos = document.getElementById("pico");
+              preFiltroTitle.style.display = "block";
+              preFiltro.style.display = "block";
+              preFiltro.textContent = `${dataTempReal.preFiltro} Pa`;
+              picosTitle.textContent = "Filtro: ";
+              picos.textContent = `${dataTempReal.picos}`;           
+
+              document.getElementById("titleVent").textContent
+            } else {
+              const preFiltroTitle = document.getElementById("preFiltroH").style.display = "none";
+              const preFiltro = document.getElementById("preFiltro").style.display = "none";
+              const ventTitle = document.getElementById("titleVent").style.display = "block";
+              const vent = document.getElementById("vent").style.display = "block";
             }
-            else if (e.clientY >= 400 && e.clientY < 500) {
-              y = y - 950;
-              x = x - 280;
-            } else if (e.clientY >= 500 && e.clientY < 600) {
-              y = y - 360;
-              x = x - 205;
-            } else if (e.clientY >= 600 && e.clientY < 700) {
-              y = y - 400;
-              x = x - 35;
-            } else y = y - 50;
-            console.log('entro');
 
-            const infoTpicos2 = `Picos-2: (Limite Inf: ${dataTempReal.limPicos} Pa)`;
-            const infoPicos2 = `${dataTempReal.picos2.toFixed(2)} Pa`;
-            const infoTCarro2 = `Carro-2: (Limite Inf: ${dataTempReal.limCarro})`;
-            const infoCarro2 = `${dataTempReal.carro}`;
-            const infoTRpm2 = `RPM-2: (Limite Inf: ${dataTempReal.limRpmFiltro} RPM)`;
-            const rpm2Title = document.getElementById('RPM2H');
-            const rpm2 = document.getElementById('rpm2');
-            const carro2 = document.getElementById('carro2H');
-            const carro2Title = document.getElementById('carro2H');
-            const picos2 = document.getElementById('pico2');            
-            const picos2Title = document.getElementById('titlePicos2');
+            if(preFiltroData !== undefined) {
+              const preFiltroTitle = document.getElementById("preFiltroH");
+              const preFiltro = document.getElementById("preFiltro");
+              preFiltroTitle.style.display = "block";
+              preFiltro.style.display = "block";
+              preFiltroTitle.textContent = `Pre-Filtro, Limite: ${dataTempReal.limPreFiltro} Pa`
+              preFiltro.textContent = `${dataTempReal.preFiltro} Pa`
 
-            rpm2Title.style.display = "block";
-            rpm2.style.display = "block";
-            carro2Title.style.display = "block";
-            carro2.style.display = "block";
-            picos2Title.style.display = "block";
-            picos2.style.display = "block";
+              if (preFiltroData < limPreFiltroData) {
+                preFiltro.style.color = textNotOk;
+              } else preFiltro.style.color = textOk;
 
-            rpm2Title.textContent = infoTRpm2;
+            } 
 
-            carro2Title.textContent = infoTCarro2;
+            if (picos2Data !== undefined) {
+              picos2Title.style.display = "block";
+              picos2.style.display = "block";
+              picos2Title.textContent = `Picos-2, Limite: ${dataTempReal.limPicos}`;
+              picos2.textContent = `${dataTempReal.picos2} Pa`;
 
-            picos2Title.textContent = infoTpicos2;
+              (picos2Data < limPicos)
+                ? (picos2.style.color = textNotOk)
+                : (picos2.style.color = textOk);
 
-            picos2.textContent = infoPicos2;
-            dataTempReal.picos2 < dataTempReal.limPicos
-              ? (picos2.style.color = textNotOk)
-              : (picos2.style.color = textOk);
-            rpm2.textContent = infoRpm;
-            dataTempReal.rpmFiltro2 < dataTempReal.limRpmFiltro
-              ? (rpm2.style.color = textNotOk)
-              : (rpm2.style.color = textOk);
-            carro2.textContent = infoCarro2;
-            dataTempReal.carro2 < dataTempReal.limCarro
-              ? (carro2.style.color = textNotOk)
-              : (carro2.style.color = textOk);
+            } else {
+              picos2Title.style.display = "none";
+              picos2.style.display = "none";
+            }
+
+            
+            if (rpm2Data !== undefined) {
+              rpm2Title.style.display = "block";
+              rpm2.style.display = "block";
+              rpm2Title.textContent = `RPM-2, Limite: ${limRpmFiltro}RPM`;
+              rpm2.textContent = `${rpm2Data} RPM`;
+              if (rpm2Data < limRpmFiltro) rpm2.style.color = textNotOk;
+                else rpm2.style.color = textOk;
+
+            } else { 
+              rpm2Title.style.display = "none";
+              rpm2.style.display = "none";    
+            }
+
+            if (carro2Data !== undefined) {
+              carro2Title.style.display = "block";
+              carro2.style.display = "block";
+              carro2Title.textContent = `Carro-2, (Limite inf: ${limCarro})`
+              carro2.textContent = `${carro2Data}`
+
+              if (carro2Data < limCarro) {
+                carro2.style.color = textNotOk;
+              } else carro2.style.color = textOk;
+            } else {
+              carro2Title.style.display = "none";
+              carro2.style.display = "none";
+            }
 
 
-          }*/
+            if (preFiltroData !== undefined && rpm2Data === undefined && picos2Data === undefined) ventanaFlotante.style.height = "375px";
+
+            else if (preFiltroData === undefined && rpm2Data !== undefined && picos2Data !== undefined && carro2Data !== undefined) ventanaFlotante.style.height = "435px";
+
+            else if (preFiltroData === undefined && rpm2Data !== undefined && picos2Data === undefined && carro2Data !== undefined) ventanaFlotante.style.height = "400px";
+
+            else if (preFiltroData !== undefined && rpm2Data !== undefined && picos2Data !== undefined && carro2Data !== undefined) ventanaFlotante.style.height = "470px";
+
+            else ventanaFlotante.style.height = "330px";
+
         } else console.log("error", sector);
 
       }
@@ -679,6 +738,55 @@ const puestoClima = (botonTemp, botonHum, textTemp, textHum, direccion) => {
   sector.send();
 };
 
+const carrier = (direccion) =>{
+  const carrier1Button = document.getElementById("carrier1");
+  const carrier2Button = document.getElementById("carrier2");
+  const carrier3Button = document.getElementById("carrier3");
+  const carrier4Button = document.getElementById("carrier4");
+  const carrier5Button = document.getElementById("carrier5");
+
+  const sector = new XMLHttpRequest();
+
+  sector.onreadystatechange = () => {
+    if (sector.readyState == XMLHttpRequest.DONE){
+      if (sector.status == 200) {
+        const date = JSON.parse(sector.responseText);
+        if(date.datos[0].carrier1 === 100) carrier1Button.style.fill = okClima;
+
+        else if(date.datos[0].carrier1 === 50) carrier1Button.style.fill = alertClima;
+
+        else if(date.datos[0].carrier1 === 0) carrier1Button.style.fill = preAlertClima;
+
+        if(date.datos[0].carrier2 === 100) carrier2Button.style.fill = okClima;
+
+        else if(date.datos[0].carrier2 === 50) carrier2Button.style.fill = alertClima;
+
+        else if(date.datos[0].carrier2 === 0) carrier2Button.style.fill = preAlertClima;
+
+        if(date.datos[0].carrier3 === 100) carrier3Button.style.fill = okClima;
+
+        else if(date.datos[0].carrier3 === 50) carrier3Button.style.fill = alertClima;
+
+        else if(date.datos[0].carrier3 === 0) carrier3Button.style.fill = preAlertClima;
+
+        if(date.datos[0].carrier4 === 100) carrier4Button.style.fill = okClima;
+
+        else if(date.datos[0].carrier4 === 50) carrier4Button.style.fill = alertClima;
+
+        else if(date.datos[0].carrier4 === 0) carrier4Button.style.fill =  preAlertClima;
+
+        if(date.datos[0].carrier5 === 100) carrier5Button.style.fill = okClima;
+
+        else if(date.datos[0].carrier5 === 50) carrier5Button.style.fill = alertClima;
+
+        else if(date.datos[0].carrier5 === 0) carrier5Button.style.fill = preAlertClima;
+      }
+    }
+  };
+  sector.open("GET", direccion, true);
+  sector.send();
+};
+
 const botonF = (botonFiltro, direccion) => {
   const sector = new XMLHttpRequest();
   sector.onreadystatechange = () => {
@@ -701,6 +809,9 @@ const botonF = (botonFiltro, direccion) => {
 };
 
 const actualizarDatos = () => {
+
+  const carrierUp = carrier(`${server}/dataCarrierEstado`);
+
   const climaExterior = climaExt(`${server}/dataFab9exterior`);
 
   const fab6PrepClima = puestoClimaRef(
@@ -1000,8 +1111,7 @@ fab6FiltroPrep.addEventListener("mouseover", (e) => {
   const fab6prepFilV = ventanaFlotanteFiltro(
     `${server}/dataFab6prepFiltro24hs`,
     fab6FiltroPrep,
-    e,
-    1
+    e
   );
   /*console.log(`X: ${e.clientX}`);
     console.log(`Y: ${e.clientY}`);*/
@@ -1043,8 +1153,7 @@ fab6FiltroCont.addEventListener("mouseover", (e)=> {
   const fab6ContFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab6contFiltro24hs`,
     fab6FiltroCont,
-    e,
-    1
+    e
   );
 });
 
@@ -1086,8 +1195,7 @@ fab6FiltroBob.addEventListener("mouseover", (e)=> {
   const fab6BobFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab6bobFiltro24hs`,
     fab6FiltroBob,
-    e,
-    1
+    e
   );
 });
 
@@ -1129,8 +1237,7 @@ fab4FiltroBatan.addEventListener("mouseover", (e)=> {
   const fab4batanFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab4batanFiltro24hs`,
     fab4FiltroBatan,
-    e,
-    2
+    e
   );
 
   /* console.log(`X: ${e.clientX}`);
@@ -1141,16 +1248,27 @@ fab4FiltroBatan.addEventListener("mouseout", (e) => {
   const fab4batanFilVo = mouseOutf(e, fab4FiltroBatan);
 });
 
-fab4FiltroClima.addEventListener("mouseover", (e)=> {
-  const fab4climaFiltV = ventanaFlotanteFiltro(
-    `${server}/dataFab4climaFiltro24hs`,
-    fab4FiltroClima,
-    e,
-    2
+fab4FiltroCardas.addEventListener("mouseover", (e)=> {
+  const fab4cardasFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab4cardasFiltro24hs`,
+    fab4FiltroCardas,
+    e
   );
 
    /*console.log(`X: ${e.clientX}`);
     console.log(`Y: ${e.clientY}`);*/
+});
+
+fab4FiltroCardas.addEventListener("mouseout", (e) => {
+  const fab4cardasFilVo = mouseOutf(e, fab4FiltroCardas);
+});
+
+fab4FiltroClima.addEventListener("mouseover", (e)=> {
+  const fab4climaFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab4climaFiltro24hs`,
+    fab4FiltroClima,
+    e
+  );
 });
 
 fab4FiltroClima.addEventListener("mouseout", (e) => {
@@ -1217,9 +1335,10 @@ fab4FiltroRetor.addEventListener("mouseover", (e)=> {
   const fab4retorFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab4retorFiltro24hs`,
     fab4FiltroRetor,
-    e,
-    1
+    e
   );
+  console.log(`X: ${e.clientX}`);
+  console.log(`Y: ${e.clientY}`);
 });
 
 fab4FiltroRetor.addEventListener("mouseout", (e) => {
@@ -1262,9 +1381,10 @@ fab3FiltroEx8.addEventListener("mouseover", (e)=> {
   const fab3ex8FiltV = ventanaFlotanteFiltro(
     `${server}/dataFab3ex8Filtro24hs`,
     fab3FiltroEx8,
-    e,
-    1
+    e
   );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
 });
 
 fab3FiltroEx8.addEventListener("mouseout", (e) => {
@@ -1361,8 +1481,7 @@ fab3FiltroPei.addEventListener("mouseover", (e)=> {
   const fab3ex8FiltV = ventanaFlotanteFiltro(
     `${server}/dataFab3peiFiltro24hs`,
     fab3FiltroPei,
-    e,
-    1
+    e
   );
   /*console.log(`X: ${e.clientX}`);
     console.log(`Y: ${e.clientY}`);*/
@@ -1376,8 +1495,7 @@ fab3FiltroPrep.addEventListener("mouseover", (e)=> {
   const fab3prepFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab3prepFiltro24hs`,
     fab3FiltroPrep,
-    e,
-    1
+    e
   );
 });
 
@@ -1389,8 +1507,7 @@ fab3FiltroCardas.addEventListener("mouseover", (e)=> {
   const fab3prepFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab3cardaFiltro24hs`,
     fab3FiltroCardas,
-    e,
-    1
+    e
   );
 });
 
@@ -1402,8 +1519,7 @@ fab3FiltroCont.addEventListener("mouseover", (e)=> {
   const fab3contFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab3contFiltro24hs`,
     fab3FiltroCont,
-    e,
-    1
+    e
   );
    /* console.log(`X: ${e.clientX}`);
     console.log(`Y: ${e.clientY}`);*/
@@ -1445,8 +1561,7 @@ fab3FiltroBob.addEventListener("mouseover", (e)=> {
   const fab3bobFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab3bobFiltro24hs`,
     fab3FiltroBob,
-    e,
-    1
+    e
   );
     /*console.log(`X: ${e.clientX}`);
     console.log(`Y: ${e.clientY}`);*/
@@ -1489,8 +1604,7 @@ fab3FiltroG33.addEventListener("mouseover", (e)=> {
   const fab3g33FiltV = ventanaFlotanteFiltro(
     `${server}/dataFab3g33Filtro24hs`,
     fab3FiltroG33,
-    e,
-    1
+    e
   );
     /*console.log(`X: ${e.clientX}`);
     console.log(`Y: ${e.clientY}`);*/
@@ -1534,8 +1648,7 @@ fab9FiltroPrep.addEventListener("mouseover", (e)=> {
   const fab9prepFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab9prepFiltro24hs`,
     fab9FiltroPrep,
-    e,
-    1
+    e
   );
     /*console.log(`X: ${e.clientX}`);
     console.log(`Y: ${e.clientY}`);*/
@@ -1633,8 +1746,7 @@ fab9FiltroOE.addEventListener("mouseover", (e)=> {
   const fab9oeFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab9oeFiltro24hs`,
     fab9FiltroOE,
-    e,
-    1
+    e
   );
     /*console.log(`X: ${e.clientX}`);
     console.log(`Y: ${e.clientY}`);*/
@@ -1706,8 +1818,7 @@ fab1FiltroCard.addEventListener("mouseover", (e)=> {
   const fab1cardasFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab1cardasFiltro24hs`,
     fab1FiltroCard,
-    e,
-    1
+    e
   );
     /*console.log(`X: ${e.clientX}`);
     console.log(`Y: ${e.clientY}`);*/
@@ -1721,8 +1832,7 @@ fab1FiltroPrep.addEventListener("mouseover", (e)=> {
   const fab1prepFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab1prepFiltro24hs`,
     fab1FiltroPrep,
-    e,
-    1
+    e
   );
     /*console.log(`X: ${e.clientX}`);
     console.log(`Y: ${e.clientY}`);*/
@@ -1792,8 +1902,7 @@ fab1FiltroCont.addEventListener("mouseover", (e)=> {
   const fab1contFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab1contFiltro24hs`,
     fab1FiltroCont,
-    e,
-    1
+    e
   );
     /*console.log(`X: ${e.clientX}`);
     console.log(`Y: ${e.clientY}`);*/
@@ -1976,8 +2085,7 @@ fab1FiltroColor.addEventListener("mouseover", (e)=> {
   const fab1colorFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab1colorFiltro24hs`,
     fab1FiltroColor,
-    e,
-    1
+    e
   );
     /*console.log(`X: ${e.clientX}`);
     console.log(`Y: ${e.clientY}`);*/
@@ -2075,8 +2183,7 @@ fab1FiltroBatan.addEventListener("mouseover", (e)=> {
   const fab1batanFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab1batanFiltro24hs`,
     fab1FiltroBatan,
-    e,
-    1
+    e
   );
     /*console.log(`X: ${e.clientX}`);
     console.log(`Y: ${e.clientY}`);*/
@@ -2090,8 +2197,7 @@ fab1filtroCoton.addEventListener("mouseover", (e)=> {
   const fab1cotonFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab1cotonFiltro24hs`,
     fab1filtroCoton,
-    e,
-    1
+    e
   );
     /*console.log(`X: ${e.clientX}`);
     console.log(`Y: ${e.clientY}`);*/
