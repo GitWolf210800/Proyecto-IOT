@@ -131,12 +131,15 @@ const climaExt = (direccion) => {
   const tempExteriortext = document.getElementById("tempExt");
   const tempExt = document.getElementById("tempExt");
   const humExterior = document.getElementById("humExt");
-  const fecha = document.getElementById("fecha");
+ // const fecha = document.getElementById("fecha");
+  const entalpiaText = document.getElementById("entalpia");
+  
+/*
   const fechaActual = new Date();
   const fechaText = `${fechaActual.getDate()} / ${
     fechaActual.getMonth() + 1
   } / ${fechaActual.getFullYear()}`;
-  fecha.textContent = fechaText;
+  fecha.textContent = fechaText;*/
 
   const sector = new XMLHttpRequest();
 
@@ -146,6 +149,9 @@ const climaExt = (direccion) => {
         const date = JSON.parse(sector.responseText);
         const tempExtdate = `${parseInt(date.datos[0].temperatura)} °C`;
         const humExtdata = `${parseInt(date.datos[0].humedad)} %`;
+        entalpiaText.textContent = `${date.datos[0].entalpia.toFixed(2)} Kj/Kg`;
+        const ultimaVezText = document.getElementById("ultimaVez").textContent = date.actualizacion;
+
         if (date.datos[0].temperatura < 20) {
           tempExt.style.fill = tempoColdExt;
           tempExt.style.stroke = tempoColdExt;
@@ -172,6 +178,7 @@ const climaExt = (direccion) => {
 };
 
 const ventanaFlotanteFiltro = (direccion, boton, e) => {
+  if (chart) this.chart.destroy();
   let ctx = document.getElementById("myChartfiltro");
   const sector = new XMLHttpRequest();
   let x = e.clientX + 15; // Agregar un desplazamiento a la derecha
@@ -480,6 +487,7 @@ const ventanaFlotanteFiltro = (direccion, boton, e) => {
 };
 
 const ventanaFlotanteClima = (direccion, boton, e) => {
+  if(chartCl) this.chartCl.destroy();
   let ctxCL = document.getElementById("myChartClima");
   const instalacion = document.getElementById("instalacionclima");
   const nombre = document.getElementById("nombre");
@@ -604,7 +612,6 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
           historial.reverse();
           limiteSup.reverse();
 
-
           this.chartCl = new Chart(ctxCL, {
             type: "line",
             data: {
@@ -642,10 +649,10 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
                 x: {
                   min: historial[0].x,
                 },
-                y: {
+               /* y: {
                   max: limiteSupG + 2,
                   min: limiteInfG - 2,
-                },
+                },*/
               },
             },
           });
@@ -663,14 +670,13 @@ const mouseOutf = (e, boton) => {
   boton.style.fill = mouseOut;
   ventanaFlotante.style.display = "none";
   paso = 1;
-  if (chart) this.chart.destroy();
 };
 
 const mouseOutfCl = (e, boton) => {
   boton.style.fill = "#333";
   ventanaFlotanteclima.style.display = "none";
   pasoCl = 1;
-  if(chart) this.chartCl.destroy();
+  if(chartCl) this.chartCl.destroy();
 };
 
 
@@ -863,6 +869,11 @@ const actualizarDatos = () => {
     `${server}/dataFab4batanFiltro`
   );
 
+  const fab4CardasFiltro = botonF(
+    "filtroCardaFab4",
+    `${server}/dataFab4cardaFiltro`
+  );
+
   const fab4ClimaFiltro = botonF(
     "filtroClimaFab4",
     `${server}/dataFab4climaFiltro`
@@ -1002,7 +1013,7 @@ const actualizarDatos = () => {
     `${server}/dataFab3BobinajeFiltro`
   );
 
-  const fab1ColorClima = puestoClimaRef(
+ /* const fab1ColorClima = puestoClimaRef(
     "climaColorTFab1",
     "climaColorHFab1",
     "tempColorFab1",
@@ -1012,7 +1023,7 @@ const actualizarDatos = () => {
   const fab1ColorFiltro = botonF(
     "filtroColorFab1",
     `${server}/dataFab1ColorFiltro`
-  );
+  );*/
 
   const fab1PeinadorasClima = puestoClimaRef(
     "climaPeinadorasTFab1",
@@ -1209,8 +1220,8 @@ fab6ClimaBobT.addEventListener("mouseover", (e) => {
     fab6ClimaBobT,
     e
   );
-    console.log(`X: ${e.clientX}`);
-    console.log(`Y: ${e.clientY}`);
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
 });
 
 fab6ClimaBobT.addEventListener("mouseout", (e) => {
@@ -1337,8 +1348,8 @@ fab4FiltroRetor.addEventListener("mouseover", (e)=> {
     fab4FiltroRetor,
     e
   );
-  console.log(`X: ${e.clientX}`);
-  console.log(`Y: ${e.clientY}`);
+  /*console.log(`X: ${e.clientX}`);
+  console.log(`Y: ${e.clientY}`);*/
 });
 
 fab4FiltroRetor.addEventListener("mouseout", (e) => {
@@ -1664,8 +1675,8 @@ fab9ClimaPrepT.addEventListener("mouseover", (e) => {
     fab9ClimaPrepT,
     e
   );
-    console.log(`X: ${e.clientX}`);
-    console.log(`Y: ${e.clientY}`);
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
 });
 
 fab9ClimaPrepT.addEventListener("mouseout", (e) => {
@@ -1678,8 +1689,8 @@ fab9ClimaPrepH.addEventListener("mouseover", (e) => {
     fab9ClimaPrepH,
     e
   );
-    console.log(`X: ${e.clientX}`);
-    console.log(`Y: ${e.clientY}`);
+   /* console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
 });
 
 fab9ClimaPrepH.addEventListener("mouseout", (e) => {
@@ -2080,15 +2091,13 @@ fab1ClimaCont2H.addEventListener("mouseover", (e) => {
 fab1ClimaCont2H.addEventListener("mouseout", (e) => {
   const fab1cont2HClimaVo = mouseOutfCl(e, fab1ClimaCont2H);
 });
-
+/*
 fab1FiltroColor.addEventListener("mouseover", (e)=> {
   const fab1colorFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab1colorFiltro24hs`,
     fab1FiltroColor,
     e
   );
-    /*console.log(`X: ${e.clientX}`);
-    console.log(`Y: ${e.clientY}`);*/
 });
 
 fab1FiltroColor.addEventListener("mouseout", (e) => {
@@ -2101,8 +2110,6 @@ fab1ClimaColorT.addEventListener("mouseover", (e) => {
     fab1ClimaColorT,
     e
   );
-    /*console.log(`X: ${e.clientX}`);
-    console.log(`Y: ${e.clientY}`);*/
 });
 
 fab1ClimaColorT.addEventListener("mouseout", (e) => {
@@ -2115,9 +2122,7 @@ fab1ClimaColorH.addEventListener("mouseover", (e) => {
     fab1ClimaColorH,
     e
   );
-    /*console.log(`X: ${e.clientX}`);
-    console.log(`Y: ${e.clientY}`);*/
-});
+});*/
 
 fab1ClimaColorH.addEventListener("mouseout", (e) => {
   const fab1colorHClimaVo = mouseOutfCl(e, fab1ClimaColorH);
