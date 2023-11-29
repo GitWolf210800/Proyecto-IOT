@@ -72,6 +72,7 @@ const fab3ClimaC80T = document.getElementById("climaGc80TFab3");
 const fab3ClimaC80H = document.getElementById("climaGc80HFab3");
 const fab3ClimaPeiT = document.getElementById("climaGpeinadorasTFab3");
 const fab3ClimaPeiH = document.getElementById("climaGpeinadorasHFab3");
+const fab3PeiHumAbs = document.getElementById("climaGpeinadorasEFab3");
 const fab3ClimaManT = document.getElementById("climaGmanuaresTFab3");
 const fab3ClimaManH = document.getElementById("climaGmanuaresHFab3");
 const fab3FiltroPei = document.getElementById("filtroPrepFab3-5");
@@ -103,14 +104,17 @@ const fab4ClimaRetorH = document.getElementById("climaGoretorHFab4");
 const fab6FiltroPrep = document.getElementById("filtroPrepFab6");
 const fab6ClimaPrepT = document.getElementById("climaGPrepTFab6");
 const fab6ClimaPrepH = document.getElementById("climaGPrepHFab6");
+const fab6HumAbsPrep = document.getElementById("climaGPrepEFab6");
 
 const fab6FiltroCont = document.getElementById("filtroContFab6");
 const fab6ClimaContT = document.getElementById("climaGContTFab6");
 const fab6ClimaContH = document.getElementById("climaGContHFab6");
+const fab6HumAbsCont = document.getElementById("climaGContEFab6");
 
 const fab6FiltroBob = document.getElementById("filtroBobFab6");
 const fab6ClimaBobT = document.getElementById("climaGBobTFab6");
 const fab6ClimaBobH = document.getElementById("climaGBobHFab6");
+const fab6HumAbsBob = document.getElementById("climaGBobHFab6-1");
 
 const fab9ClimaCarda1T = document.getElementById("climaGCardas-1TFab9");
 const fab9ClimaCarda1H = document.getElementById("climaGBobHFab6-6");
@@ -125,7 +129,19 @@ const fab9ClimaOEH = document.getElementById("climaGPrepTFab9-3-2");
 const fab9ClimaEmpT = document.getElementById("climaGEmpTFab9");
 const fab9ClimaEmpH = document.getElementById("climaGEmpHFab9");
 
+const isMobile = () => {
+  return /Mobi|Android/i.test(navigator.userAgent);
+};
 
+const detecPant = () => {
+  if(isMobile()) {
+    console.log('Pantalla de un SmartPhone');
+    //alert('Pantalla de un celular');
+  } else {
+    console.log('Pantalla de una Pc');
+    //alert('pantalla de una PC');
+  }
+};
 
 const climaExt = (direccion) => {
   const tempExteriortext = document.getElementById("tempExt");
@@ -398,8 +414,8 @@ const ventanaFlotanteFiltro = (direccion, boton, e) => {
               preFiltroTitle.style.display = "block";
               preFiltro.style.display = "block";
               preFiltro.textContent = `${dataTempReal.preFiltro} Pa`;
-              picosTitle.textContent = "Filtro: ";
-              picos.textContent = `${dataTempReal.picos}`;           
+              picosTitle.style.display = "none";
+              picos.style.display = "none";           
 
               document.getElementById("titleVent").textContent
             } else {
@@ -407,6 +423,8 @@ const ventanaFlotanteFiltro = (direccion, boton, e) => {
               const preFiltro = document.getElementById("preFiltro").style.display = "none";
               const ventTitle = document.getElementById("titleVent").style.display = "block";
               const vent = document.getElementById("vent").style.display = "block";
+              const picosTitle = document.getElementById("titlePicos").style.display = "block";
+              const picos = document.getElementById("pico").style.display = "block";
             }
 
             if(preFiltroData !== undefined) {
@@ -556,11 +574,10 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
           let colorG;
           let limiteColor;
 
-      if (pasoCl === 1) {
-            pasoCl = 0;
+
           if (this.chartCl) {
             this.chartCl.destroy();
-          }
+         }
 
           let ultIDcl = dataTempRealcl.ID;
 
@@ -587,6 +604,11 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
                 historial.push({ x: horaText, y: `${datos[i].filtro}` });
                 ultIDcl = ultIDcl - 15; 
               }
+              else if (date.variable === "g/kg") {
+                limiteInf.push({ x: horaText, y: `${datos[i].minEnt}` });
+                historial.push({ x: horaText, y: `${datos[i].humedadAbsoluta2}` });
+                limiteSup.push({ x: horaText, y: `${datos[i].maxEnt}` });
+              }
               
             }
           }
@@ -600,13 +622,20 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
             limiteColor = "#A507FA";
           } else if (date.variable === "humedad") {
             limiteSupT = `Limite Superior: ${dataTempRealcl.maxHum}%`;
-            (limiteSupG = dataTempRealcl.maxHum),
-              (limtieInfT = `Limite Inferior: ${dataTempRealcl.minHum}%`);
+            limiteSupG = dataTempRealcl.maxHum;
+            limtieInfT = `Limite Inferior: ${dataTempRealcl.minHum}%`;
             limiteInfG = dataTempRealcl.minHum;
             colorG = "#417CDF";
             limiteColor = "#20A907";
           }
           else if (date.variable === "prensa_filtro") colorG = "#31BD00";
+
+          else if (date.variable === "g/kg") {
+            limiteSupT = `Limite Superior: ${dataTempRealcl.maxEnt}g/kg`;
+            limtieInfT = `Limite Inferior: ${dataTempRealcl.minEnt}g/kg`;
+            colorG = "#0076E5";
+            limiteColor = "#FA1300";
+          }
 
           limiteInf.reverse();
           historial.reverse();
@@ -656,7 +685,7 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
               },
             },
           });
-           }
+          document.getElementById("myChartClima").style.display = "block";
         } else console.log("error", sector);
       }
 
@@ -670,17 +699,19 @@ const mouseOutf = (e, boton) => {
   boton.style.fill = mouseOut;
   ventanaFlotante.style.display = "none";
   paso = 1;
+  if(chart) this.chart.destroy();
 };
 
 const mouseOutfCl = (e, boton) => {
   boton.style.fill = "#333";
   ventanaFlotanteclima.style.display = "none";
+  document.getElementById("myChartClima").style.display = "none";
   pasoCl = 1;
   if(chartCl) this.chartCl.destroy();
 };
 
 
-const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, direccion) => {
+const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, direccion, botonEnt, textEnt) => {
   const sector = new XMLHttpRequest();
   sector.onreadystatechange = () => {
     const buttonTemp = document.getElementById(botonTemp);
@@ -695,8 +726,8 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, direccion) => {
         const maxTemper = date.datos[0].maxTemp;
         const minHum = date.datos[0].minHum;
         const maxHum = date.datos[0].maxHum;
-        const infoTemp = `T: ${parseInt(temp)}°C`;
-        const infoHum = `H: ${parseInt(hum)}%`;
+        const infoTemp = `${parseInt(temp)}°C`;
+        const infoHum = `${parseInt(hum)}% H.r`;
 
         document.getElementById(textTemp).textContent = infoTemp;
         document.getElementById(textHum).textContent = infoHum;
@@ -708,6 +739,19 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, direccion) => {
         hum < minHum || hum > maxHum
           ? (buttonHum.style.fill = alertClima)
           : (buttonHum.style.fill = okClima);
+
+        if(date.datos[0].entalpia){
+          const buttonEnt = document.getElementById(botonEnt);
+          const minEnt = date.datos[0].minEnt;
+          const maxEnt = date.datos[0].maxEnt;
+          const humAbs = date.datos[0].humedadAbsoluta2;
+          const infoEnt = `${parseInt(humAbs)} g/Kg`;
+          document.getElementById(textEnt).textContent = infoEnt;
+
+          humAbs < minEnt || humAbs > maxEnt
+            ? (buttonEnt.style.fill = alertClima)
+            : (buttonEnt.style.fill = okClima);
+        }
       } else console.log("error", sector);
     }
   };
@@ -728,8 +772,8 @@ const puestoClima = (botonTemp, botonHum, textTemp, textHum, direccion) => {
         const date = JSON.parse(sector.responseText);
         const temp = parseInt(date.datos[0].tempFabrica);
         const hum = parseInt(date.datos[0].humedad);
-        const infoTemp = `T: ${temp}°C`;
-        const infoHum = `H: ${hum}%`;
+        const infoTemp = `${temp}°C`;
+        const infoHum = `${hum}% H.R`;
 
         document.getElementById(textTemp).textContent = infoTemp;
         document.getElementById(textHum).textContent = infoHum;
@@ -825,7 +869,9 @@ const actualizarDatos = () => {
     "climaPrepHFab6",
     "tempPrepFab6",
     "humPrepFab6",
-    `${server}/dataFab6prepClima`
+    `${server}/dataFab6prepClima`,
+    "climaPrepEFab6",
+    "climaETprepFab6"
   );
   const fab6PrepFiltro = botonF(
     "filtroPrepFab6",
@@ -837,7 +883,9 @@ const actualizarDatos = () => {
     "climaContHFab6",
     "tempContFab6",
     "humContFab6",
-    `${server}/dataFab6contClima`
+    `${server}/dataFab6contClima`,
+    "climaContEFab6",
+    "climaETcontFab6"
   );
   const fab6ContFiltro = botonF(
     "filtroContFab6",
@@ -849,7 +897,9 @@ const actualizarDatos = () => {
     "climaBobHFab6",
     "tempBobFab6",
     "humBobFab6",
-    `${server}/dataFab6bobClima`
+    `${server}/dataFab6bobClima`,
+    "climaBobEFab6",
+    "climaETbobFab6"
   );
   const fab6BobinajeFiltro = botonF(
     "filtroBobFab6",
@@ -959,7 +1009,9 @@ const actualizarDatos = () => {
     "climaPeiHFab3",
     "tempPeiFab3",
     "humPeiFab3",
-    `${server}/dataFab3PeinadorasClima`
+    `${server}/dataFab3PeinadorasClima`,
+    "climaPeiEFab3",
+    "climaETpeiFab3"
   );
   const fab3PeinadorasFiltro = botonF(
     "filtroPrepFab3-5",
@@ -1116,6 +1168,8 @@ const actualizarDatos = () => {
 
 ////////////////////// Eventos ////////////////////
 
+//window.addEventListener('resize', detecPant);
+
 ///////// Fabrica 6
 
 fab6FiltroPrep.addEventListener("mouseover", (e) => {
@@ -1151,13 +1205,25 @@ fab6ClimaPrepT.addEventListener("mouseout", (e) => {
 fab6ClimaPrepH.addEventListener("mouseover", (e) => {
   const fab6prepHClimaV = ventanaFlotanteClima(
     `${server}/dataFab6prepClimaH24hs`,
-    fab6ClimaPrepT,
+    fab6ClimaPrepH,
     e
   );
 });
 
 fab6ClimaPrepH.addEventListener("mouseout", (e) => {
   const fab6prepHClimaVo = mouseOutfCl(e, fab6ClimaPrepH);
+});
+
+fab6HumAbsPrep.addEventListener("mouseover", (e) => {
+  const fab6prepHumAbsV = ventanaFlotanteClima(
+    `${server}/dataFab6prepHumAbsH24hs`,
+    fab6HumAbsPrep,
+    e
+  );
+});
+
+fab6HumAbsPrep.addEventListener("mouseout", (e) => {
+  const fab6prepHumAbsVo = mouseOutfCl(e, fab6HumAbsPrep);
 });
 
 fab6FiltroCont.addEventListener("mouseover", (e)=> {
@@ -1200,6 +1266,19 @@ fab6ClimaContH.addEventListener("mouseout", (e) => {
   const fab6contHClimaVo = mouseOutfCl(e, fab6ClimaContH);
 });
 
+fab6HumAbsCont.addEventListener("mouseover", (e) => {
+  const fab6contHumAbsV = ventanaFlotanteClima(
+    `${server}/dataFab6contHumAbsH24hs`,
+    fab6HumAbsCont,
+    e
+  );
+   /* console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab6HumAbsCont.addEventListener("mouseout", (e) => {
+  const fab6contHumAbsVo = mouseOutfCl(e, fab6HumAbsCont);
+});
 
 
 fab6FiltroBob.addEventListener("mouseover", (e)=> {
@@ -1240,6 +1319,20 @@ fab6ClimaBobH.addEventListener("mouseover", (e) => {
 
 fab6ClimaBobH.addEventListener("mouseout", (e) => {
   const fab6bobHClimaVo = mouseOutfCl(e, fab6ClimaBobH);
+});
+
+fab6HumAbsBob.addEventListener("mouseover", (e) => {
+  const fab6BobHumedadAbsV = ventanaFlotanteClima(
+    `${server}/dataFab6bobHumAbsH24hs`,
+    fab6HumAbsBob,
+    e
+  );
+   /* console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab6HumAbsBob.addEventListener("mouseout", (e) => {
+  const fab6bobHumAbsVo = mouseOutfCl(e, fab6HumAbsBob);
 });
 
 //////Fabrica 4
@@ -1456,6 +1549,20 @@ fab3ClimaPeiH.addEventListener("mouseover", (e) => {
 
 fab3ClimaPeiH.addEventListener("mouseout", (e) => {
   const fab3peiHClimaVo = mouseOutfCl(e, fab3ClimaPeiH);
+});
+
+fab3PeiHumAbs.addEventListener("mouseover", (e) => {
+  const fab3peiEClimaV = ventanaFlotanteClima(
+    `${server}/dataFab3peiHumAbsH24hs`,
+    fab3PeiHumAbs,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3PeiHumAbs.addEventListener("mouseout", (e) => {
+  const fab3peiEClimaVo = mouseOutfCl(e, fab3PeiHumAbs);
 });
 
 fab3ClimaManT.addEventListener("mouseover", (e) => {
@@ -2227,7 +2334,7 @@ fab1FiltroPrensa.addEventListener("mouseout", (e) => {
 });
 
 
-
+detecPant();
 
 
 actualizarDatos();
