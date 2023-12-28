@@ -44,6 +44,7 @@ const fab1ClimaPeiH = document.getElementById("climaGpeinadorasHFab1");
 const fab1ClimaManT = document.getElementById("climaGmanuaresTFab1");
 const fab1ClimaManH = document.getElementById("climaGmanuaresHFab1");
 const fab1FiltroCont = document.getElementById("filtroContinuasFab1");
+const fab1FiltroBob = document.getElementById("filtroBobinajeFab1");
 const fab1ClimaCont1T = document.getElementById("climaGcontinuas-1TFab1");
 const fab1ClimaCont1H = document.getElementById("climaGcontinuas-1HFab1");
 const fab1ClimaCont2T = document.getElementById("climaGcontinuas-2TFab1");
@@ -87,6 +88,8 @@ const fab3ClimaBobT = document.getElementById("climaGbobTFab3");
 const fab3ClimaBobH = document.getElementById("climaGbobHFab3");
 const fab3ClimaG33T = document.getElementById("climaGg33TFab3");
 const fab3ClimaG33H = document.getElementById("climaGg33HFab3");
+const fab3Clima3ZT = document.getElementById("climaG3zTFab3");
+const fab3Clima3ZH = document.getElementById("climaG3zHFab3-1");
 
 const fab4FiltroBatan = document.getElementById("filtroBatanFab4");
 const fab4FiltroCardas = document.getElementById("filtroCardaFab4");
@@ -120,6 +123,9 @@ const fab9ClimaCarda1T = document.getElementById("climaGCardas-1TFab9");
 const fab9ClimaCarda1H = document.getElementById("climaGBobHFab6-6");
 const fab9ClimaCarda2T = document.getElementById("climaGCardas-2TFab9");
 const fab9ClimaCarda2H = document.getElementById("climaGCardas-2HFab9");
+const fab9FiltroCardaA = document.getElementById("filtroCardasAFab9");
+const fab9FiltroCardaB = document.getElementById("filtroCardasBFab9");
+const fab9FiltroLuwa = document.getElementById("filtroLuwaFab9");
 const fab9FiltroPrep = document.getElementById("filtroPrepFab9");
 const fab9ClimaPrepT = document.getElementById("climaGPrepTFab9");
 const fab9ClimaPrepH = document.getElementById("climaGPrepHFab9");
@@ -202,6 +208,16 @@ const ventanaFlotanteFiltro = (direccion, boton, e) => {
   boton.style.fill = mouseOver;
 
   if (e.clientY >= 45 && e.clientY < 100) y = y + 30;
+
+  else if (e.clientY >= 300 && e.clientY < 450 && e.clientX >= 1200 && e.clientX < 1400) {
+    y = y - 280;
+    x = x - 360;
+  } 
+
+  else if (e.clientY >= 300 && e.clientY < 400 && e.clientX >= 300 && e.clientX < 400) {
+    y = y - 280;
+    x = x + 30;
+  } 
   else if (e.clientY >= 400 && e.clientY < 500 && e.clientX >= 200 && e.clientX < 300) {
     y = y - 360;
     x = x + 50;
@@ -493,6 +509,8 @@ const ventanaFlotanteFiltro = (direccion, boton, e) => {
 
             else if (preFiltroData !== undefined && rpm2Data !== undefined && picos2Data !== undefined && carro2Data !== undefined) ventanaFlotante.style.height = "470px";
 
+            else if (preFiltroData === undefined && picos2Data !== undefined ) ventanaFlotante.style.height = "380px";
+
             else ventanaFlotante.style.height = "330px";
 
         } else console.log("error", sector);
@@ -527,10 +545,12 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
   else if (e.clientY >= 400 && e.clientY < 500 && e.clientX >= 1100) {
     y = y - 320;
     x = x - 250;
-  } else if (e.clientY >= 500 && e.clientY < 600 && e.clientX >= 1100) {
+  }
+  else if (e.clientY >= 500 && e.clientY < 600 && e.clientX >= 1100) {
     y = y - 340;
     x = x - 400;
-  } else if (e.clientY >= 100 && e.clientY < 200) {
+  }
+  else if (e.clientY >= 100 && e.clientY < 200) {
     y = y + 30;
   }
   else if (e.clientY >= 200 && e.clientY < 300) {
@@ -543,14 +563,15 @@ const ventanaFlotanteClima = (direccion, boton, e) => {
   else if (e.clientY >= 400 && e.clientY < 500) {
     y = y - 325;
     x = x - 250;
-  } else if (e.clientY >= 500 && e.clientY < 600) {
-    y = y - 340;
-    x = x - 305;
-  } else if (e.clientY >= 600 && e.clientY < 800) {
+  }
+  else if (e.clientY >= 500 && e.clientY < 600) {
     y = y - 340;
     x = x - 305;
   }
-  else y = y - 50;
+  else if (e.clientY >= 600 && e.clientY < 800) {
+    y = y - 340;
+    x = x - 305;
+  } else y = y - 50;
 
   ventanaFlotanteclima.style.left = x + "px";
   ventanaFlotanteclima.style.top = y + "px";
@@ -773,7 +794,7 @@ const puestoClima = (botonTemp, botonHum, textTemp, textHum, direccion) => {
         const temp = parseInt(date.datos[0].tempFabrica);
         const hum = parseInt(date.datos[0].humedad);
         const infoTemp = `${temp}°C`;
-        const infoHum = `${hum}% H.R`;
+        const infoHum = `${hum}% H.r`;
 
         document.getElementById(textTemp).textContent = infoTemp;
         document.getElementById(textHum).textContent = infoHum;
@@ -963,6 +984,22 @@ const actualizarDatos = () => {
     "humCardas-2Fab9",
     `${server}/dataFab9carda-2Clima`
   );
+
+  const fab9CardasAFiltro = botonF(
+    "filtroCardasAFab9",
+    `${server}/dataFab9cardaAFiltro`
+    );
+
+  const fab9CardasBFiltro = botonF(
+    "filtroCardasBFab9",
+    `${server}/dataFab9cardaBFiltro`
+    );
+  
+  const fab9LuwaFiltro = botonF(
+    "filtroLuwaFab9",
+    `${server}/dataFab9luwaFiltro`
+  );
+
   const fab9PrepFiltro = botonF(
     "filtroPrepFab9",
     `${server}/dataFab9prepFiltro`
@@ -995,7 +1032,10 @@ const actualizarDatos = () => {
     `${server}/dataFab9empaque`
   );
 
-  const fab3Ex8Filtro = botonF("filtroEX-8Fab3", `${server}/dataFab3ex8`);
+  const fab3Ex8Filtro = botonF(
+    "filtroEX-8Fab3", 
+    `${server}/dataFab3ex8`
+    );
   const fab3C80Clima = puestoClima(
     "climaC80TFab3",
     "climaC80HFab3",
@@ -1042,7 +1082,18 @@ const actualizarDatos = () => {
     "humG30Fab3",
     `${server}/dataFab3G30Clima`
   );
-  const fab3G30Filtro = botonF("filtroContFab3", `${server}/dataFab3G30Filtro`);
+  const fab3G30Filtro = botonF(
+    "filtroContFab3", 
+  `${server}/dataFab3G30Filtro`
+  );
+
+  const fab33ZClima = puestoClimaRef(
+    "clima3zTFab3",
+    "clima3zHFab3",
+    "temp3zFab3",
+    "hum3zFab3",
+    `${server}/dataFab33ZClima`
+  );
 
   const fab3G33Clima = puestoClimaRef(
     "climaG33TFab3",
@@ -1051,7 +1102,10 @@ const actualizarDatos = () => {
     "humG33Fab3",
     `${server}/dataFab3G33Clima`
   );
-  const fab3G33Filtro = botonF("filtroG33Fab3", `${server}/dataFab3G33Filtro`);
+  const fab3G33Filtro = botonF(
+    "filtroG33Fab3", 
+  `${server}/dataFab3G33Filtro`
+  );
 
   const fab3BobClima = puestoClimaRef(
     "climaBobinajeTFab3",
@@ -1065,7 +1119,7 @@ const actualizarDatos = () => {
     `${server}/dataFab3BobinajeFiltro`
   );
 
- /* const fab1ColorClima = puestoClimaRef(
+  const fab1ColorClima = puestoClimaRef(
     "climaColorTFab1",
     "climaColorHFab1",
     "tempColorFab1",
@@ -1075,7 +1129,7 @@ const actualizarDatos = () => {
   const fab1ColorFiltro = botonF(
     "filtroColorFab1",
     `${server}/dataFab1ColorFiltro`
-  );*/
+  );
 
   const fab1PeinadorasClima = puestoClimaRef(
     "climaPeinadorasTFab1",
@@ -1100,6 +1154,11 @@ const actualizarDatos = () => {
     "filtroCardasFab1",
     `${server}/dataFab1CardaFiltros`
   );
+
+  const fab1BobFiltro = botonF(
+    "filtroBobinajeFab1",
+    `${server}/dataFab1bobFiltro`
+    );
 
   const fab1ContFiltro = botonF(
     "filtroContinuasFab1",
@@ -1162,8 +1221,14 @@ const actualizarDatos = () => {
     "humBobinajeFab1",
     `${server}/dataFab1BobinajeClima`
   );
-  const fab1Batan = botonF("filtroBatanFab1", `${server}/dataFab1BatanFiltro`);
-  const fab1Cotonia = botonF("filtroCotoniaFab1", `${server}/dataFab1Cotonia`);
+  const fab1Batan = botonF(
+  "filtroBatanFab1", 
+  `${server}/dataFab1BatanFiltro`
+  );
+  const fab1Cotonia = botonF(
+    "filtroCotoniaFab1", 
+    `${server}/dataFab1Cotonia`
+    );
 };
 
 ////////////////////// Eventos ////////////////////
@@ -1675,6 +1740,34 @@ fab3ClimaG30H.addEventListener("mouseout", (e) => {
   const fab3g30HClimaVo = mouseOutfCl(e, fab3ClimaG30H);
 });
 
+fab3Clima3ZT.addEventListener("mouseover", (e) => {
+  const fab3g30TClimaV = ventanaFlotanteClima(
+    `${server}/dataFab33zClimaT24hs`,
+    fab3Clima3ZT,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3Clima3ZT.addEventListener("mouseout", (e) => {
+  const fab3g30TClimaVo = mouseOutfCl(e, fab3Clima3ZT);
+});
+
+fab3Clima3ZH.addEventListener("mouseover", (e) => {
+  const fab3g30HClimaV = ventanaFlotanteClima(
+    `${server}/dataFab33zClimaH24hs`,
+    fab3Clima3ZH,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3Clima3ZH.addEventListener("mouseout", (e) => {
+  const fab3g30HClimaVo = mouseOutfCl(e, fab3Clima3ZH);
+});
+
 fab3FiltroBob.addEventListener("mouseover", (e)=> {
   const fab3bobFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab3bobFiltro24hs`,
@@ -1762,6 +1855,20 @@ fab3ClimaG33H.addEventListener("mouseout", (e) => {
 
 //fabrica 9 //////////////
 
+fab9FiltroLuwa.addEventListener("mouseover", (e)=> {
+  const fab9luwaFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab9luwaFiltro24hs`,
+    fab9FiltroLuwa,
+    e
+  );
+    console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);
+});
+
+fab9FiltroLuwa.addEventListener("mouseout", (e) => {
+  const fab9luwaFilVo = mouseOutf(e, fab9FiltroLuwa);
+});
+
 fab9FiltroPrep.addEventListener("mouseover", (e)=> {
   const fab9prepFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab9prepFiltro24hs`,
@@ -1802,6 +1909,34 @@ fab9ClimaPrepH.addEventListener("mouseover", (e) => {
 
 fab9ClimaPrepH.addEventListener("mouseout", (e) => {
   const fab9prepHClimaVo = mouseOutfCl(e, fab9ClimaPrepH);
+});
+
+fab9FiltroCardaA.addEventListener("mouseover", (e)=> {
+  const fab9CardaaFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab9cardaAFiltro24hs`,
+    fab9FiltroCardaA,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab9FiltroCardaA.addEventListener("mouseout", (e) => {
+  const fab9CardaaFilVo = mouseOutf(e, fab9FiltroCardaA);
+});
+
+fab9FiltroCardaB.addEventListener("mouseover", (e)=> {
+  const fab9CardabFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab9cardaBFiltro24hs`,
+    fab9FiltroCardaB,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab9FiltroCardaB.addEventListener("mouseout", (e) => {
+  const fab9CardabFilVo = mouseOutf(e, fab9FiltroCardaB);
 });
 
 fab9ClimaCarda1T.addEventListener("mouseover", (e) => {
@@ -2030,6 +2165,20 @@ fab1FiltroCont.addEventListener("mouseout", (e) => {
   const fab1contFilVo = mouseOutf(e, fab1FiltroCont);
 });
 
+fab1FiltroBob.addEventListener("mouseover", (e)=> {
+  const fab1bobFiltV = ventanaFlotanteFiltro(
+    `${server}/dataFab1bobFiltro24hs`,
+    fab1FiltroBob,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1FiltroBob.addEventListener("mouseout", (e) => {
+  const fab1bobFilVo = mouseOutf(e, fab1FiltroBob);
+});
+
 fab1ClimaCont1T.addEventListener("mouseover", (e) => {
   const fab1cont1TClimaV = ventanaFlotanteClima(
     `${server}/dataFab1cont1ClimaT24hs`,
@@ -2198,7 +2347,7 @@ fab1ClimaCont2H.addEventListener("mouseover", (e) => {
 fab1ClimaCont2H.addEventListener("mouseout", (e) => {
   const fab1cont2HClimaVo = mouseOutfCl(e, fab1ClimaCont2H);
 });
-/*
+
 fab1FiltroColor.addEventListener("mouseover", (e)=> {
   const fab1colorFiltV = ventanaFlotanteFiltro(
     `${server}/dataFab1colorFiltro24hs`,
@@ -2229,7 +2378,7 @@ fab1ClimaColorH.addEventListener("mouseover", (e) => {
     fab1ClimaColorH,
     e
   );
-});*/
+});
 
 fab1ClimaColorH.addEventListener("mouseout", (e) => {
   const fab1colorHClimaVo = mouseOutfCl(e, fab1ClimaColorH);
