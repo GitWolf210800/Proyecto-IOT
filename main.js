@@ -82,12 +82,18 @@ const fab1colHumAbs = document.getElementById('climaGcolorHFab1-6');
 const fab3FiltroEx8 = document.getElementById("filtroEX-8Fab3");
 const fab3ClimaC80T = document.getElementById("climaGc80TFab3");
 const fab3ClimaC80H = document.getElementById("climaGc80HFab3");
+const fab3ClimaC50T = document.getElementById('climaGcardasTFab3');
+const fab3ClimaC50H = document.getElementById('climaGcardasHFab3');
+const fab3C50HumAbs = document.getElementById('climaGcardasEFab3');
 const fab3ClimaPeiT = document.getElementById("climaGpeinadorasTFab3");
 const fab3ClimaPeiH = document.getElementById("climaGpeinadorasHFab3");
 const fab3PeiHumAbs = document.getElementById("climaGpeinadorasEFab3");
 const fab3ClimaManT = document.getElementById("climaGmanuaresTFab3");
 const fab3ClimaManH = document.getElementById("climaGmanuaresHFab3");
 const fab3Pei65HumAbs = document.getElementById('climaGmanEFab3');
+const fab3ClimaLabT = document.getElementById('climaGmecheraTFab3-3');
+const fab3ClimaLabH = document.getElementById('climaGmanuaresHFab3-7-9');
+const fab3LabHumAbs = document.getElementById('climaGlaboratorioEFab3');
 
 const fab3ClimaMechT = document.getElementById('climaGmecheraTFab3');
 const fab3ClimaMechH = document.getElementById('climaGmanuaresHFab3-7');
@@ -568,7 +574,7 @@ ventanaFlotante.style.display = "block";
 
 const ventanaFlotanteClima = (nombre, medicion, boton, e) => {
 
-  if(chartCl) this.chartCl.destroy();
+  if(window.chartCl) window.chartCl.destroy();
   let ctxCL = document.getElementById("myChartClima");
   const instalacion = document.getElementById("instalacionclima");
   const nameInst = document.getElementById("nombre");
@@ -618,10 +624,14 @@ http.onreadystatechange = function() {
           let colorG;
           let limiteColor;
           let limiteInterColor;
+          let tempMaxA = dataTempRealcl.max_Atemp;
+          let tempMinA = dataTempRealcl.min_Atemp;
+          let humMaxA = dataTempRealcl.max_Ahum;
+          let humMinA = dataTempRealcl.min_Ahum;
 
 
-          if (this.chartCl) {
-            this.chartCl.destroy();
+          if (window.chartCl) {
+            window.chartCl.destroy();
          }
          //let ultIDcl = dataTempRealcl.id_medicion;
          //console.log(ultIDcl);
@@ -700,13 +710,14 @@ http.onreadystatechange = function() {
             limiteColor = "#FA1300";
           }
 
-
+          limiteInterInf.reverse();
           limiteInf.reverse();
           historial.reverse();
           limiteSup.reverse();
+          limiteInterSup.reverse();
 
-          if (date.medicion === 'temperatura' || date.medicion === 'humedad'){
-            this.chartCl = new Chart(ctxCL, {
+          if ((date.medicion === 'temperatura' && tempMaxA !== 0 && tempMinA !== 0) || (date.medicion === 'humedad' && humMaxA !== 0 && humMinA !== 0)){
+            window.chartCl = new Chart(ctxCL, {
               type: "line",
               data: {
                 datasets: [
@@ -763,8 +774,54 @@ http.onreadystatechange = function() {
               },
             });
           } 
+          else if ( (tempMaxA === 0 && tempMinA === 0) || (humMaxA === 0 && humMinA === 0)){
+            window.chartCl = new Chart(ctxCL, {
+              type: "line",
+              data: {
+                datasets: [
+                  {
+                    label : limiteInterInfT,
+                    borderColor : limiteInterColor,
+                    borderWidth: 1.5,
+                    data: limiteInterInf
+                  },
+                  {
+                    label: date.medicion,
+                    borderColor: colorG,
+                    borderWidth: 2,
+                    data: historial,
+                  },
+                  {
+                    label: limiteInterSupT,
+                    borderColor: limiteInterColor,
+                    borderWidth: 1.5,
+                    data: limiteInterSup
+                  }
+                ],
+              },
+              options: {
+                elements: {
+                  point: {
+                    radius: 0, // Establecer el radio de los puntos en 0 para ocultarlos
+                  },
+                },
+                animations: {
+                  duration: 0,
+                },
+                scales: {
+                  x: {
+                    min: historial[0].x,
+                  },
+                 /* y: {
+                    max: limiteSupG + 2,
+                    min: limiteInfG - 2,
+                  },*/
+                },
+              },
+            });
+          }
           else {
-            this.chartCl = new Chart(ctxCL, {
+            window.chartCl = new Chart(ctxCL, {
               type: "line",
               data: {
                 datasets: [
@@ -1343,6 +1400,17 @@ const actualizarDatos = () => {
     "climaEmanFab3"
   );
 
+  const fab3LaboratorioClima = puestoClimaRef(
+    "climaLabTFab3",
+    "climaLabHFab3",
+    "tempLabFab3",
+    "humLabFab3",
+    datosClima,
+    'fab3_laboratorio_clima',
+    "climaLaboratorioEFab3",
+    "climaElaboratorioFab3"
+  );
+
   const fab3MecherasClima = puestoClimaRef(
     "climaMecheraTFab3",
     "climaMecheraHFab3",
@@ -1619,7 +1687,7 @@ const actualizarDatos = () => {
 
 ///////// Fabrica 6
 
-fab6FiltroPrep.addEventListener("mouseover", (e) => {
+fab6FiltroPrep.addEventListener("click", (e) => {
   const fab6prepFilV = ventanaFlotanteFiltro(
     'fab6_preparacion_filtro',
     fab6FiltroPrep,
@@ -1633,11 +1701,12 @@ fab6FiltroPrep.addEventListener("mouseout", (e) => {
   const fab6prepFilVo = mouseOutf(e, fab6FiltroPrep);
 });
 
+/*
 fab6FiltroPrep.addEventListener("click", () => {
   window.location.href = "filtroPrepFab6/index.html";
-});
+});*/
 
-fab6ClimaPrepT.addEventListener("mouseover", (e) => {
+fab6ClimaPrepT.addEventListener("click", (e) => {
   const fab6prepTClimaV = ventanaFlotanteClima(
     'fab6_preparacion_clima',
     'temperatura',
@@ -1650,7 +1719,7 @@ fab6ClimaPrepT.addEventListener("mouseout", (e) => {
   const fab6prepTClimaVo = mouseOutfCl(e, fab6ClimaPrepT);
 });
 
-fab6ClimaPrepH.addEventListener("mouseover", (e) => {
+fab6ClimaPrepH.addEventListener("click", (e) => {
   const fab6prepHClimaV = ventanaFlotanteClima(
     'fab6_preparacion_clima',
     'humedad',
@@ -1663,7 +1732,7 @@ fab6ClimaPrepH.addEventListener("mouseout", (e) => {
   const fab6prepHClimaVo = mouseOutfCl(e, fab6ClimaPrepH);
 });
 
-fab6HumAbsPrep.addEventListener("mouseover", (e) => {
+fab6HumAbsPrep.addEventListener("click", (e) => {
   const fab6prepHumAbsV = ventanaFlotanteClima(
     'fab6_preparacion_clima',
     'humAbsoluta',
@@ -1676,7 +1745,7 @@ fab6HumAbsPrep.addEventListener("mouseout", (e) => {
   const fab6prepHumAbsVo = mouseOutfCl(e, fab6HumAbsPrep);
 });
 
-fab6FiltroCont.addEventListener("mouseover", (e)=> {
+fab6FiltroCont.addEventListener("click", (e)=> {
   const fab6ContFiltV = ventanaFlotanteFiltro(
     'fab6_continuas_filtro',
     fab6FiltroCont,
@@ -1688,7 +1757,7 @@ fab6FiltroCont.addEventListener("mouseout", (e) => {
   const fab6contFilVo = mouseOutf(e, fab6FiltroCont);
 });
 
-fab6ClimaContT.addEventListener("mouseover", (e) => {
+fab6ClimaContT.addEventListener("click", (e) => {
   const fab6contTClimaV = ventanaFlotanteClima(
     'fab6_continuas_clima',
     'temperatura',
@@ -1703,7 +1772,7 @@ fab6ClimaContT.addEventListener("mouseout", (e) => {
   const fab6contTClimaVo = mouseOutfCl(e, fab6ClimaContT);
 });
 
-fab6ClimaContH.addEventListener("mouseover", (e) => {
+fab6ClimaContH.addEventListener("click", (e) => {
   const fab6contHClimaV = ventanaFlotanteClima(
     'fab6_continuas_clima',
     'humedad',
@@ -1718,7 +1787,7 @@ fab6ClimaContH.addEventListener("mouseout", (e) => {
   const fab6contHClimaVo = mouseOutfCl(e, fab6ClimaContH);
 });
 
-fab6HumAbsCont.addEventListener("mouseover", (e) => {
+fab6HumAbsCont.addEventListener("click", (e) => {
   const fab6contHumAbsV = ventanaFlotanteClima(
     'fab6_continuas_clima',
     'humAbsoluta',
@@ -1734,7 +1803,7 @@ fab6HumAbsCont.addEventListener("mouseout", (e) => {
 });
 
 
-fab6FiltroBob.addEventListener("mouseover", (e)=> {
+fab6FiltroBob.addEventListener("click", (e)=> {
   const fab6BobFiltV = ventanaFlotanteFiltro(
     'fab6_bobinaje_filtro',
     fab6FiltroBob,
@@ -1746,7 +1815,7 @@ fab6FiltroBob.addEventListener("mouseout", (e) => {
   const fab6BobFilVo = mouseOutf(e, fab6FiltroBob);
 });
 
-fab6ClimaBobT.addEventListener("mouseover", (e) => {
+fab6ClimaBobT.addEventListener("click", (e) => {
   const fab6bobTClimaV = ventanaFlotanteClima(
     'fab6_bobinaje_clima',
     'temperatura',
@@ -1761,7 +1830,7 @@ fab6ClimaBobT.addEventListener("mouseout", (e) => {
   const fab6bobTClimaVo = mouseOutfCl(e, fab6ClimaBobT);
 });
 
-fab6ClimaBobH.addEventListener("mouseover", (e) => {
+fab6ClimaBobH.addEventListener("click", (e) => {
   const fab6BobHClimaV = ventanaFlotanteClima(
     'fab6_bobinaje_clima',
     'humedad',
@@ -1776,7 +1845,7 @@ fab6ClimaBobH.addEventListener("mouseout", (e) => {
   const fab6bobHClimaVo = mouseOutfCl(e, fab6ClimaBobH);
 });
 
-fab6HumAbsBob.addEventListener("mouseover", (e) => {
+fab6HumAbsBob.addEventListener("click", (e) => {
   const fab6BobHumedadAbsV = ventanaFlotanteClima(
     'fab6_bobinaje_clima',
     'humAbsoluta',
@@ -1793,7 +1862,7 @@ fab6HumAbsBob.addEventListener("mouseout", (e) => {
 
 //////Fabrica 4
 
-fab4FiltroBatan.addEventListener("mouseover", (e)=> {
+fab4FiltroBatan.addEventListener("click", (e)=> {
   const fab4batanFiltV = ventanaFlotanteFiltro(
     'fab4_batan_filtro',
     fab4FiltroBatan,
@@ -1809,7 +1878,7 @@ fab4FiltroBatan.addEventListener("mouseout", (e) => {
 });
 
 /*
-fab4FiltroCardas.addEventListener("mouseover", (e)=> {
+fab4FiltroCardas.addEventListener("click", (e)=> {
   const fab4cardasFiltV = ventanaFlotanteFiltro(
     'fab4_cardas_filtro',
     fab4FiltroCardas,
@@ -1824,7 +1893,7 @@ fab4FiltroCardas.addEventListener("mouseout", (e) => {
   const fab4cardasFilVo = mouseOutf(e, fab4FiltroCardas);
 });*/
 
-fab4FiltroClima.addEventListener("mouseover", (e)=> {
+fab4FiltroClima.addEventListener("click", (e)=> {
   const fab4climaFiltV = ventanaFlotanteFiltro(
     'fab4_clima_filtro',
     fab4FiltroClima,
@@ -1836,7 +1905,7 @@ fab4FiltroClima.addEventListener("mouseout", (e) => {
   const fab4climaFilVo = mouseOutf(e, fab4FiltroClima);
 });
 
-fab4ClimaPrepT.addEventListener("mouseover", (e) => {
+fab4ClimaPrepT.addEventListener("click", (e) => {
   const fab4prepTClimaV = ventanaFlotanteClima(
     'fab4_preparacion_clima',
     'temperatura',
@@ -1851,7 +1920,7 @@ fab4ClimaPrepT.addEventListener("mouseout", (e) => {
   const fab6bobTClimaVo = mouseOutfCl(e, fab4ClimaPrepT);
 });
 
-fab4ClimaPrepH.addEventListener("mouseover", (e) => {
+fab4ClimaPrepH.addEventListener("click", (e) => {
   const fab4prepHClimaV = ventanaFlotanteClima(
     'fab4_preparacion_clima',
     'humedad',
@@ -1866,7 +1935,7 @@ fab4ClimaPrepH.addEventListener("mouseout", (e) => {
   const fab4prepTClimaVo = mouseOutfCl(e, fab4ClimaPrepH);
 });
 
-fab4HumAbsPrep.addEventListener("mouseover", (e) => {
+fab4HumAbsPrep.addEventListener("click", (e) => {
   const fab4PrepHumedadAbsV = ventanaFlotanteClima(
     'fab4_preparacion_clima',
     'humAbsoluta',
@@ -1881,7 +1950,7 @@ fab4HumAbsPrep.addEventListener("mouseout", (e) => {
   const fab4prepHumAbsVo = mouseOutfCl(e, fab4HumAbsPrep);
 });
 
-fab4ClimaOpenEndT.addEventListener("mouseover", (e) => {
+fab4ClimaOpenEndT.addEventListener("click", (e) => {
   const fab4openEndTClimaV = ventanaFlotanteClima(
     'fab4_open_end_clima',
     'temperatura',
@@ -1896,7 +1965,7 @@ fab4ClimaOpenEndT.addEventListener("mouseout", (e) => {
   const fab6openEndTClimaVo = mouseOutfCl(e, fab4ClimaOpenEndT);
 });
 
-fab4ClimaOpenEndH.addEventListener("mouseover", (e) => {
+fab4ClimaOpenEndH.addEventListener("click", (e) => {
   const fab4prepHClimaV = ventanaFlotanteClima(
     'fab4_open_end_clima',
     'humedad',
@@ -1911,7 +1980,7 @@ fab4ClimaOpenEndH.addEventListener("mouseout", (e) => {
   const fab4prepTClimaVo = mouseOutfCl(e, fab4ClimaOpenEndH);
 });
 
-fab4FiltroRetor.addEventListener("mouseover", (e)=> {
+fab4FiltroRetor.addEventListener("click", (e)=> {
   const fab4retorFiltV = ventanaFlotanteFiltro(
     'fab4_retorcidos_filtro',
     fab4FiltroRetor,
@@ -1925,7 +1994,7 @@ fab4FiltroRetor.addEventListener("mouseout", (e) => {
   const fab4retorFilVo = mouseOutf(e, fab4FiltroRetor);
 });
 
-fab4ClimaRetorT.addEventListener("mouseover", (e) => {
+fab4ClimaRetorT.addEventListener("click", (e) => {
   const fab4retorcidoTClimaV = ventanaFlotanteClima(
     'fab4_retorcidos_clima',
     'temperatura',
@@ -1940,7 +2009,7 @@ fab4ClimaRetorT.addEventListener("mouseout", (e) => {
   const fab4retorcidoTClimaVo = mouseOutfCl(e, fab4ClimaRetorT);
 });
 
-fab4ClimaRetorH.addEventListener("mouseover", (e) => {
+fab4ClimaRetorH.addEventListener("click", (e) => {
   const fab4retorcidoHClimaV = ventanaFlotanteClima(
     'fab4_retorcidos_clima',
     'humedad',
@@ -1959,7 +2028,7 @@ fab4ClimaRetorH.addEventListener("mouseout", (e) => {
 //fabrica 3/////////////////////
 
 
-fab3FiltroEx8.addEventListener("mouseover", (e)=> {
+fab3FiltroEx8.addEventListener("click", (e)=> {
   const fab3ex8FiltV = ventanaFlotanteFiltro(
     'fab3_ex8_filtro',
     fab3FiltroEx8,
@@ -1973,7 +2042,7 @@ fab3FiltroEx8.addEventListener("mouseout", (e) => {
   const fab3ex8FilVo = mouseOutf(e, fab3FiltroEx8);
 });
 
-fab3ClimaC80T.addEventListener("mouseover", (e) => {
+fab3ClimaC80T.addEventListener("click", (e) => {
   const fab3c80TClimaV = ventanaFlotanteClima(
     'fab3_c80_clima',
     'temperatura',
@@ -1988,7 +2057,7 @@ fab3ClimaC80T.addEventListener("mouseout", (e) => {
   const fab4retorcidoTClimaVo = mouseOutfCl(e, fab3ClimaC80T);
 });
 
-fab3ClimaC80H.addEventListener("mouseover", (e) => {
+fab3ClimaC80H.addEventListener("click", (e) => {
   const fab3c80HClimaV = ventanaFlotanteClima(
     'fab3_c80_clima',
     'humedad',
@@ -2003,7 +2072,52 @@ fab3ClimaC80H.addEventListener("mouseout", (e) => {
   const fab3C80HClimaVo = mouseOutfCl(e, fab3ClimaC80H);
 });
 
-fab3ClimaPeiT.addEventListener("mouseover", (e) => {
+fab3ClimaC50T.addEventListener("click", (e) => {
+  const fab3c50TClimaV = ventanaFlotanteClima(
+    'fab3_c50_clima',
+    'temperatura',
+    fab3ClimaC50T,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3ClimaC50T.addEventListener("mouseout", (e) => {
+  const fab3peiTClimaVo = mouseOutfCl(e, fab3ClimaC50T);
+});
+
+fab3ClimaC50H.addEventListener("click", (e) => {
+  const fab3c50HClimaV = ventanaFlotanteClima(
+    'fab3_c50_clima',
+    'humedad',
+    fab3ClimaC50H,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3ClimaC50H.addEventListener("mouseout", (e) => {
+  const fab3c50HClimaVo = mouseOutfCl(e, fab3ClimaC50H);
+});
+
+fab3C50HumAbs.addEventListener("click", (e) => {
+  const fab3peiEClimaV = ventanaFlotanteClima(
+    'fab3_c50_clima',
+    'humAbsoluta',
+    fab3C50HumAbs,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3C50HumAbs.addEventListener("mouseout", (e) => {
+  const fab3c50EClimaVo = mouseOutfCl(e, fab3C50HumAbs);
+});
+
+fab3ClimaPeiT.addEventListener("click", (e) => {
   const fab3peiTClimaV = ventanaFlotanteClima(
     'fab3_peinadorasE95_clima',
     'temperatura',
@@ -2018,7 +2132,7 @@ fab3ClimaPeiT.addEventListener("mouseout", (e) => {
   const fab3peiTClimaVo = mouseOutfCl(e, fab3ClimaPeiT);
 });
 
-fab3ClimaPeiH.addEventListener("mouseover", (e) => {
+fab3ClimaPeiH.addEventListener("click", (e) => {
   const fab3peiHClimaV = ventanaFlotanteClima(
     'fab3_peinadorasE95_clima',
     'humedad',
@@ -2033,7 +2147,7 @@ fab3ClimaPeiH.addEventListener("mouseout", (e) => {
   const fab3peiHClimaVo = mouseOutfCl(e, fab3ClimaPeiH);
 });
 
-fab3PeiHumAbs.addEventListener("mouseover", (e) => {
+fab3PeiHumAbs.addEventListener("click", (e) => {
   const fab3peiEClimaV = ventanaFlotanteClima(
     'fab3_peinadorasE95_clima',
     'humAbsoluta',
@@ -2048,7 +2162,7 @@ fab3PeiHumAbs.addEventListener("mouseout", (e) => {
   const fab3peiEClimaVo = mouseOutfCl(e, fab3PeiHumAbs);
 });
 
-fab3ClimaManT.addEventListener("mouseover", (e) => {
+fab3ClimaManT.addEventListener("click", (e) => {
   const fab3peiTClimaV = ventanaFlotanteClima(
     'fab3_peinadorasE65_clima',
     'temperatura',
@@ -2064,7 +2178,7 @@ fab3ClimaManT.addEventListener("mouseout", (e) => {
 });
 
 
-fab3ClimaManH.addEventListener("mouseover", (e) => {
+fab3ClimaManH.addEventListener("click", (e) => {
   const fab3manHClimaV = ventanaFlotanteClima(
     'fab3_peinadorasE65_clima',
     'humedad',
@@ -2079,7 +2193,7 @@ fab3ClimaManH.addEventListener("mouseout", (e) => {
   const fab3manHClimaVo = mouseOutfCl(e, fab3ClimaManH);
 });
 
-fab3Pei65HumAbs.addEventListener("mouseover", (e) => {
+fab3Pei65HumAbs.addEventListener("click", (e) => {
   const fab3pei65EClimaV = ventanaFlotanteClima(
     'fab3_peinadorasE65_clima',
     'humAbsoluta',
@@ -2094,7 +2208,52 @@ fab3Pei65HumAbs.addEventListener("mouseout", (e) => {
   const fab3pei65EClimaVo = mouseOutfCl(e, fab3Pei65HumAbs);
 });
 
-fab3ClimaMechT.addEventListener("mouseover", (e) => {
+fab3ClimaLabT.addEventListener("click", (e) => {
+  const fab3labTClimaV = ventanaFlotanteClima(
+    'fab3_laboratorio_clima',
+    'temperatura',
+    fab3ClimaLabT,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3ClimaLabT.addEventListener("mouseout", (e) => {
+  const fab3labTClimaVo = mouseOutfCl(e, fab3ClimaLabT);
+});
+
+fab3ClimaLabH.addEventListener("click", (e) => {
+  const fab3labHClimaV = ventanaFlotanteClima(
+    'fab3_laboratorio_clima',
+    'humedad',
+    fab3ClimaLabH,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3ClimaLabH.addEventListener("mouseout", (e) => {
+  const fab3labHClimaVo = mouseOutfCl(e, fab3ClimaLabH);
+});
+
+fab3LabHumAbs.addEventListener("click", (e) => {
+  const fab3labEClimaV = ventanaFlotanteClima(
+    'fab3_laboratorio_clima',
+    'humAbsoluta',
+    fab3C50HumAbs,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab3LabHumAbs.addEventListener("mouseout", (e) => {
+  const fab3labTClimaVo = mouseOutfCl(e, fab3LabHumAbs);
+});
+
+fab3ClimaMechT.addEventListener("click", (e) => {
   const fab3mechTClimaV = ventanaFlotanteClima(
     'fab3_mecheras_clima',
     'temperatura',
@@ -2109,7 +2268,7 @@ fab3ClimaMechT.addEventListener("mouseout", (e) => {
   const fab3peiTClimaVo = mouseOutfCl(e, fab3ClimaMechT);
 });
 
-fab3ClimaMechH.addEventListener("mouseover", (e) => {
+fab3ClimaMechH.addEventListener("click", (e) => {
   const fab3mechHClimaV = ventanaFlotanteClima(
     'fab3_mecheras_clima',
     'humedad',
@@ -2124,7 +2283,7 @@ fab3ClimaMechH.addEventListener("mouseout", (e) => {
   const fab3mechHClimaVo = mouseOutfCl(e, fab3ClimaMechH);
 });
 
-fab3MechHumAbs.addEventListener("mouseover", (e) => {
+fab3MechHumAbs.addEventListener("click", (e) => {
   const fab3mechEClimaV = ventanaFlotanteClima(
     'fab3_mecheras_clima',
     'humAbsoluta',
@@ -2139,7 +2298,7 @@ fab3MechHumAbs.addEventListener("mouseout", (e) => {
   const fab3mechEClimaVo = mouseOutfCl(e, fab3MechHumAbs);
 });
 
-fab3FiltroPei.addEventListener("mouseover", (e)=> {
+fab3FiltroPei.addEventListener("click", (e)=> {
   const fab3ex8FiltV = ventanaFlotanteFiltro(
     'fab3_peinadoras_filtro',
     fab3FiltroPei,
@@ -2153,7 +2312,7 @@ fab3FiltroPei.addEventListener("mouseout", (e) => {
   const fab3ex8FilVo = mouseOutf(e, fab3FiltroPei);
 });
 
-fab3FiltroPrep.addEventListener("mouseover", (e)=> {
+fab3FiltroPrep.addEventListener("click", (e)=> {
   const fab3prepFiltV = ventanaFlotanteFiltro(
     'fab3_preparacion_filtro',
     fab3FiltroPrep,
@@ -2165,7 +2324,7 @@ fab3FiltroPrep.addEventListener("mouseout", (e) => {
   const fab3prepFilVo = mouseOutf(e, fab3FiltroPrep);
 });
 
-fab3FiltroCardas.addEventListener("mouseover", (e)=> {
+fab3FiltroCardas.addEventListener("click", (e)=> {
   const fab3prepFiltV = ventanaFlotanteFiltro(
     'fab3_cardas_filtro',
     fab3FiltroCardas,
@@ -2177,7 +2336,7 @@ fab3FiltroCardas.addEventListener("mouseout", (e) => {
   const fab3prepFilVo = mouseOutf(e, fab3FiltroCardas);
 });
 
-fab3FiltroCont.addEventListener("mouseover", (e)=> {
+fab3FiltroCont.addEventListener("click", (e)=> {
   const fab3contFiltV = ventanaFlotanteFiltro(
     'fab3_g30_filtro',
     fab3FiltroCont,
@@ -2191,7 +2350,7 @@ fab3FiltroCont.addEventListener("mouseout", (e) => {
   const fab3contFilVo = mouseOutf(e, fab3FiltroCont);
 });
 
-fab3ClimaG30T.addEventListener("mouseover", (e) => {
+fab3ClimaG30T.addEventListener("click", (e) => {
   const fab3g30TClimaV = ventanaFlotanteClima(
     'fab3_g30_clima',
     'temperatura',
@@ -2206,7 +2365,7 @@ fab3ClimaG30T.addEventListener("mouseout", (e) => {
   const fab3g30TClimaVo = mouseOutfCl(e, fab3ClimaG30T);
 });
 
-fab3ClimaG30H.addEventListener("mouseover", (e) => {
+fab3ClimaG30H.addEventListener("click", (e) => {
   const fab3g30HClimaV = ventanaFlotanteClima(
     'fab3_g30_clima',
     'humedad',
@@ -2221,7 +2380,7 @@ fab3ClimaG30H.addEventListener("mouseout", (e) => {
   const fab3g30HClimaVo = mouseOutfCl(e, fab3ClimaG30H);
 });
 
-fab3G30HumAbs.addEventListener("mouseover", (e) => {
+fab3G30HumAbs.addEventListener("click", (e) => {
   const fab3g30EClimaV = ventanaFlotanteClima(
     'fab3_g30_clima',
     'humAbsoluta',
@@ -2236,7 +2395,7 @@ fab3G30HumAbs.addEventListener("mouseout", (e) => {
   const fab3g30EClimaVo = mouseOutfCl(e, fab3G30HumAbs);
 });
 
-fab3Clima3ZT.addEventListener("mouseover", (e) => {
+fab3Clima3ZT.addEventListener("click", (e) => {
   const fab3g30TClimaV = ventanaFlotanteClima(
     'fab3_3z_clima',
     'temperatura',
@@ -2251,7 +2410,7 @@ fab3Clima3ZT.addEventListener("mouseout", (e) => {
   const fab3g30TClimaVo = mouseOutfCl(e, fab3Clima3ZT);
 });
 
-fab3Clima3ZH.addEventListener("mouseover", (e) => {
+fab3Clima3ZH.addEventListener("click", (e) => {
   const fab3g30HClimaV = ventanaFlotanteClima(
     'fab3_3z_clima',
     'humedad',
@@ -2266,7 +2425,7 @@ fab3Clima3ZH.addEventListener("mouseout", (e) => {
   const fab3g30HClimaVo = mouseOutfCl(e, fab3Clima3ZH);
 });
 
-fab3z3HumAbs.addEventListener("mouseover", (e) => {
+fab3z3HumAbs.addEventListener("click", (e) => {
   const fab3z3EClimaV = ventanaFlotanteClima(
     'fab3_3z_clima',
     'humAbsoluta',
@@ -2281,7 +2440,7 @@ fab3z3HumAbs.addEventListener("mouseout", (e) => {
   const fab3z3EClimaVo = mouseOutfCl(e, fab3z3HumAbs);
 });
 
-fab3FiltroBob.addEventListener("mouseover", (e)=> {
+fab3FiltroBob.addEventListener("click", (e)=> {
   const fab3bobFiltV = ventanaFlotanteFiltro(
     'fab3_bobinaje_filtro',
     fab3FiltroBob,
@@ -2295,7 +2454,7 @@ fab3FiltroBob.addEventListener("mouseout", (e) => {
   const fab3contFilVo = mouseOutf(e, fab3FiltroBob);
 });
 
-fab3ClimaBobT.addEventListener("mouseover", (e) => {
+fab3ClimaBobT.addEventListener("click", (e) => {
   const fab3bobTClimaV = ventanaFlotanteClima(
     'fab3_bobinaje_clima',
     'temperatura',
@@ -2310,7 +2469,7 @@ fab3ClimaBobT.addEventListener("mouseout", (e) => {
   const fab3bobTClimaVo = mouseOutfCl(e, fab3ClimaBobT);
 });
 
-fab3ClimaBobH.addEventListener("mouseover", (e) => {
+fab3ClimaBobH.addEventListener("click", (e) => {
   const fab3bobHClimaV = ventanaFlotanteClima(
     'fab3_bobinaje_clima',
     'humedad',
@@ -2325,7 +2484,7 @@ fab3ClimaBobH.addEventListener("mouseout", (e) => {
   const fab3bobHClimaVo = mouseOutfCl(e, fab3ClimaBobH);
 });
 
-fab3bobHumAbs.addEventListener("mouseover", (e) => {
+fab3bobHumAbs.addEventListener("click", (e) => {
   const fab3bobEClimaV = ventanaFlotanteClima(
     'fab3_bobinaje_clima',
     'humAbsoluta',
@@ -2341,7 +2500,7 @@ fab3bobHumAbs.addEventListener("mouseout", (e) => {
 });
 
 
-fab3FiltroG33.addEventListener("mouseover", (e)=> {
+fab3FiltroG33.addEventListener("click", (e)=> {
   const fab3g33FiltV = ventanaFlotanteFiltro(
     'fab3_g33_filtro',
     fab3FiltroG33,
@@ -2355,7 +2514,7 @@ fab3FiltroG33.addEventListener("mouseout", (e) => {
   const fab3g33FilVo = mouseOutf(e, fab3FiltroG33);
 });
 
-fab3ClimaG33T.addEventListener("mouseover", (e) => {
+fab3ClimaG33T.addEventListener("click", (e) => {
   const fab3g33TClimaV = ventanaFlotanteClima(
     'fab3_g33_clima',
     'temperatura',
@@ -2370,7 +2529,7 @@ fab3ClimaG33T.addEventListener("mouseout", (e) => {
   const fab3g33TClimaVo = mouseOutfCl(e, fab3ClimaG33T);
 });
 
-fab3ClimaG33H.addEventListener("mouseover", (e) => {
+fab3ClimaG33H.addEventListener("click", (e) => {
   const fab3g33HClimaV = ventanaFlotanteClima(
     'fab3_g33_clima',
     'humedad',
@@ -2385,7 +2544,7 @@ fab3ClimaG33H.addEventListener("mouseout", (e) => {
   const fab3g33HClimaVo = mouseOutfCl(e, fab3ClimaG33H);
 });
 
-fab3G33HumAbs.addEventListener("mouseover", (e) => {
+fab3G33HumAbs.addEventListener("click", (e) => {
   const fab3g33EClimaV = ventanaFlotanteClima(
     'fab3_g33_clima',
     'humAbsoluta',
@@ -2402,7 +2561,7 @@ fab3G33HumAbs.addEventListener("mouseout", (e) => {
 
 //fabrica 9 //////////////
 
-fab9FiltroLuwa.addEventListener("mouseover", (e)=> {
+fab9FiltroLuwa.addEventListener("click", (e)=> {
   const fab9luwaFiltV = ventanaFlotanteFiltro(
     'fab9_batan_luwa_filtro',
     fab9FiltroLuwa,
@@ -2416,7 +2575,7 @@ fab9FiltroLuwa.addEventListener("mouseout", (e) => {
   const fab9luwaFilVo = mouseOutf(e, fab9FiltroLuwa);
 });
 
-fab9FiltroPrep.addEventListener("mouseover", (e)=> {
+fab9FiltroPrep.addEventListener("click", (e)=> {
   const fab9prepFiltV = ventanaFlotanteFiltro(
     'fab9_preparacion_filtro',
     fab9FiltroPrep,
@@ -2430,7 +2589,7 @@ fab9FiltroPrep.addEventListener("mouseout", (e) => {
   const fab9prepFilVo = mouseOutf(e, fab9FiltroPrep);
 });
 
-fab9ClimaPrepT.addEventListener("mouseover", (e) => {
+fab9ClimaPrepT.addEventListener("click", (e) => {
   const fab9prepTClimaV = ventanaFlotanteClima(
     'fab9_preparacion_clima',
     'temperatura',
@@ -2445,7 +2604,7 @@ fab9ClimaPrepT.addEventListener("mouseout", (e) => {
   const fab9prepTClimaVo = mouseOutfCl(e, fab9ClimaPrepT);
 });
 
-fab9ClimaPrepH.addEventListener("mouseover", (e) => {
+fab9ClimaPrepH.addEventListener("click", (e) => {
   const fab9prepHClimaV = ventanaFlotanteClima(
     'fab9_preparacion_clima',
     'humedad',
@@ -2460,7 +2619,7 @@ fab9ClimaPrepH.addEventListener("mouseout", (e) => {
   const fab9prepHClimaVo = mouseOutfCl(e, fab9ClimaPrepH);
 });
 
-fab9FiltroCardaA.addEventListener("mouseover", (e)=> {
+fab9FiltroCardaA.addEventListener("click", (e)=> {
   const fab9CardaaFiltV = ventanaFlotanteFiltro(
     'fab9_cardasA_filtro',
     fab9FiltroCardaA,
@@ -2474,7 +2633,7 @@ fab9FiltroCardaA.addEventListener("mouseout", (e) => {
   const fab9CardaaFilVo = mouseOutf(e, fab9FiltroCardaA);
 });
 
-fab9FiltroCardaB.addEventListener("mouseover", (e)=> {
+fab9FiltroCardaB.addEventListener("click", (e)=> {
   const fab9CardabFiltV = ventanaFlotanteFiltro(
     'fab9_cardasB_filtro',
     fab9FiltroCardaB,
@@ -2488,7 +2647,7 @@ fab9FiltroCardaB.addEventListener("mouseout", (e) => {
   const fab9CardabFilVo = mouseOutf(e, fab9FiltroCardaB);
 });
 
-fab9ClimaCarda1T.addEventListener("mouseover", (e) => {
+fab9ClimaCarda1T.addEventListener("click", (e) => {
   const fab9carda1TClimaV = ventanaFlotanteClima(
     'fab9_cardas1_clima',
     'temperatura',
@@ -2503,7 +2662,7 @@ fab9ClimaCarda1T.addEventListener("mouseout", (e) => {
   const fab9carda1TClimaVo = mouseOutfCl(e, fab9ClimaCarda1T);
 });
 
-fab9ClimaCarda1H.addEventListener("mouseover", (e) => {
+fab9ClimaCarda1H.addEventListener("click", (e) => {
   const fab9carda1HClimaV = ventanaFlotanteClima(
     'fab9_cardas1_clima',
     'humedad',
@@ -2518,7 +2677,7 @@ fab9ClimaCarda1H.addEventListener("mouseout", (e) => {
   const fab9carda1HClimaVo = mouseOutfCl(e, fab9ClimaCarda1H);
 });
 
-fab9car1HumAbs.addEventListener("mouseover", (e) => {
+fab9car1HumAbs.addEventListener("click", (e) => {
   const fab9car1EClimaV = ventanaFlotanteClima(
     'fab9_cardas1_clima',
     'humAbsoluta',
@@ -2533,7 +2692,7 @@ fab9car1HumAbs.addEventListener("mouseout", (e) => {
   const fab9car1EClimaVo = mouseOutfCl(e, fab9car1HumAbs);
 });
 
-fab9ClimaCarda2T.addEventListener("mouseover", (e) => {
+fab9ClimaCarda2T.addEventListener("click", (e) => {
   const fab9carda2TClimaV = ventanaFlotanteClima(
     'fab9_cardas2_clima',
     'temperatura',
@@ -2548,7 +2707,7 @@ fab9ClimaCarda2T.addEventListener("mouseout", (e) => {
   const fab9carda2TClimaVo = mouseOutfCl(e, fab9ClimaCarda1T);
 });
 
-fab9ClimaCarda2H.addEventListener("mouseover", (e) => {
+fab9ClimaCarda2H.addEventListener("click", (e) => {
   const fab9carda2HClimaV = ventanaFlotanteClima(
     'fab9_cardas2_clima',
     'temperatura',
@@ -2563,7 +2722,7 @@ fab9ClimaCarda2H.addEventListener("mouseout", (e) => {
   const fab9carda2TClimaVo = mouseOutfCl(e, fab9ClimaCarda2H);
 });
 
-fab9FiltroOE.addEventListener("mouseover", (e)=> {
+fab9FiltroOE.addEventListener("click", (e)=> {
   const fab9oeFiltV = ventanaFlotanteFiltro(
     'fab9_open_end_filtro',
     fab9FiltroOE,
@@ -2577,7 +2736,7 @@ fab9FiltroOE.addEventListener("mouseout", (e) => {
   const fab9oeFilVo = mouseOutf(e, fab9FiltroOE);
 });
 
-fab9ClimaOET.addEventListener("mouseover", (e) => {
+fab9ClimaOET.addEventListener("click", (e) => {
   const fab9oeTClimaV = ventanaFlotanteClima(
     'fab9_open_end_clima',
     'temperatura',
@@ -2592,7 +2751,7 @@ fab9ClimaOET.addEventListener("mouseout", (e) => {
   const fab9oeTClimaVo = mouseOutfCl(e, fab9ClimaOET);
 });
 
-fab9ClimaOEH.addEventListener("mouseover", (e) => {
+fab9ClimaOEH.addEventListener("click", (e) => {
   const fab9oeHClimaV = ventanaFlotanteClima(
     'fab9_open_end_clima',
     'humedad',
@@ -2607,7 +2766,7 @@ fab9ClimaOEH.addEventListener("mouseout", (e) => {
   const fab9oeHClimaVo = mouseOutfCl(e, fab9ClimaOEH);
 });
 
-fab9OEHumAbs.addEventListener("mouseover", (e) => {
+fab9OEHumAbs.addEventListener("click", (e) => {
   const fab9oeEClimaV = ventanaFlotanteClima(
     'fab9_open_end_clima',
     'humAbsoluta',
@@ -2622,7 +2781,7 @@ fab9OEHumAbs.addEventListener("mouseout", (e) => {
   const fab9oeEClimaVo = mouseOutfCl(e, fab9OEHumAbs);
 });
 
-fab9ClimaEmpT.addEventListener("mouseover", (e) => {
+fab9ClimaEmpT.addEventListener("click", (e) => {
   const fab9empTClimaV = ventanaFlotanteClima(
     'fab9_empaque_clima',
     'temperatura',
@@ -2637,7 +2796,7 @@ fab9ClimaEmpT.addEventListener("mouseout", (e) => {
   const fab9empTClimaVo = mouseOutfCl(e, fab9ClimaEmpT);
 });
 
-fab9ClimaEmpH.addEventListener("mouseover", (e) => {
+fab9ClimaEmpH.addEventListener("click", (e) => {
   const fab9empHClimaV = ventanaFlotanteClima(
     'fab9_empaque_clima',
     'humedad',
@@ -2652,7 +2811,7 @@ fab9ClimaEmpH.addEventListener("mouseout", (e) => {
   const fab9empHClimaVo = mouseOutfCl(e, fab9ClimaEmpH);
 });
 
-fab9empHumAbs.addEventListener("mouseover", (e) => {
+fab9empHumAbs.addEventListener("click", (e) => {
   const fab9empEClimaV = ventanaFlotanteClima(
     'fab9_empaque_clima',
     'humAbsoluta',
@@ -2669,7 +2828,7 @@ fab9empHumAbs.addEventListener("mouseout", (e) => {
 
 /// fabrica 1/////////////
 
-fab1FiltroCard.addEventListener("mouseover", (e)=> {
+fab1FiltroCard.addEventListener("click", (e)=> {
   const fab1cardasFiltV = ventanaFlotanteFiltro(
     'fab1_cardas_filtro',
     fab1FiltroCard,
@@ -2683,7 +2842,7 @@ fab1FiltroCard.addEventListener("mouseout", (e) => {
   const fab1cardasFilVo = mouseOutf(e, fab1FiltroCard);
 });
 
-fab1FiltroPrep.addEventListener("mouseover", (e)=> {
+fab1FiltroPrep.addEventListener("click", (e)=> {
   const fab1prepFiltV = ventanaFlotanteFiltro(
     'fab1_preparacion_filtro',
     fab1FiltroPrep,
@@ -2697,7 +2856,7 @@ fab1FiltroPrep.addEventListener("mouseout", (e) => {
   const fab1prepFilVo = mouseOutf(e, fab1FiltroPrep);
 });
 
-fab1ClimaPeiT.addEventListener("mouseover", (e) => {
+fab1ClimaPeiT.addEventListener("click", (e) => {
   const fab1peiTClimaV = ventanaFlotanteClima(
     'fab1_preparacion_clima',
     'temperatura',
@@ -2712,7 +2871,7 @@ fab1ClimaPeiT.addEventListener("mouseout", (e) => {
   const fab1peiTClimaVo = mouseOutfCl(e, fab1ClimaPeiT);
 });
 
-fab1ClimaPeiH.addEventListener("mouseover", (e) => {
+fab1ClimaPeiH.addEventListener("click", (e) => {
   const fab1peiHClimaV = ventanaFlotanteClima(
     'fab1_preparacion_clima',
     'humedad',
@@ -2727,7 +2886,7 @@ fab1ClimaPeiH.addEventListener("mouseout", (e) => {
   const fab1peiHClimaVo = mouseOutfCl(e, fab1ClimaPeiH);
 });
 
-fab1peiHumAbs.addEventListener("mouseover", (e) => {
+fab1peiHumAbs.addEventListener("click", (e) => {
   const fab1peiEClimaV = ventanaFlotanteClima(
     'fab1_preparacion_clima',
     'humAbsoluta',
@@ -2742,7 +2901,7 @@ fab1peiHumAbs.addEventListener("mouseout", (e) => {
   const fab1peiEClimaVo = mouseOutfCl(e, fab1peiHumAbs);
 });
 
-fab1ClimaManT.addEventListener("mouseover", (e) => {
+fab1ClimaManT.addEventListener("click", (e) => {
   const fab1manTClimaV = ventanaFlotanteClima(
     'fab1_manuares_clima',
     'temperatura',
@@ -2757,7 +2916,7 @@ fab1ClimaManT.addEventListener("mouseout", (e) => {
   const fab1manTClimaVo = mouseOutfCl(e, fab1ClimaManT);
 });
 
-fab1ClimaManH.addEventListener("mouseover", (e) => {
+fab1ClimaManH.addEventListener("click", (e) => {
   const fab1manHClimaV = ventanaFlotanteClima(
     'fab1_manuares_clima',
     'humedad',
@@ -2772,7 +2931,7 @@ fab1ClimaManH.addEventListener("mouseout", (e) => {
   const fab1manHClimaVo = mouseOutfCl(e, fab1ClimaManH);
 });
 
-fab1FiltroCont.addEventListener("mouseover", (e)=> {
+fab1FiltroCont.addEventListener("click", (e)=> {
   const fab1contFiltV = ventanaFlotanteFiltro(
     'fab1_continuas_filtro',
     fab1FiltroCont,
@@ -2786,7 +2945,7 @@ fab1FiltroCont.addEventListener("mouseout", (e) => {
   const fab1contFilVo = mouseOutf(e, fab1FiltroCont);
 });
 
-fab1FiltroBob.addEventListener("mouseover", (e)=> {
+fab1FiltroBob.addEventListener("click", (e)=> {
   const fab1bobFiltV = ventanaFlotanteFiltro(
     'fab1_bobinaje_filtro',
     fab1FiltroBob,
@@ -2800,7 +2959,7 @@ fab1FiltroBob.addEventListener("mouseout", (e) => {
   const fab1bobFilVo = mouseOutf(e, fab1FiltroBob);
 });
 
-fab1ClimaCont1T.addEventListener("mouseover", (e) => {
+fab1ClimaCont1T.addEventListener("click", (e) => {
   const fab1cont1TClimaV = ventanaFlotanteClima(
     'fab1_continuas1_clima',
     'temperatura',
@@ -2815,7 +2974,7 @@ fab1ClimaCont1T.addEventListener("mouseout", (e) => {
   const fab1cont1TClimaVo = mouseOutfCl(e, fab1ClimaCont1T);
 });
 
-fab1ClimaCont1H.addEventListener("mouseover", (e) => {
+fab1ClimaCont1H.addEventListener("click", (e) => {
   const fab1cont1HClimaV = ventanaFlotanteClima(
     'fab1_continuas1_clima',
     'humedad',
@@ -2830,7 +2989,7 @@ fab1ClimaCont1H.addEventListener("mouseout", (e) => {
   const fab1cont1HClimaVo = mouseOutfCl(e, fab1ClimaCont1H);
 });
 
-fab1ClimaCont2T.addEventListener("mouseover", (e) => {
+fab1ClimaCont2T.addEventListener("click", (e) => {
   const fab1cont2TClimaV = ventanaFlotanteClima(
     'fab1_continuas2_clima',
     'temperatura',
@@ -2845,7 +3004,7 @@ fab1ClimaCont2T.addEventListener("mouseout", (e) => {
   const fab1cont2TClimaVo = mouseOutfCl(e, fab1ClimaCont2T);
 });
 
-fab1ClimaCont2H.addEventListener("mouseover", (e) => {
+fab1ClimaCont2H.addEventListener("click", (e) => {
   const fab1cont2HClimaV = ventanaFlotanteClima(
     'fab1_continuas2_clima',
     'humedad',
@@ -2860,7 +3019,7 @@ fab1ClimaCont2H.addEventListener("mouseout", (e) => {
   const fab1cont2HClimaVo = mouseOutfCl(e, fab1ClimaCont2H);
 });
 
-fab1cont2HumAbs.addEventListener("mouseover", (e) => {
+fab1cont2HumAbs.addEventListener("click", (e) => {
   const fab1cont2EClimaV = ventanaFlotanteClima(
     'fab1_continuas2_clima',
     'humAbsoluta',
@@ -2876,7 +3035,7 @@ fab1cont2HumAbs.addEventListener("mouseout", (e) => {
 });
 
 
-fab1ClimaVortex1T.addEventListener("mouseover", (e) => {
+fab1ClimaVortex1T.addEventListener("click", (e) => {
   const fab1vortex1TClimaV = ventanaFlotanteClima(
     'fab1_vortex1_clima',
     'temperatura',
@@ -2891,7 +3050,7 @@ fab1ClimaVortex1T.addEventListener("mouseout", (e) => {
   const fab1vortex1TClimaVo = mouseOutfCl(e, fab1ClimaVortex1T);
 });
 
-fab1ClimaVortex1H.addEventListener("mouseover", (e) => {
+fab1ClimaVortex1H.addEventListener("click", (e) => {
   const fab1vortex1HClimaV = ventanaFlotanteClima(
     'fab1_vortex1_clima',
     'humedad',
@@ -2906,7 +3065,7 @@ fab1ClimaVortex1H.addEventListener("mouseout", (e) => {
   const fab1vortex1HClimaVo = mouseOutfCl(e, fab1ClimaVortex1H);
 });
 
-fab1ClimaVortex2T.addEventListener("mouseover", (e) => {
+fab1ClimaVortex2T.addEventListener("click", (e) => {
   const fab1vortex2TClimaV = ventanaFlotanteClima(
     'fab1_vortex2_clima',
     'temperatura',
@@ -2921,10 +3080,10 @@ fab1ClimaVortex2T.addEventListener("mouseout", (e) => {
   const fab1vortex2TClimaVo = mouseOutfCl(e, fab1ClimaVortex2T);
 });
 
-fab1ClimaVortex2H.addEventListener("mouseover", (e) => {
+fab1ClimaVortex2H.addEventListener("click", (e) => {
   const fab1vortex2HClimaV = ventanaFlotanteClima(
     'fab1_vortex2_clima',
-    'humedada',
+    'humedad',
     fab1ClimaVortex2H,
     e
   );
@@ -2936,7 +3095,7 @@ fab1ClimaVortex2H.addEventListener("mouseout", (e) => {
   const fab1vortex2HClimaVo = mouseOutfCl(e, fab1ClimaVortex2H);
 });
 
-fab1ClimaVortex3T.addEventListener("mouseover", (e) => {
+fab1ClimaVortex3T.addEventListener("click", (e) => {
   const fab1vortex3TClimaV = ventanaFlotanteClima(
     'fab1_vortex3_clima',
     'temperatura',
@@ -2951,7 +3110,7 @@ fab1ClimaVortex3T.addEventListener("mouseout", (e) => {
   const fab1vortex3TClimaVo = mouseOutfCl(e, fab1ClimaVortex3T);
 });
 
-fab1ClimaVortex3H.addEventListener("mouseover", (e) => {
+fab1ClimaVortex3H.addEventListener("click", (e) => {
   const fab1vortex3TClimaV = ventanaFlotanteClima(
     'fab1_vortex3_clima',
     'humedad',
@@ -2966,7 +3125,7 @@ fab1ClimaVortex3H.addEventListener("mouseout", (e) => {
   const fab1vortex3TClimaVo = mouseOutfCl(e, fab1ClimaVortex3H);
 });
 
-fab1ClimaVortex4T.addEventListener("mouseover", (e) => {
+fab1ClimaVortex4T.addEventListener("click", (e) => {
   const fab1vortex3TClimaV = ventanaFlotanteClima(
     'fab1_vortex4_clima',
     'temperatura',
@@ -2981,7 +3140,7 @@ fab1ClimaVortex4T.addEventListener("mouseout", (e) => {
   const fab1vortex3TClimaVo = mouseOutfCl(e, fab1ClimaVortex4T);
 });
 
-fab1ClimaVortex4H.addEventListener("mouseover", (e) => {
+fab1ClimaVortex4H.addEventListener("click", (e) => {
   const fab1vortex4TClimaV = ventanaFlotanteClima(
     'fab1_vortex4_clima',
     'humedad',
@@ -2997,7 +3156,7 @@ fab1ClimaVortex4H.addEventListener("mouseout", (e) => {
 });
 
 
-fab1FiltroColor.addEventListener("mouseover", (e)=> {
+fab1FiltroColor.addEventListener("click", (e)=> {
   const fab1colorFiltV = ventanaFlotanteFiltro(
     'fab1_color_filtro',
     fab1FiltroColor,
@@ -3009,7 +3168,7 @@ fab1FiltroColor.addEventListener("mouseout", (e) => {
   const fab1colorFilVo = mouseOutf(e, fab1FiltroColor);
 });
 
-fab1ClimaColorT.addEventListener("mouseover", (e) => {
+fab1ClimaColorT.addEventListener("click", (e) => {
   const fab1colorTClimaV = ventanaFlotanteClima(
     'fab1_color_clima',
     'temperatura',
@@ -3022,7 +3181,7 @@ fab1ClimaColorT.addEventListener("mouseout", (e) => {
   const fab1colorTClimaVo = mouseOutfCl(e, fab1ClimaColorT);
 });
 
-fab1ClimaColorH.addEventListener("mouseover", (e) => {
+fab1ClimaColorH.addEventListener("click", (e) => {
   const fab1colorHClimaV = ventanaFlotanteClima(
     'fab1_color_clima',
     'humedad',
@@ -3035,7 +3194,7 @@ fab1ClimaColorH.addEventListener("mouseout", (e) => {
   const fab1colorHClimaVo = mouseOutfCl(e, fab1ClimaColorH);
 });
 
-fab1colHumAbs.addEventListener("mouseover", (e) => {
+fab1colHumAbs.addEventListener("click", (e) => {
   const fab1colEClimaV = ventanaFlotanteClima(
     'fab1_color_clima',
     'humAbsoluta',
@@ -3050,7 +3209,7 @@ fab1colHumAbs.addEventListener("mouseout", (e) => {
   const fab1col2EClimaVo = mouseOutfCl(e, fab1colHumAbs);
 });
 
-fab1ClimaBobT.addEventListener("mouseover", (e) => {
+fab1ClimaBobT.addEventListener("click", (e) => {
   const fab1bobTClimaV = ventanaFlotanteClima(
     'fab1_bobinaje_clima',
     'temperatura',
@@ -3065,7 +3224,7 @@ fab1ClimaBobT.addEventListener("mouseout", (e) => {
   const fab1bobTClimaVo = mouseOutfCl(e, fab1ClimaBobT);
 });
 
-fab1ClimaBobH.addEventListener("mouseover", (e) => {
+fab1ClimaBobH.addEventListener("click", (e) => {
   const fab1bobHClimaV = ventanaFlotanteClima(
     'fab1_bobinaje_clima',
     'humedad',
@@ -3080,7 +3239,7 @@ fab1ClimaBobH.addEventListener("mouseout", (e) => {
   const fab1bobHClimaVo = mouseOutfCl(e, fab1ClimaBobH);
 });
 
-fab1bobHumAbs.addEventListener("mouseover", (e) => {
+fab1bobHumAbs.addEventListener("click", (e) => {
   const fab1bobEClimaV = ventanaFlotanteClima(
     'fab1_bobinaje_clima',
     'humAbsoluta',
@@ -3095,7 +3254,7 @@ fab1bobHumAbs.addEventListener("mouseout", (e) => {
   const fab1bob2EClimaVo = mouseOutfCl(e, fab1bobHumAbs);
 });
 
-fab1ClimaEmpT.addEventListener("mouseover", (e) => {
+fab1ClimaEmpT.addEventListener("click", (e) => {
   const fab1empTClimaV = ventanaFlotanteClima(
     'fab1_empaque_clima',
     'temperatura',
@@ -3110,7 +3269,7 @@ fab1ClimaEmpT.addEventListener("mouseout", (e) => {
   const fab1empTClimaVo = mouseOutfCl(e, fab1ClimaEmpT);
 });
 
-fab1ClimaEmpH.addEventListener("mouseover", (e) => {
+fab1ClimaEmpH.addEventListener("click", (e) => {
   const fab1empHClimaV = ventanaFlotanteClima(
     'fab1_empaque_clima',
     'humedad',
@@ -3125,7 +3284,7 @@ fab1ClimaEmpH.addEventListener("mouseout", (e) => {
   const fab1empHClimaVo = mouseOutfCl(e, fab1ClimaEmpH);
 });
 
-fab1empHumAbs.addEventListener("mouseover", (e) => {
+fab1empHumAbs.addEventListener("click", (e) => {
   const fab1empEClimaV = ventanaFlotanteClima(
     'fab1_empaque_clima',
     'humAbsoluta',
@@ -3140,7 +3299,7 @@ fab1empHumAbs.addEventListener("mouseout", (e) => {
   const fab1empEClimaVo = mouseOutfCl(e, fab1empHumAbs);
 });
 
-fab1FiltroBatan.addEventListener("mouseover", (e)=> {
+fab1FiltroBatan.addEventListener("click", (e)=> {
   const fab1batanFiltV = ventanaFlotanteFiltro(
     'fab1_batan_filtro',
     fab1FiltroBatan,
@@ -3154,7 +3313,7 @@ fab1FiltroBatan.addEventListener("mouseout", (e) => {
   const fab1batanFilVo = mouseOutf(e, fab1FiltroBatan);
 });
 
-fab1filtroCoton.addEventListener("mouseover", (e)=> {
+fab1filtroCoton.addEventListener("click", (e)=> {
   const fab1cotonFiltV = ventanaFlotanteFiltro(
     'fab1_cotonia_filtro',
     fab1filtroCoton,
@@ -3168,7 +3327,7 @@ fab1filtroCoton.addEventListener("mouseout", (e) => {
   const fab1cotonFilVo = mouseOutf(e, fab1filtroCoton);
 });
 
-fab1FiltroPrensa.addEventListener("mouseover", (e) => {
+fab1FiltroPrensa.addEventListener("click", (e) => {
   const fab1prensaFiltroV = ventanaFlotanteClima(
     `${server}/dataFabxprensaFiltro24hs`,
     fab1FiltroPrensa,
