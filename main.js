@@ -502,13 +502,16 @@ http.onreadystatechange = function() {
 // Enviar la solicitud al servidor
 http.send();
 
-if (chart) this.chart.destroy();
-const sector = new XMLHttpRequest();
 let x = e.clientX + 15; // Agregar un desplazamiento a la derecha
 let y = e.clientY;
 boton.style.fill = mouseOver;
 
 if (e.clientY >= 45 && e.clientY < 100) y = y + 30;
+
+else if (e.clientY >= 400 && e.clientY < 600 && e.clientX >= 100 && e.clientX < 200) {
+  y = y - 380;
+  x = x + 50;
+} 
 
 else if (e.clientY >= 300 && e.clientY < 450 && e.clientX >= 1200 && e.clientX < 1400) {
   y = y - 280;
@@ -875,6 +878,11 @@ boton.style.fill = mouseOver;
 
 if (e.clientY >= 45 && e.clientY < 100) y = y + 30;
 
+else if (e.clientY >= 200 && e.clientY < 300 && e.clientX >= 800 && e.clientX <= 1200) {
+  y = y - 200;
+  x = x - 550;
+}
+
 else if (e.clientY >= 300 && e.clientY < 400 && e.clientX >= 100 && e.clientX < 400) {
   y = y - 310;
   x = x + 50;
@@ -883,13 +891,11 @@ else if (e.clientY >= 300 && e.clientY < 400 && e.clientX >= 200 && e.clientX < 
   y = y - 310;
   x = x - 200;
 }
-
-else if (e.clientY >= 300 && e.clientY < 400 && e.clientX >= 1100) {
+else if (e.clientY >= 300 && e.clientY < 500 && e.clientX >= 800) {
   y = y - 330;
   x = x - 350;
 }
 else if (e.clientY >= 400 && e.clientY < 500 && e.clientX >= 100) {
-  console.log('el if entra aca');
   y = y - 320;
   x = x + 50;
 }
@@ -922,7 +928,9 @@ else if (e.clientY >= 500 && e.clientY < 600) {
 else if (e.clientY >= 600 && e.clientY < 800) {
   y = y - 340;
   x = x - 305;
-} else y = y - 50;
+}
+
+else y = y - 50;
 
 ventanaFlotanteclima.style.left = x + "px";
 ventanaFlotanteclima.style.top = y + "px";
@@ -2703,8 +2711,8 @@ fab9ClimaCarda1T.addEventListener("mouseover", (e) => {
     fab9ClimaCarda1T,
     e
   );
-    /*console.log(`X: ${e.clientX}`);
-    console.log(`Y: ${e.clientY}`);*/
+    console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);
 });
 
 fab9ClimaCarda1T.addEventListener("mouseout", (e) => {
