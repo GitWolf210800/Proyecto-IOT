@@ -1,16 +1,32 @@
+/* ojoDeHalcon Version 2.0
+
+ ! Software Developed by @GitWolf210800 --gitHub // Ezequiel Quintana Torrent, since proyect 2023 - 2024
+   For: Tipoiti S.A.T.I.C. in Innovacion & Desarrollo
+
+ ** Tecnologies extern used:
+ * Chart.js
+ * SVG graphics in XML tecnology
+   
+*/
+
 "use strict";
-var chart;
-var chartCl;
-const server = "http://192.168.3.122:1880";
+
+//////////////////////////// Here declared Address Server
+const server = "http://192.168.3.122:1880";                                       
 let direccion =  `${server}/datoClima`;
 let datos;
 let http = new XMLHttpRequest();
+/////////////////////////////////////////////////////////
 
+///////////////////////////// popUp windows, Chart variable global, and Colours ///////////////////////
+var chart;
+var chartCl;
 let paso = 1;
 let pasoCl = 1;
-const ventanaFlotante = document.getElementById("ventanaFlotante");
-const ventanaFlotanteclima = document.getElementById("ventanaClima");
+const ventanaFlotante = document.getElementById("ventanaFlotante");                 // Here declared in popUp windows, previosly developed in CSS and HTML
+const ventanaFlotanteclima = document.getElementById("ventanaClima");              //  idem
 
+////////////////////// colours
 const tempoColdExt = "#3275E4";
 const tempOkExt = "#F4E441";
 const tempMhotExt = "#FA9133";
@@ -38,7 +54,10 @@ const offline = "#C96100";
 const mouseOver = "#58B7D3";
 
 const mouseOut = "#333";
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+/////////////////////////////////// objects SVG declared for logic used ///////////////////////
 
 const fab1FiltroPrensa = document.getElementById("filtroPrensaFab1");
 const fab1filtroCoton = document.getElementById("filtroCotoniaFab1");
@@ -169,11 +188,13 @@ const fab9ClimaEmpT = document.getElementById("climaGEmpTFab9");
 const fab9ClimaEmpH = document.getElementById("climaGEmpHFab9");
 const fab9empHumAbs = document.getElementById('climaGEmpEFab9');
 
-const isMobile = () => {
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+const isMobile = () => {                                 //// This function is for detected if is mobile
   return /Mobi|Android/i.test(navigator.userAgent);
 };
 
-const detecPant = () => {
+const detecPant = () => {                               //// This function is for detected between mobile and PC
   if(isMobile()) {
     console.log('Pantalla de un SmartPhone');
     //alert('Pantalla de un celular');
@@ -183,7 +204,7 @@ const detecPant = () => {
   }
 };
 
-const climaExt = (direccion) => {
+const climaExt = (direccion) => {                        /// This function is for interact in object SVG clima Extern
   const tempExteriortext = document.getElementById("tempExt");
   const tempExt = document.getElementById("tempExt");
   const humExterior = document.getElementById("humExt");
@@ -233,7 +254,7 @@ const climaExt = (direccion) => {
   sector.send();
 };
 
-const ventanaFlotanteFiltro = (nombre, boton, e) => {
+const ventanaFlotanteFiltro = (nombre, boton, e) => {    /// This function is for show data in filters installation and popUp windows adjusted automatically
 let ctxFl = document.getElementById("myChartfiltro");
 if(window.chart) window.chart.destroy();
 // Definir la URL del servidor
@@ -584,7 +605,7 @@ ventanaFlotante.style.display = "block";
 
 };
 
-const ventanaFlotanteClima = (nombre, medicion, boton, e) => {
+const ventanaFlotanteClima = (nombre, medicion, boton, e) => {  /// This function is for show data in clima installation and popUp windows adjusted automatically
 
   let ctxCL = document.getElementById("myChartClima");
   //const instalacion = document.getElementById("instalacionclima");
@@ -941,14 +962,14 @@ ventanaFlotanteclima.style.display = "block";
 http.send();
 };
 
-const mouseOutf = (e, boton) => {
+const mouseOutf = (e, boton) => {   // This function is for disguise popUp windows filters
   boton.style.fill = mouseOut;
   ventanaFlotante.style.display = "none";
   paso = 1;
   if(chart) this.chart.destroy();
 };
 
-const mouseOutfCl = (e, boton) => {
+const mouseOutfCl = (e, boton) => {  // This function is for disguise popUp windows Clima installations
   boton.style.fill = "#333";
   ventanaFlotanteclima.style.display = "none";
   document.getElementById("myChartClima").style.display = "none";
@@ -957,7 +978,7 @@ const mouseOutfCl = (e, boton) => {
 };
 
 
-const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacion, botonEnt, textEnt) => {
+const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacion, botonEnt, textEnt) => {  // This function is for intected witch objects SVG, in map installations adjustement colors according to, limits and show now status data information
     
   const buttonTemp = document.getElementById(botonTemp);
   const buttonHum = document.getElementById(botonHum);
@@ -1038,7 +1059,7 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacio
 
 };
 
-const puestoClima = (botonTemp, botonHum, textTemp, textHum, data, instalacion) => {
+const puestoClima = (botonTemp, botonHum, textTemp, textHum, data, instalacion) => {  //this function is for show status now information is not references installations (grey installations)
     const buttonTemp = document.getElementById(botonTemp);
     const buttonHum = document.getElementById(botonHum);
     let datos;
@@ -1070,7 +1091,7 @@ const puestoClima = (botonTemp, botonHum, textTemp, textHum, data, instalacion) 
 
 };
 
-const carrier = (direccion) =>{
+const carrier = (direccion) =>{ // here interacted with 'sala de chillers' object, whit data registered in dataBase
   const carrier1Button = document.getElementById("carrier1");
   const carrier2Button = document.getElementById("carrier2");
   const carrier3Button = document.getElementById("carrier3");
@@ -1119,7 +1140,7 @@ const carrier = (direccion) =>{
   sector.send();
 };
 
-const botonF = (botonFiltro, textBoton, data, instalacion) => {
+const botonF = (botonFiltro, textBoton, data, instalacion) => { // here interacted filter status if is 0 or 1, is 0 = not good (red colour), is 1 = good (green colour) 
 
     const buttonFiltro = document.getElementById(botonFiltro);
     const textBotonFil = document.getElementById(textBoton);
@@ -1149,7 +1170,7 @@ const botonF = (botonFiltro, textBoton, data, instalacion) => {
 
 
 
-const actualizarDatos = () => {
+const actualizarDatos = () => {  // this function, have petticion GET server is the latest data from dataBase server
 
   http.open('GET', direccion, true);
   http.send();
@@ -1692,7 +1713,7 @@ const actualizarDatos = () => {
 }
 };
 
-////////////////////// Eventos ////////////////////
+////////////////////// Events ////////////////////
 
 //window.addEventListener('resize', detecPant);
 
