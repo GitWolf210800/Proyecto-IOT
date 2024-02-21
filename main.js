@@ -987,6 +987,7 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacio
   const textHumm = document.getElementById(textHum);
   const buttonTempBg = document.getElementById(`${botonTemp}Bg`);
   const buttonHumBg = document.getElementById(`${botonHum}Bg`);
+  const buttonEntBg = document.getElementById(`${botonEnt}Bg`);
     let datos;
 
 
@@ -1072,6 +1073,8 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacio
           const infoEnt = `${parseInt(humAbs)} g/Kg`;
           document.getElementById(textEnt).textContent = infoEnt;
 
+          buttonEntBg.style.fill = neutClima;
+          
           humAbs < minEnt || humAbs > maxEnt
             ? (buttonEnt.style.fill = alertClima)
             : (buttonEnt.style.fill = okClima);
