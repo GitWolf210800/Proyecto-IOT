@@ -324,7 +324,7 @@ http.onreadystatechange = function() {
       let ultID = dataTempReal.ID;
       //let ultMed = dataTempReal.fecha.getTime();
 
-      for (let i = 0; i < datos.length; i++) {
+      for (let i = 0; i < datos.length; i++) {  // here running bucle for array data since dataBase server
           let id = datos[i].ID;
           //let medFor = dataTempReal.fecha.getTime();
 
@@ -392,6 +392,7 @@ http.onreadystatechange = function() {
             },
           });
 
+          ////////// Validations status with limits data and types data is installations
       diferencial.textContent = infoFiltroVent;
       dataTempReal.filtroVentilador > dataTempReal.limFiltroVent
           ? (diferencial.style.color = textNotOk)
@@ -1027,8 +1028,8 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacio
 
         else buttonHum.style.fill = okClima;
 
-          buttonTempBg.style.fill = neutClima;
-          buttonHumBg.style.fill = neutClima;
+          /*buttonTempBg.style.fill = neutClima;
+          buttonHumBg.style.fill = neutClima;*/
 
           const buttonEnt = document.getElementById(botonEnt);
           const minEnt = datos.minHumAbs;
@@ -1047,9 +1048,9 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacio
       document.getElementById(textHum).textContent = 'offline';
 
          buttonTemp.style.fill = offline;
-         buttonTempBg.style.fill = offline;
+         //buttonTempBg.style.fill = offline;
          buttonHum.style.fill = offline;
-         buttonHumBg.style.fill = offline;
+        // buttonHumBg.style.fill = offline;
 
         const buttonEnt = document.getElementById(botonEnt);
         document.getElementById(textEnt).textContent = 'offline';

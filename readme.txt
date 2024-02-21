@@ -1,7 +1,7 @@
 /* ojoDeHalcon Version 2.0
 
  ! Software FULL-STACK Developed by @GitWolf210800 --gitHub // Ezequiel Quintana Torrent, since proyect 2023 - 2024
-   For: Tipoiti S.A.T.I.C. in Innovacion & Desarrollo
+   For: Tipoiti S.A.T.I.C. in Innovacion & Desarrollo Departament
 
  ** Tecnologies used:
  ///////// FrontEnd /////////////////
