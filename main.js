@@ -35,7 +35,7 @@ const fallaColor = '#5A00C6';
 
 const humOkExt = "#37AED8";
 
-const alarmClima = '#FFFF00';
+const alarmClima = '#CEC80F';     /// Yellow colour
 const alertClima = "#BD1F1F";
 const preAlertClima = "#E4C500";
 const okClima = "#2bc12cff";
@@ -983,6 +983,8 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacio
     
   const buttonTemp = document.getElementById(botonTemp);
   const buttonHum = document.getElementById(botonHum);
+  const textTempp = document.getElementById(textTemp);
+  const textHumm = document.getElementById(textHum);
   const buttonTempBg = document.getElementById(`${botonTemp}Bg`);
   const buttonHumBg = document.getElementById(`${botonHum}Bg`);
     let datos;
@@ -1009,12 +1011,16 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacio
         const infoTemp = `${parseInt(temp)}°C`;
         const infoHum = `${parseInt(hum)}% H.r`;
 
-        document.getElementById(textTemp).textContent = infoTemp;
-        document.getElementById(textHum).textContent = infoHum;
+        textTempp.textContent = infoTemp;
+        textHumm.textContent = infoHum;
 
         if (temp < minATemper || temp > maxATemper) buttonTemp.style.fill = alertClima
 
-       else if (temp < minTemp || temp > maxTemp) buttonTemp.style.fill = alarmClima;
+       else if (temp < minTemp || temp > maxTemp){
+         buttonTemp.style.fill = alarmClima;
+         textTempp.style.stroke = '#2C2C2C';
+         textTempp.style.fill = '#2C2C2C';
+        }
 
        else if (temp === NaN) buttonTemp.style.fill = fallaColor;
 
@@ -1022,7 +1028,11 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacio
 
         if (hum < minAHum || hum > maxAHum) buttonHum.style.fill = alertClima;
 
-        else if (hum < minHum || hum > maxHum) buttonHum.style.fill = alarmClima;
+        else if (hum < minHum || hum > maxHum){ 
+          buttonHum.style.fill = alarmClima;
+          textHumm.style.stroke = '#2C2C2C';
+          textHumm.style.fill = '#2C2C2C';
+        }
 
         else if (hum === NaN) buttonHum.style.fill = fallaColor;
 
