@@ -1014,19 +1014,35 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacio
         textTempp.textContent = infoTemp;
         textHumm.textContent = infoHum;
 
-        if (temp < minATemper || temp > maxATemper) buttonTemp.style.fill = alertClima
+        if (temp < minATemper || temp > maxATemper){ 
+          buttonTemp.style.fill = alertClima
+          textTempp.style.stroke = '#000';
+          textTempp.style.fill = '#FFF';
+        }
 
        else if (temp < minTemp || temp > maxTemp){
          buttonTemp.style.fill = alarmClima;
          textTempp.style.stroke = '#2C2C2C';
-         textTempp.style.fill = '#2C2C2C';
+         textTempp.style.fill = '#474747';
         }
 
-       else if (temp === NaN) buttonTemp.style.fill = fallaColor;
+       else if (temp === NaN){
+         buttonTemp.style.fill = fallaColor;
+         textTempp.style.stroke = '#000';
+         textTempp.style.fill = '#FFF';
+        }
 
-        else buttonTemp.style.fill = okClima;
+        else{ 
+          buttonTemp.style.fill = okClima;
+          textTempp.style.stroke = '#000';
+          textTempp.style.fill = '#FFF';
+        }
 
-        if (hum < minAHum || hum > maxAHum) buttonHum.style.fill = alertClima;
+        if (hum < minAHum || hum > maxAHum){ 
+          buttonHum.style.fill = alertClima;
+          textHumm.style.stroke = '#000';
+          textHumm.style.fill = '#FFF';
+        }
 
         else if (hum < minHum || hum > maxHum){ 
           buttonHum.style.fill = alarmClima;
@@ -1034,9 +1050,17 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacio
           textHumm.style.fill = '#2C2C2C';
         }
 
-        else if (hum === NaN) buttonHum.style.fill = fallaColor;
+        else if (hum === NaN){ 
+          buttonHum.style.fill = fallaColor;
+          textHumm.style.stroke = '#000';
+          textHumm.style.fill = '#FFF';
+        }
 
-        else buttonHum.style.fill = okClima;
+        else{ 
+          buttonHum.style.fill = okClima;
+          textHumm.style.stroke = '#000';
+          textHumm.style.fill = '#FFF';
+        }
 
           /*buttonTempBg.style.fill = neutClima;
           buttonHumBg.style.fill = neutClima;*/
