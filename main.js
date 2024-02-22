@@ -748,16 +748,16 @@ http.onreadystatechange = function() {
                     data: limiteInf,
                   },
                   {
+                    label: limiteSupT,
+                    borderColor: limiteColor,
+                    borderWidth: 1.5,
+                    data: limiteSup,
+                  },
+                  {
                     label : limiteInterInfT,
                     borderColor : limiteInterColor,
                     borderWidth: 1.5,
                     data: limiteInterInf
-                  },
-                  {
-                    label: date.medicion,
-                    borderColor: colorG,
-                    borderWidth: 2,
-                    data: historial,
                   },
                   {
                     label: limiteInterSupT,
@@ -766,10 +766,10 @@ http.onreadystatechange = function() {
                     data: limiteInterSup
                   },
                   {
-                    label: limiteSupT,
-                    borderColor: limiteColor,
-                    borderWidth: 1.5,
-                    data: limiteSup,
+                    label: date.medicion,
+                    borderColor: colorG,
+                    borderWidth: 2,
+                    data: historial,
                   }
                 ],
               },
@@ -987,6 +987,7 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacio
   const textHumm = document.getElementById(textHum);
   const buttonTempBg = document.getElementById(`${botonTemp}Bg`);
   const buttonHumBg = document.getElementById(`${botonHum}Bg`);
+  const buttonEnt = document.getElementById(botonEnt);
   const buttonEntBg = document.getElementById(`${botonEnt}Bg`);
     let datos;
 
@@ -1039,6 +1040,7 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacio
           textTempp.style.fill = '#FFF';
         }
 
+
         if (hum < minAHum || hum > maxAHum){ 
           buttonHum.style.fill = alertClima;
           textHumm.style.stroke = '#000';
@@ -1085,13 +1087,17 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacio
       document.getElementById(textHum).textContent = 'offline';
 
          buttonTemp.style.fill = offline;
+         textTempp.style.stroke = '#000'
+         textTempp.style.fill = '#FFF';
          //buttonTempBg.style.fill = offline;
          buttonHum.style.fill = offline;
+         textHumm.style.stroke = '#000';
+         textHumm.style.fill = '#FFF';
         // buttonHumBg.style.fill = offline;
 
-        const buttonEnt = document.getElementById(botonEnt);
+        
         document.getElementById(textEnt).textContent = 'offline';
-
+           buttonEntBg.style.fill = offline;
            buttonEnt.style.fill = offline;
     }
 
