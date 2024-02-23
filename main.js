@@ -35,7 +35,7 @@ const fallaColor = '#5A00C6';
 
 const humOkExt = "#37AED8";
 
-const alarmClima = '#CEC80F';     /// Yellow colour
+const alarmClima = '#ffff00f0';     /// Yellow colour
 const alertClima = "#BD1F1F";
 const preAlertClima = "#E4C500";
 const okClima = "#2bc12cff";
@@ -280,18 +280,8 @@ http.onreadystatechange = function() {
       //handleResponse(responseData);
       const date = JSON.parse(http.responseText);
       const dataTempReal = date.datos[0];
-      const limtieG = dataTempReal.limFiltroVent + 100;
-      const datos = date.datos;
-      const infoTFiltroV = `Diferencial de la Tela: (Limite Sup: ${dataTempReal.limFiltroVent} Pa)`;
-      const infoFiltroVent = `${dataTempReal.filtroVentilador.toFixed(2)} Pa`;
       const infoTVent = `Ventilador: (Limite Inf: ${dataTempReal.limVent} Pa)`;
       const infoVent = `${dataTempReal.ventilador.toFixed(2)} Pa`;
-      const infoTpicos = `Picos: (Limite Inf: ${dataTempReal.limPicos} Pa)`;
-      const infoPicos = `${dataTempReal.picos.toFixed(2)} Pa`;
-      const infoTRpm = `RPM: (Limite Inf: ${dataTempReal.limRpm} RPM)`;
-      const infoRpm = `${dataTempReal.rpmFiltro} RPM`;
-      const infoTCarro = `Carro: (Limite Inf: ${dataTempReal.limCarro})`;
-      const infoCarro = `${dataTempReal.carro}`;
       const preFiltroData = dataTempReal.preFiltro;
       const limPreFiltroData = dataTempReal.limPreFiltro;
       const picos2Data = dataTempReal.picos2;
@@ -300,16 +290,6 @@ http.onreadystatechange = function() {
       const limRpmFiltro = dataTempReal.limRpm;
       const carro2Data = dataTempReal.carro2;
       const limCarro = dataTempReal.limCarro;
-      const inst = document.getElementById("instalacion");
-      const titleFiltroV = (document.getElementById("titleTela").textContent = infoTFiltroV);
-      const diferencial = document.getElementById("filtroVent");
-      const titleVent = (document.getElementById("titleVent").textContent = infoTVent);
-      const vent = document.getElementById("vent");
-      const titlePico = (document.getElementById("titlePicos").textContent = infoTpicos);
-      const pico = document.getElementById("pico");
-      const titleRpm = (document.getElementById("titleRpm").textContent = infoTRpm);
-      const rpm = document.getElementById("rpm");
-      const titleCarro = (document.getElementById("titleCarro").textContent = infoTCarro);
       const picos2Title = document.getElementById("titlePicos2");
       const picos2 = document.getElementById("pico2");
       const carro = document.getElementById("carro");
@@ -317,14 +297,37 @@ http.onreadystatechange = function() {
       const rpm2 = document.getElementById("rpm2");
       const carro2Title = document.getElementById("carro2H");
       const carro2 = document.getElementById("carro2");
-      let datoss = [];
-      let limite = [];
+      const inst = document.getElementById("instalacion");
+      const titleVent = (document.getElementById("titleVent").textContent = infoTVent);
+      const vent = document.getElementById("vent");
       inst.textContent = `${date.instalacion}`;
 
       let ultID = dataTempReal.ID;
       //let ultMed = dataTempReal.fecha.getTime();
 
-      for (let i = 0; i < datos.length; i++) {  // here running bucle for array data since dataBase server
+      if (nombre !== 'fab4_cardas_filtro'){
+        document.getElementById('myChartfiltro').style.display = 'block';
+        const limtieG = dataTempReal.limFiltroVent + 100;
+        const datos = date.datos;
+        const infoTFiltroV = `Diferencial de la Tela: (Limite Sup: ${dataTempReal.limFiltroVent} Pa)`;
+        const infoFiltroVent = `${dataTempReal.filtroVentilador.toFixed(2)} Pa`;
+        const infoTpicos = `Picos: (Limite Inf: ${dataTempReal.limPicos} Pa)`;
+        const infoPicos = `${dataTempReal.picos.toFixed(2)} Pa`;
+        const infoTRpm = `RPM: (Limite Inf: ${dataTempReal.limRpm} RPM)`;
+        const infoRpm = `${dataTempReal.rpmFiltro} RPM`;
+        const infoTCarro = `Carro: (Limite Inf: ${dataTempReal.limCarro})`;
+        const infoCarro = `${dataTempReal.carro}`;
+        const titleFiltroV = (document.getElementById("titleTela").textContent = infoTFiltroV);
+        const diferencial = document.getElementById("filtroVent");
+        const titlePico = (document.getElementById("titlePicos").textContent = infoTpicos);
+        const pico = document.getElementById("pico");
+        const titleRpm = (document.getElementById("titleRpm").textContent = infoTRpm);
+        const rpm = document.getElementById("rpm");
+        const titleCarro = (document.getElementById("titleCarro").textContent = infoTCarro);
+        let datoss = [];
+        let limite = [];
+
+        for (let i = 0; i < datos.length; i++) {  // here running bucle for array data since dataBase server
           let id = datos[i].ID;
           //let medFor = dataTempReal.fecha.getTime();
 
@@ -392,15 +395,12 @@ http.onreadystatechange = function() {
             },
           });
 
-          ////////// Validations status with limits data and types data is installations
+                    ////////// Validations status with limits data and types data is installations
       diferencial.textContent = infoFiltroVent;
       dataTempReal.filtroVentilador > dataTempReal.limFiltroVent
           ? (diferencial.style.color = textNotOk)
            : (diferencial.style.color = textOk);
-      vent.textContent = infoVent;
-      dataTempReal.ventilador < dataTempReal.limVent
-          ? (vent.style.color = textNotOk)
-          : (vent.style.color = textOk);
+
       pico.textContent = infoPicos;
       dataTempReal.picos < dataTempReal.limPicos
           ? (pico.style.color = textNotOk)
@@ -414,6 +414,13 @@ http.onreadystatechange = function() {
           ? (carro.style.color = textNotOk)
           : (carro.style.color = textOk);
 
+      }
+
+      vent.textContent = infoVent;
+      dataTempReal.ventilador < dataTempReal.limVent
+          ? (vent.style.color = textNotOk)
+          : (vent.style.color = textOk);
+
       (dataTempReal.carro === null) 
           ? (carro.style.display = "none", document.getElementById("titleCarro").style.display = "none") 
           : (carro.style.display = "block", document.getElementById("titleCarro").style.display = "block");
@@ -422,16 +429,20 @@ http.onreadystatechange = function() {
           ? (rpm.style.display = "none", document.getElementById("titleRpm").style.display = "none")
           : (rpm.style.display = "block", document.getElementById("titleRpm").style.display = "block");
 
-      if (date.instalacion === "Filtro Fabrica 4 Cardas 24Hs"){
+      if (nombre === "fab4_cardas_filtro"){
+            document.getElementById('titleTela').style.display = 'none';
+            document.getElementById('filtroVent').style.display = 'none';
+            document.getElementById('myChartfiltro').style.display = 'none';
             const preFiltroTitle = document.getElementById("preFiltroH");
             const preFiltro = document.getElementById("preFiltro");
-            const ventTitle = document.getElementById("titleVent").style.display = "none";
-            const vent = document.getElementById("vent").style.display = "none";
+            //const ventTitle = document.getElementById("titleVent");
+            //const vent = document.getElementById("vent");
             const picosTitle = document.getElementById("titlePicos");
             const picos = document.getElementById("pico");
             preFiltroTitle.style.display = "block";
             preFiltro.style.display = "block";
             preFiltro.textContent = `${dataTempReal.preFiltro} Pa`;
+            
             picosTitle.style.display = "none";
             picos.style.display = "none";           
 
@@ -450,7 +461,7 @@ http.onreadystatechange = function() {
            const preFiltro = document.getElementById("preFiltro");
            preFiltroTitle.style.display = "block";
            preFiltro.style.display = "block";
-           preFiltroTitle.textContent = `Pre-Filtro, Limite: ${dataTempReal.limPreFiltro} Pa`
+           preFiltroTitle.textContent = `Pre-Filtro, (Limite Inf: ${dataTempReal.limPreFiltro}) Pa`
            preFiltro.textContent = `${dataTempReal.preFiltro} Pa`
 
         if (preFiltroData < limPreFiltroData) {
@@ -985,10 +996,7 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacio
   const buttonHum = document.getElementById(botonHum);
   const textTempp = document.getElementById(textTemp);
   const textHumm = document.getElementById(textHum);
-  const buttonTempBg = document.getElementById(`${botonTemp}Bg`);
-  const buttonHumBg = document.getElementById(`${botonHum}Bg`);
   const buttonEnt = document.getElementById(botonEnt);
-  const buttonEntBg = document.getElementById(`${botonEnt}Bg`);
     let datos;
 
 
@@ -1075,7 +1083,6 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacio
           const infoEnt = `${parseInt(humAbs)} g/Kg`;
           document.getElementById(textEnt).textContent = infoEnt;
 
-          buttonEntBg.style.fill = neutClima;
           
           humAbs < minEnt || humAbs > maxEnt
             ? (buttonEnt.style.fill = alertClima)
@@ -1097,7 +1104,6 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacio
 
         
         document.getElementById(textEnt).textContent = 'offline';
-           buttonEntBg.style.fill = offline;
            buttonEnt.style.fill = offline;
     }
 
@@ -1954,7 +1960,7 @@ fab4FiltroBatan.addEventListener("mouseout", (e) => {
   const fab4batanFilVo = mouseOutf(e, fab4FiltroBatan);
 });
 
-/*
+
 fab4FiltroCardas.addEventListener("mouseover", (e)=> {
   const fab4cardasFiltV = ventanaFlotanteFiltro(
     'fab4_cardas_filtro',
@@ -1968,7 +1974,7 @@ fab4FiltroCardas.addEventListener("mouseover", (e)=> {
 
 fab4FiltroCardas.addEventListener("mouseout", (e) => {
   const fab4cardasFilVo = mouseOutf(e, fab4FiltroCardas);
-});*/
+});
 
 fab4FiltroClima.addEventListener("mouseover", (e)=> {
   const fab4climaFiltV = ventanaFlotanteFiltro(
@@ -2832,7 +2838,7 @@ fab9ClimaCarda2T.addEventListener("mouseout", (e) => {
 fab9ClimaCarda2H.addEventListener("mouseover", (e) => {
   const fab9carda2HClimaV = ventanaFlotanteClima(
     'fab9_cardas2_clima',
-    'temperatura',
+    'humedad',
     fab9ClimaCarda2H,
     e
   );
