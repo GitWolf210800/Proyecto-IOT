@@ -306,6 +306,8 @@ http.onreadystatechange = function() {
       //let ultMed = dataTempReal.fecha.getTime();
 
       if (nombre !== 'fab4_cardas_filtro'){
+        document.getElementById('titleTela').style.display = 'block';
+        document.getElementById('filtroVent').style.display = 'block';
         document.getElementById('myChartfiltro').style.display = 'block';
         const limtieG = dataTempReal.limFiltroVent + 100;
         const datos = date.datos;
