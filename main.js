@@ -280,241 +280,244 @@ http.onreadystatechange = function() {
       //handleResponse(responseData);
       const date = JSON.parse(http.responseText);
       const dataTempReal = date.datos[0];
-      const infoTVent = `Ventilador: (Limite Inf: ${dataTempReal.limVent} Pa)`;
-      const infoVent = `${dataTempReal.ventilador.toFixed(2)} Pa`;
-      const preFiltroData = dataTempReal.preFiltro;
-      const limPreFiltroData = dataTempReal.limPreFiltro;
-      const picos2Data = dataTempReal.picos2;
-      const limPicos = dataTempReal.limPicos;
-      const rpm2Data = dataTempReal.rpmFiltro2;
-      const limRpmFiltro = dataTempReal.limRpm;
-      const carro2Data = dataTempReal.carro2;
-      const limCarro = dataTempReal.limCarro;
-      const picos2Title = document.getElementById("titlePicos2");
-      const picos2 = document.getElementById("pico2");
-      const carro = document.getElementById("carro");
-      const rpm2Title = document.getElementById("RPM2H");
-      const rpm2 = document.getElementById("rpm2");
-      const carro2Title = document.getElementById("carro2H");
-      const carro2 = document.getElementById("carro2");
-      const inst = document.getElementById("instalacion");
-      const titleVent = (document.getElementById("titleVent").textContent = infoTVent);
-      const vent = document.getElementById("vent");
-      inst.textContent = `${date.instalacion}`;
-
-      let ultID = dataTempReal.ID;
-      //let ultMed = dataTempReal.fecha.getTime();
-
-      if (nombre !== 'fab4_cardas_filtro'){
-        document.getElementById('titleTela').style.display = 'block';
-        document.getElementById('filtroVent').style.display = 'block';
-        document.getElementById('myChartfiltro').style.display = 'block';
-        const limtieG = dataTempReal.limFiltroVent + 100;
-        const datos = date.datos;
-        const infoTFiltroV = `Diferencial de la Tela: (Limite Sup: ${dataTempReal.limFiltroVent} Pa)`;
-        const infoFiltroVent = `${dataTempReal.filtroVentilador.toFixed(2)} Pa`;
-        const infoTpicos = `Picos: (Limite Inf: ${dataTempReal.limPicos} Pa)`;
-        const infoPicos = `${dataTempReal.picos.toFixed(2)} Pa`;
-        const infoTRpm = `RPM: (Limite Inf: ${dataTempReal.limRpm} RPM)`;
-        const infoRpm = `${dataTempReal.rpmFiltro} RPM`;
-        const infoTCarro = `Carro: (Limite Inf: ${dataTempReal.limCarro})`;
-        const infoCarro = `${dataTempReal.carro}`;
-        const titleFiltroV = (document.getElementById("titleTela").textContent = infoTFiltroV);
-        const diferencial = document.getElementById("filtroVent");
-        const titlePico = (document.getElementById("titlePicos").textContent = infoTpicos);
-        const pico = document.getElementById("pico");
-        const titleRpm = (document.getElementById("titleRpm").textContent = infoTRpm);
-        const rpm = document.getElementById("rpm");
-        const titleCarro = (document.getElementById("titleCarro").textContent = infoTCarro);
-        let datoss = [];
-        let limite = [];
-
-        for (let i = 0; i < datos.length; i++) {  // here running bucle for array data since dataBase server
-          let id = datos[i].ID;
-          //let medFor = dataTempReal.fecha.getTime();
-
-          //if (medFor === ultMed) {
-          ultID = id;
-          let fecha = new Date(datos[i].fecha);
-          let hora = fecha.getHours().toString().padStart(2, "0");
-          let minuto = fecha.getMinutes().toString().padStart(2, "0");
-          let horaText = `${hora}:${minuto}`;
-          datoss.push({
-             x: horaText,
-             y: `${parseInt(datos[i].filtroVentilador)}`,
-            });
-          limite.push({
-            x: horaText,
-            y: `${datos[i].limFiltroVent}`,
-            });
-          ultID = ultID - 15;
-          //ultMed = ultMed - 1800000;
-          //}
-          }
-
-          limite.reverse();
-          datoss.reverse();
-     window.chart = new Chart(ctxFl, {
-          type: "line",
-          data: {
-          datasets: [
-              {
-                label: "Diferencial",
-                borderColor: "blue",
-                borderWidth: 1.5,
-                data: datoss,
-                //yAxisID: 'y',
-              },
-              {
-                label: "Límite",
-                borderColor: "#20A907",
-                borderWidth: 1,
-                data: limite,
-                //yAxisID: 'y1',
-              },
-            ],
-          },
-          options: {
-            elements: {
-              point: {
-                radius: 0, // Establecer el radio de los puntos en 0 para ocultarlos
-              },
-            },
-            animations: {
-                /*tension: {
-                },*/
-            },
-            scales: {
-              y: {
-                max: limtieG,
-                min: 0,
-               /* title: {
-                                  display: true,
-                                  text: 'Valores',
-                                },*/
-              },
-              },
-            },
-          });
-
-                    ////////// Validations status with limits data and types data is installations
-      diferencial.textContent = infoFiltroVent;
-      dataTempReal.filtroVentilador > dataTempReal.limFiltroVent
-          ? (diferencial.style.color = textNotOk)
-           : (diferencial.style.color = textOk);
-
-      pico.textContent = infoPicos;
-      dataTempReal.picos < dataTempReal.limPicos
-          ? (pico.style.color = textNotOk)
-          : (pico.style.color = textOk);
-      rpm.textContent = infoRpm;
-      dataTempReal.rpmFiltro < dataTempReal.limRpm
-          ? (rpm.style.color = textNotOk)
-          : (rpm.style.color = textOk);
-      carro.textContent = infoCarro;
-      dataTempReal.carro < dataTempReal.limCarro
-          ? (carro.style.color = textNotOk)
-          : (carro.style.color = textOk);
-
-      }
-
-      vent.textContent = infoVent;
-      dataTempReal.ventilador < dataTempReal.limVent
-          ? (vent.style.color = textNotOk)
-          : (vent.style.color = textOk);
-
-      (dataTempReal.carro === null) 
-          ? (carro.style.display = "none", document.getElementById("titleCarro").style.display = "none") 
-          : (carro.style.display = "block", document.getElementById("titleCarro").style.display = "block");
-
-      (dataTempReal.rpmFiltro === null)
-          ? (rpm.style.display = "none", document.getElementById("titleRpm").style.display = "none")
-          : (rpm.style.display = "block", document.getElementById("titleRpm").style.display = "block");
-
-      if (nombre === "fab4_cardas_filtro"){
-            document.getElementById('titleTela').style.display = 'none';
-            document.getElementById('filtroVent').style.display = 'none';
-            document.getElementById('myChartfiltro').style.display = 'none';
-            const preFiltroTitle = document.getElementById("preFiltroH");
-            const preFiltro = document.getElementById("preFiltro");
-            //const ventTitle = document.getElementById("titleVent");
-            //const vent = document.getElementById("vent");
-            const picosTitle = document.getElementById("titlePicos");
-            const picos = document.getElementById("pico");
-            preFiltroTitle.style.display = "block";
-            preFiltro.style.display = "block";
-            preFiltro.textContent = `${dataTempReal.preFiltro} Pa`;
-            
-            picosTitle.style.display = "none";
-            picos.style.display = "none";           
-
-            document.getElementById("titleVent").textContent
-       } else {
-            const preFiltroTitle = document.getElementById("preFiltroH").style.display = "none";
-            const preFiltro = document.getElementById("preFiltro").style.display = "none";
-            const ventTitle = document.getElementById("titleVent").style.display = "block";
-            const vent = document.getElementById("vent").style.display = "block";
-            const picosTitle = document.getElementById("titlePicos").style.display = "block";
-            const picos = document.getElementById("pico").style.display = "block";
+      
+      if (nombre !== 'fabx_prensa_filtro'){
+        const infoTVent = `Ventilador: (Limite Inf: ${dataTempReal.limVent} Pa)`;
+        const infoVent = `${dataTempReal.ventilador.toFixed(2)} Pa`;
+        const preFiltroData = dataTempReal.preFiltro;
+        const limPreFiltroData = dataTempReal.limPreFiltro;
+        const picos2Data = dataTempReal.picos2;
+        const limPicos = dataTempReal.limPicos;
+        const rpm2Data = dataTempReal.rpmFiltro2;
+        const limRpmFiltro = dataTempReal.limRpm;
+        const carro2Data = dataTempReal.carro2;
+        const limCarro = dataTempReal.limCarro;
+        const picos2Title = document.getElementById("titlePicos2");
+        const picos2 = document.getElementById("pico2");
+        const carro = document.getElementById("carro");
+        const rpm2Title = document.getElementById("RPM2H");
+        const rpm2 = document.getElementById("rpm2");
+        const carro2Title = document.getElementById("carro2H");
+        const carro2 = document.getElementById("carro2");
+        const inst = document.getElementById("instalacion");
+        const titleVent = (document.getElementById("titleVent").textContent = infoTVent);
+        const vent = document.getElementById("vent");
+        inst.textContent = `${date.instalacion}`;
+  
+        let ultID = dataTempReal.ID;
+        //let ultMed = dataTempReal.fecha.getTime();
+  
+        if (nombre !== 'fab4_cardas_filtro'){
+          document.getElementById('titleTela').style.display = 'block';
+          document.getElementById('filtroVent').style.display = 'block';
+          document.getElementById('myChartfiltro').style.display = 'block';
+          const limtieG = dataTempReal.limFiltroVent + 100;
+          const datos = date.datos;
+          const infoTFiltroV = `Diferencial de la Tela: (Limite Sup: ${dataTempReal.limFiltroVent} Pa)`;
+          const infoFiltroVent = `${dataTempReal.filtroVentilador.toFixed(2)} Pa`;
+          const infoTpicos = `Picos: (Limite Inf: ${dataTempReal.limPicos} Pa)`;
+          const infoPicos = `${dataTempReal.picos.toFixed(2)} Pa`;
+          const infoTRpm = `RPM: (Limite Inf: ${dataTempReal.limRpm} RPM)`;
+          const infoRpm = `${dataTempReal.rpmFiltro} RPM`;
+          const infoTCarro = `Carro: (Limite Inf: ${dataTempReal.limCarro})`;
+          const infoCarro = `${dataTempReal.carro}`;
+          const titleFiltroV = (document.getElementById("titleTela").textContent = infoTFiltroV);
+          const diferencial = document.getElementById("filtroVent");
+          const titlePico = (document.getElementById("titlePicos").textContent = infoTpicos);
+          const pico = document.getElementById("pico");
+          const titleRpm = (document.getElementById("titleRpm").textContent = infoTRpm);
+          const rpm = document.getElementById("rpm");
+          const titleCarro = (document.getElementById("titleCarro").textContent = infoTCarro);
+          let datoss = [];
+          let limite = [];
+  
+          for (let i = 0; i < datos.length; i++) {  // here running bucle for array data since dataBase server
+            let id = datos[i].ID;
+            //let medFor = dataTempReal.fecha.getTime();
+  
+            //if (medFor === ultMed) {
+            ultID = id;
+            let fecha = new Date(datos[i].fecha);
+            let hora = fecha.getHours().toString().padStart(2, "0");
+            let minuto = fecha.getMinutes().toString().padStart(2, "0");
+            let horaText = `${hora}:${minuto}`;
+            datoss.push({
+               x: horaText,
+               y: `${parseInt(datos[i].filtroVentilador)}`,
+              });
+            limite.push({
+              x: horaText,
+              y: `${datos[i].limFiltroVent}`,
+              });
+            ultID = ultID - 15;
+            //ultMed = ultMed - 1800000;
+            //}
             }
-
-        if(preFiltroData !== null) {
-           const preFiltroTitle = document.getElementById("preFiltroH");
-           const preFiltro = document.getElementById("preFiltro");
-           preFiltroTitle.style.display = "block";
-           preFiltro.style.display = "block";
-           preFiltroTitle.textContent = `Pre-Filtro, (Limite Inf: ${dataTempReal.limPreFiltro}) Pa`
-           preFiltro.textContent = `${dataTempReal.preFiltro} Pa`
-
-        if (preFiltroData < limPreFiltroData) {
-            preFiltro.style.color = textNotOk;
-        } else preFiltro.style.color = textOk;
-
-        } 
-
-        if (picos2Data !== null) {
-            picos2Title.style.display = "block";
-            picos2.style.display = "block";
-            picos2Title.textContent = `Picos-2, Limite: ${dataTempReal.limPicos}`;
-            picos2.textContent = `${dataTempReal.picos2} Pa`;
-
-        (picos2Data < limPicos)
-            ? (picos2.style.color = textNotOk)
-            : (picos2.style.color = textOk);
-
-       } else {
-            picos2Title.style.display = "none";
-            picos2.style.display = "none";
+  
+            limite.reverse();
+            datoss.reverse();
+       window.chart = new Chart(ctxFl, {
+            type: "line",
+            data: {
+            datasets: [
+                {
+                  label: "Diferencial",
+                  borderColor: "blue",
+                  borderWidth: 1.5,
+                  data: datoss,
+                  //yAxisID: 'y',
+                },
+                {
+                  label: "Límite",
+                  borderColor: "#20A907",
+                  borderWidth: 1,
+                  data: limite,
+                  //yAxisID: 'y1',
+                },
+              ],
+            },
+            options: {
+              elements: {
+                point: {
+                  radius: 0, // Establecer el radio de los puntos en 0 para ocultarlos
+                },
+              },
+              animations: {
+                  /*tension: {
+                  },*/
+              },
+              scales: {
+                y: {
+                  max: limtieG,
+                  min: 0,
+                 /* title: {
+                                    display: true,
+                                    text: 'Valores',
+                                  },*/
+                },
+                },
+              },
+            });
+  
+                      ////////// Validations status with limits data and types data is installations
+        diferencial.textContent = infoFiltroVent;
+        dataTempReal.filtroVentilador > dataTempReal.limFiltroVent
+            ? (diferencial.style.color = textNotOk)
+             : (diferencial.style.color = textOk);
+  
+        pico.textContent = infoPicos;
+        dataTempReal.picos < dataTempReal.limPicos
+            ? (pico.style.color = textNotOk)
+            : (pico.style.color = textOk);
+        rpm.textContent = infoRpm;
+        dataTempReal.rpmFiltro < dataTempReal.limRpm
+            ? (rpm.style.color = textNotOk)
+            : (rpm.style.color = textOk);
+        carro.textContent = infoCarro;
+        dataTempReal.carro < dataTempReal.limCarro
+            ? (carro.style.color = textNotOk)
+            : (carro.style.color = textOk);
+  
         }
-
-            
-        if (rpm2Data !== null) {
-            rpm2Title.style.display = "block";
-            rpm2.style.display = "block";
-            rpm2Title.textContent = `RPM-2, Limite: ${limRpmFiltro}RPM`;
-            rpm2.textContent = `${rpm2Data} RPM`;
-        if (rpm2Data < limRpmFiltro) rpm2.style.color = textNotOk;
-        else rpm2.style.color = textOk;
-
-        } else { 
-            rpm2Title.style.display = "none";
-            rpm2.style.display = "none";    
-            }
-
-        if (carro2Data !== null) {
-            carro2Title.style.display = "block";
-            carro2.style.display = "block";
-            carro2Title.textContent = `Carro-2, (Limite inf: ${limCarro})`
-            carro2.textContent = `${carro2Data}`
-
-       if (carro2Data < limCarro) {
-            carro2.style.color = textNotOk;
-       } else carro2.style.color = textOk;
-       } else {
-          carro2Title.style.display = "none";
-          carro2.style.display = "none";
-       }
-
+  
+        vent.textContent = infoVent;
+        dataTempReal.ventilador < dataTempReal.limVent
+            ? (vent.style.color = textNotOk)
+            : (vent.style.color = textOk);
+  
+        (dataTempReal.carro === null) 
+            ? (carro.style.display = "none", document.getElementById("titleCarro").style.display = "none") 
+            : (carro.style.display = "block", document.getElementById("titleCarro").style.display = "block");
+  
+        (dataTempReal.rpmFiltro === null)
+            ? (rpm.style.display = "none", document.getElementById("titleRpm").style.display = "none")
+            : (rpm.style.display = "block", document.getElementById("titleRpm").style.display = "block");
+  
+        if (nombre === "fab4_cardas_filtro"){
+              document.getElementById('titleTela').style.display = 'none';
+              document.getElementById('filtroVent').style.display = 'none';
+              document.getElementById('myChartfiltro').style.display = 'none';
+              const preFiltroTitle = document.getElementById("preFiltroH");
+              const preFiltro = document.getElementById("preFiltro");
+              //const ventTitle = document.getElementById("titleVent");
+              //const vent = document.getElementById("vent");
+              const picosTitle = document.getElementById("titlePicos");
+              const picos = document.getElementById("pico");
+              preFiltroTitle.style.display = "block";
+              preFiltro.style.display = "block";
+              preFiltro.textContent = `${dataTempReal.preFiltro} Pa`;
+              
+              picosTitle.style.display = "none";
+              picos.style.display = "none";           
+  
+              document.getElementById("titleVent").textContent
+         } else {
+              const preFiltroTitle = document.getElementById("preFiltroH").style.display = "none";
+              const preFiltro = document.getElementById("preFiltro").style.display = "none";
+              const ventTitle = document.getElementById("titleVent").style.display = "block";
+              const vent = document.getElementById("vent").style.display = "block";
+              const picosTitle = document.getElementById("titlePicos").style.display = "block";
+              const picos = document.getElementById("pico").style.display = "block";
+              }
+  
+          if(preFiltroData !== null) {
+             const preFiltroTitle = document.getElementById("preFiltroH");
+             const preFiltro = document.getElementById("preFiltro");
+             preFiltroTitle.style.display = "block";
+             preFiltro.style.display = "block";
+             preFiltroTitle.textContent = `Pre-Filtro, (Limite Inf: ${dataTempReal.limPreFiltro}) Pa`
+             preFiltro.textContent = `${dataTempReal.preFiltro} Pa`
+  
+          if (preFiltroData < limPreFiltroData) {
+              preFiltro.style.color = textNotOk;
+          } else preFiltro.style.color = textOk;
+  
+          } 
+  
+          if (picos2Data !== null) {
+              picos2Title.style.display = "block";
+              picos2.style.display = "block";
+              picos2Title.textContent = `Picos-2, Limite: ${dataTempReal.limPicos}`;
+              picos2.textContent = `${dataTempReal.picos2} Pa`;
+  
+          (picos2Data < limPicos)
+              ? (picos2.style.color = textNotOk)
+              : (picos2.style.color = textOk);
+  
+         } else {
+              picos2Title.style.display = "none";
+              picos2.style.display = "none";
+          }
+  
+              
+          if (rpm2Data !== null) {
+              rpm2Title.style.display = "block";
+              rpm2.style.display = "block";
+              rpm2Title.textContent = `RPM-2, Limite: ${limRpmFiltro}RPM`;
+              rpm2.textContent = `${rpm2Data} RPM`;
+          if (rpm2Data < limRpmFiltro) rpm2.style.color = textNotOk;
+          else rpm2.style.color = textOk;
+  
+          } else { 
+              rpm2Title.style.display = "none";
+              rpm2.style.display = "none";    
+              }
+  
+          if (carro2Data !== null) {
+              carro2Title.style.display = "block";
+              carro2.style.display = "block";
+              carro2Title.textContent = `Carro-2, (Limite inf: ${limCarro})`
+              carro2.textContent = `${carro2Data}`
+  
+         if (carro2Data < limCarro) {
+              carro2.style.color = textNotOk;
+         } else carro2.style.color = textOk;
+         } else {
+            carro2Title.style.display = "none";
+            carro2.style.display = "none";
+         }
+  
+      
 
       if (preFiltroData !== null && rpm2Data === null && picos2Data === null) ventanaFlotante.style.height = "375px";
 
@@ -527,6 +530,8 @@ http.onreadystatechange = function() {
       else if (preFiltroData === null && picos2Data !== null ) ventanaFlotante.style.height = "380px";
 
       else ventanaFlotante.style.height = "330px";
+      
+      }
     } else {
       // Ocurrió un error en la solicitud
       console.error('Error en la solicitud: ' + http.status);
