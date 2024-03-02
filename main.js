@@ -673,28 +673,16 @@ http.onreadystatechange = function() {
           let humMinA = dataTempRealcl.min_Ahum;
 
 
-         //let ultIDcl = dataTempRealcl.id_medicion;
-         //console.log(ultIDcl);
-          //let ultMed = dataTempRealcl.fecha;
-
-
+          //Iterar sobre el array de datos de la base de datos
           for (let i = 0; i < datos.length; i++) {
             let medFor = datos[i].id_medicion; 
-            //let tiempo;
 
-           //if (medFor === ultIDcl) {
-              //console.log('entra al if');
-              //tiempo = new Date(datos[i].fecha);
-              //tiempo.setMinutes(tiempo.getMinutes() - 30);
-              //ultMed = tiempo.toISOString();
               let fecha = new Date(datos[i].fecha);
               let hora = fecha.getHours().toString().padStart(2, "0");
               let minuto = fecha.getMinutes().toString().padStart(2, "0");
               let horaText = `${hora}:${minuto}`;
-              //console.log('entro el if');
-              //ultIDcl = ultIDcl - 320;
-             // console.log(`luego del if: ${ultIDcl}`);
-              
+
+              // El paquete de datos se arma en base a la solicitud del usuario. Condicion si es temperatura, humedad o humedadAbs
               if (date.medicion === "temperatura") {
                 limiteInf.push({ x: horaText, y: `${datos[i].min_Atemp}` });
                 limiteInterInf.push ({ x: horaText, y: `${datos[i].minTemp}` });
@@ -717,9 +705,9 @@ http.onreadystatechange = function() {
                 limiteSup.push({ x: horaText, y: `${datos[i].maxHumAbs}` });
               }
               
-            //}
           }
 
+          //Validacion si el Dato es temperatura, humedad o humedadAbsoluta para armar el paquete de datos
           if (date.medicion === "temperatura") {
             limiteSupT = `Limite Superior: ${dataTempRealcl.max_Atemp}°C`;
             limiteInterSupT = `Limite InterSup: ${dataTempRealcl.maxTemp}°C`;
@@ -745,15 +733,17 @@ http.onreadystatechange = function() {
             colorG = "#0076E5";
             limiteColor = "#FA1300";
           }
-
+          // Aqui se da vuelta los datos del array para representarlo en la grafica
           limiteInterInf.reverse();
           limiteInf.reverse();
           historial.reverse();
           limiteSup.reverse();
           limiteInterSup.reverse();
 
+          // Aqui se destruye la grafica en caso de haberse utilizado previamente
           if(this.chartCl) this.chartCl.destroy();
 
+          //Aqui es donde se arma la grafica, pero antes se define si es medida simple o medida de doble limite
           if ((date.medicion === 'temperatura' && tempMaxA !== 0 && tempMinA !== 0) || (date.medicion === 'humedad' && humMaxA !== 0 && humMinA !== 0)){
             this.chartCl = new Chart(ctxCL, {
               type: "line",
@@ -916,6 +906,8 @@ let x = e.clientX + 15; // Agregar un desplazamiento a la derecha
 let y = e.clientY;
 boton.style.fill = mouseOver;
 
+// definir la posicion de la ventana en la pantalla del usuario/cliente, en base a la posicion del eje x e y del mouse donde se
+// esta seleccionando el objeto
 if (e.clientY >= 45 && e.clientY < 100) y = y + 30;
 
 else if (e.clientY >= 200 && e.clientY < 300 && e.clientX >= 800 && e.clientX <= 1200) {
@@ -972,6 +964,7 @@ else if (e.clientY >= 600 && e.clientY < 800) {
 
 else y = y - 50;
 
+//aca se define en el CSS los px de posicion de la ventana flotante, y el modo de la ventana, en este caso 'block'
 ventanaFlotanteclima.style.left = x + "px";
 ventanaFlotanteclima.style.top = y + "px";
 ventanaFlotanteclima.style.display = "block";
@@ -998,23 +991,28 @@ const mouseOutfCl = (e, boton) => {  // This function is for disguise popUp wind
 
 
 const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacion, botonEnt, textEnt) => {  // This function is for intected witch objects SVG, in map installations adjustement colors according to, limits and show now status data information
-    
+  
+  //Se declaran los objetos SVG, se pasan los parametros en la funcion, con que objeto debe interactuar
   const buttonTemp = document.getElementById(botonTemp);
   const buttonHum = document.getElementById(botonHum);
   const textTempp = document.getElementById(textTemp);
   const textHumm = document.getElementById(textHum);
   const buttonEnt = document.getElementById(botonEnt);
+  //aca se almacenan los datos en array de la base de datos, pasados por parametros en la funcion
     let datos;
 
-
+    //se itera el array de datos de la base de datos
     for (let i = 0; i < data.length; i++){
+      // se verifica por nombre de instalacion, para almacenar los datos en la variable 'datos'
       if (data[i].nombre === instalacion){
           datos = data[i];
           break
       }
     }
 
+    //Verificando la existencia en 'true' de datos de la instalacion, de no existir 'false', esta en modo offline
     if (datos){
+      //de existir los datos se almacenen en constantes, para ser utilizadas mas adelante
         const temp = datos.temperatura;
         const hum = datos.humedad;
         const minATemper = datos.min_Atemp;
@@ -1025,89 +1023,138 @@ const puestoClimaRef = (botonTemp, botonHum, textTemp, textHum, data, instalacio
         const minHum = datos.minHum;
         const maxHum = datos.maxHum;
         const maxAHum = datos.max_Ahum;
+        // armando la cadena de texto para mostrar en el objeto
         const infoTemp = `${parseInt(temp)}°C`;
         const infoHum = `${parseInt(hum)}% H.r`;
 
+        //los datos armados previamente se insertan en los objetos llamados previamente
         textTempp.textContent = infoTemp;
         textHumm.textContent = infoHum;
 
-        if (temp < minATemper || temp > maxATemper){ 
-          buttonTemp.style.fill = alertClima
-          textTempp.style.stroke = '#000';
-          textTempp.style.fill = '#FFF';
+        // se verifican los estados de las varibles obtenidas de la base de datos, de estar en los rango, se pinta de verde
+        // si estan fuera de los rangos de limites, se pintan de rojo, o amarillo 'de pasarse por el primer limite'
+        // en caso de estar en NaN, se considera en modo falla
+
+        
+        if (minATemper !== 0 && maxATemper !== 0){
+          if (temp < minATemper || temp > maxATemper){ 
+            buttonTemp.style.fill = alertClima
+            textTempp.style.stroke = '#000';
+            textTempp.style.fill = '#FFF';
+          }
+  
+         else if (temp < minTemp || temp > maxTemp){
+           buttonTemp.style.fill = alarmClima;
+           textTempp.style.stroke = '#2C2C2C';
+           textTempp.style.fill = '#474747';
+          }
+  
+         else if (temp === NaN){
+           buttonTemp.style.fill = fallaColor;
+           textTempp.style.stroke = '#000';
+           textTempp.style.fill = '#FFF';
+          }
+  
+          else{ 
+            buttonTemp.style.fill = okClima;
+            textTempp.style.stroke = '#000';
+            textTempp.style.fill = '#FFF';
+          }
+        } else {
+          if (temp < minTemp || temp > maxTemp){ 
+            buttonTemp.style.fill = alertClima
+            textTempp.style.stroke = '#000';
+            textTempp.style.fill = '#FFF';
+          }
+  
+         else if (temp === NaN){
+           buttonTemp.style.fill = fallaColor;
+           textTempp.style.stroke = '#000';
+           textTempp.style.fill = '#FFF';
+          }
+  
+          else{ 
+            buttonTemp.style.fill = okClima;
+            textTempp.style.stroke = '#000';
+            textTempp.style.fill = '#FFF';
+          }
         }
 
-       else if (temp < minTemp || temp > maxTemp){
-         buttonTemp.style.fill = alarmClima;
-         textTempp.style.stroke = '#2C2C2C';
-         textTempp.style.fill = '#474747';
+
+        if (minAHum !== 0 && maxAHum !== 0){
+          if (hum < minAHum || hum > maxAHum){ 
+            buttonHum.style.fill = alertClima;
+            textHumm.style.stroke = '#000';
+            textHumm.style.fill = '#FFF';
+          }
+  
+          else if (hum < minHum || hum > maxHum){ 
+            buttonHum.style.fill = alarmClima;
+            textHumm.style.stroke = '#2C2C2C';
+            textHumm.style.fill = '#2C2C2C';
+          }
+  
+          else if (hum === NaN){ 
+            buttonHum.style.fill = fallaColor;
+            textHumm.style.stroke = '#000';
+            textHumm.style.fill = '#FFF';
+          }
+  
+          else{ 
+            buttonHum.style.fill = okClima;
+            textHumm.style.stroke = '#000';
+            textHumm.style.fill = '#FFF';
+          }
+        } else {
+  
+           if (hum < minHum || hum > maxHum){ 
+            buttonHum.style.fill = alarmClima;
+            textHumm.style.stroke = '#2C2C2C';
+            textHumm.style.fill = '#2C2C2C';
+          }
+  
+          else if (hum === NaN){ 
+            buttonHum.style.fill = fallaColor;
+            textHumm.style.stroke = '#000';
+            textHumm.style.fill = '#FFF';
+          }
+  
+          else{ 
+            buttonHum.style.fill = okClima;
+            textHumm.style.stroke = '#000';
+            textHumm.style.fill = '#FFF';
+          }
         }
 
-       else if (temp === NaN){
-         buttonTemp.style.fill = fallaColor;
-         textTempp.style.stroke = '#000';
-         textTempp.style.fill = '#FFF';
-        }
 
-        else{ 
-          buttonTemp.style.fill = okClima;
-          textTempp.style.stroke = '#000';
-          textTempp.style.fill = '#FFF';
-        }
-
-
-        if (hum < minAHum || hum > maxAHum){ 
-          buttonHum.style.fill = alertClima;
-          textHumm.style.stroke = '#000';
-          textHumm.style.fill = '#FFF';
-        }
-
-        else if (hum < minHum || hum > maxHum){ 
-          buttonHum.style.fill = alarmClima;
-          textHumm.style.stroke = '#2C2C2C';
-          textHumm.style.fill = '#2C2C2C';
-        }
-
-        else if (hum === NaN){ 
-          buttonHum.style.fill = fallaColor;
-          textHumm.style.stroke = '#000';
-          textHumm.style.fill = '#FFF';
-        }
-
-        else{ 
-          buttonHum.style.fill = okClima;
-          textHumm.style.stroke = '#000';
-          textHumm.style.fill = '#FFF';
-        }
-
-          /*buttonTempBg.style.fill = neutClima;
-          buttonHumBg.style.fill = neutClima;*/
-
+          //se define el boton objeto de la humedadAbs
           const buttonEnt = document.getElementById(botonEnt);
+          //se obtienen los datos previamente obtenido de la base de datos
           const minEnt = datos.minHumAbs;
           const maxEnt = datos.maxHumAbs;
-          const humAbs = datos.humedadAbs;          ;
+          const humAbs = datos.humedadAbs;
+          // armado de string para mostrar en la web
           const infoEnt = `${parseInt(humAbs)} g/Kg`;
+          // inserccion del string en el objeto texto del svg de la web
           document.getElementById(textEnt).textContent = infoEnt;
 
-          
+          // se define a traves de los limites el estado y los colores de la instalacion
           humAbs < minEnt || humAbs > maxEnt
             ? (buttonEnt.style.fill = alertClima)
             : (buttonEnt.style.fill = okClima);
 
     }
+    // en caso de no existir los datos 'false', esta en modo offline
     else {
       document.getElementById(textTemp).textContent = 'offline';
       document.getElementById(textHum).textContent = 'offline';
-
+        // se parametriza todo en modo offline
          buttonTemp.style.fill = offline;
          textTempp.style.stroke = '#000'
          textTempp.style.fill = '#FFF';
-         //buttonTempBg.style.fill = offline;
          buttonHum.style.fill = offline;
          textHumm.style.stroke = '#000';
          textHumm.style.fill = '#FFF';
-        // buttonHumBg.style.fill = offline;
 
         
         document.getElementById(textEnt).textContent = 'offline';
@@ -1777,6 +1824,9 @@ const actualizarDatos = () => {  // this function, have petticion GET server is 
 
 ///////// Fabrica 6
 
+
+//En esta instalncia se llaman a los objetos previamente declarados al inicio, para interactuar con el usuario, Llamando a las
+//funciones de control de ventanas flotantes
 fab6FiltroPrep.addEventListener("mouseover", (e) => {
   const fab6prepFilV = ventanaFlotanteFiltro(
     'fab6_preparacion_filtro',
