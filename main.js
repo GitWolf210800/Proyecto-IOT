@@ -226,7 +226,7 @@ const climaExt = (direccion) => {                        /// This function is fo
         const date = JSON.parse(sector.responseText);
         const tempExtdate = `${parseInt(date.datos[0].temperatura)} °C`;
         const humExtdata = `${parseInt(date.datos[0].humedad)} %`;
-        entalpiaText.textContent = `${date.datos[0].entalpia.toFixed(2)} Kj/Kg`;
+        entalpiaText.textContent = `${date.datos[0].entalpia.toFixed(2)} Kj / Kg`;
         const ultimaVezText = document.getElementById("ultimaVez").textContent = date.actualizacion;
 
         if (date.datos[0].temperatura < 20) {
