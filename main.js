@@ -63,6 +63,8 @@ const fab1FiltroPrensa = document.getElementById("filtroPrensaFab1");
 const fab1filtroCoton = document.getElementById("filtroCotoniaFab1");
 const fab1FiltroBatan = document.getElementById("filtroBatanFab1");
 const fab1FiltroCard = document.getElementById("filtroCardasFab1");
+const fab1ClimaTCardT = document.getElementById('climaGt.cardasTFab1');
+const fab1ClimaTCardH = document.getElementById('climaGt.cardasHFab1');
 const fab1FiltroPrep = document.getElementById("filtroPrepFab1");
 const fab1ClimaPeiT = document.getElementById("climaGpeinadorasTFab1");
 const fab1ClimaPeiH = document.getElementById("climaGpeinadorasHFab1");
@@ -187,6 +189,9 @@ const fab9OEHumAbs = document.getElementById('climaGopenEndEFab9');
 const fab9ClimaEmpT = document.getElementById("climaGEmpTFab9");
 const fab9ClimaEmpH = document.getElementById("climaGEmpHFab9");
 const fab9empHumAbs = document.getElementById('climaGEmpEFab9');
+const fab9ClimaExtT = document.getElementById('tempExtt');
+const fab9ClimaExtH = document.getElementById('text349');
+const fab9ClimaExtE = document.getElementById('entalpiaa');
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -704,6 +709,9 @@ http.onreadystatechange = function() {
                 historial.push({ x: horaText, y: `${datos[i].humedadAbs}` });
                 limiteSup.push({ x: horaText, y: `${datos[i].maxHumAbs}` });
               }
+              else if (date.medicion === 'entalpia'){
+                historial.push({ x: horaText, y: `${datos[i].entalpia}`});
+              }
               
           }
 
@@ -733,6 +741,8 @@ http.onreadystatechange = function() {
             colorG = "#0076E5";
             limiteColor = "#FA1300";
           }
+          else if (date.medicion === 'entalpia') colorG = "#0076E5";
+
           // Aqui se da vuelta los datos del array para representarlo en la grafica
           limiteInterInf.reverse();
           limiteInf.reverse();
@@ -908,7 +918,11 @@ boton.style.fill = mouseOver;
 
 // definir la posicion de la ventana en la pantalla del usuario/cliente, en base a la posicion del eje x e y del mouse donde se
 // esta seleccionando el objeto
-if (e.clientY >= 45 && e.clientY < 100) y = y + 30;
+if (e.clientY >= 45 && e.clientY < 100) {
+  console.log('entra al if');
+  x = x - 300; 
+  y = y + 30;
+}
 
 else if (e.clientY >= 200 && e.clientY < 300 && e.clientX >= 800 && e.clientX <= 1200) {
   y = y - 200;
@@ -936,6 +950,11 @@ else if (e.clientY >= 400 && e.clientY < 500 && e.clientX >= 1100) {
   x = x - 250;
 }
 else if (e.clientY >= 500 && e.clientY < 600 && e.clientX >= 1100) {
+  y = y - 340;
+  x = x - 400;
+}
+else if (e.clientY >= 50 && e.clientY < 600 && e.clientX >= 800) {
+  //console.log('entra al if');
   y = y - 340;
   x = x - 400;
 }
@@ -1197,10 +1216,15 @@ const puestoClima = (botonTemp, botonHum, textTemp, textHum, data, instalacion) 
 
 const carrier = (direccion) =>{ // here interacted with 'sala de chillers' object, whit data registered in dataBase
   const carrier1Button = document.getElementById("carrier1");
+  const carrier1Text = document.getElementById('carrier1Text');
   const carrier2Button = document.getElementById("carrier2");
+  const carrier2Text = document.getElementById('carrier2Text');
   const carrier3Button = document.getElementById("carrier3");
+  const carrier3Text = document.getElementById('carrier3Text');
   const carrier4Button = document.getElementById("carrier4");
+  const carrier4Text = document.getElementById('carrier4Text');
   const carrier5Button = document.getElementById("carrier5");
+  const carrier5Text = document.getElementById('carrier5Text');
 
   const sector = new XMLHttpRequest();
 
@@ -1208,35 +1232,95 @@ const carrier = (direccion) =>{ // here interacted with 'sala de chillers' objec
     if (sector.readyState == XMLHttpRequest.DONE){
       if (sector.status == 200) {
         const date = JSON.parse(sector.responseText);
-        if(date.datos[0].carrier1 === 100) carrier1Button.style.fill = okClima;
+        if(date.datos[0].carrier1 === 100) {
+          carrier1Button.style.fill = okClima;
+          carrier1Text.style.stroke = '#000';
+          carrier1Text.style.fill = '#FFF';
+        }
 
-        else if(date.datos[0].carrier1 === 50) carrier1Button.style.fill = alertClima;
+        else if(date.datos[0].carrier1 === 50){ 
+          carrier1Button.style.fill = alertClima;
+          carrier1Text.style.stroke = '#000';
+          carrier1Text.style.fill = '#FFF';
+        }
 
-        else if(date.datos[0].carrier1 === 0) carrier1Button.style.fill = preAlertClima;
+        else if(date.datos[0].carrier1 === 0){ 
+          carrier1Button.style.fill = preAlertClima;
+          carrier1Text.style.stroke = '#000';
+          carrier1Text.style.fill = '#000';
+        }
 
-        if(date.datos[0].carrier2 === 100) carrier2Button.style.fill = okClima;
+        if(date.datos[0].carrier2 === 100) {
+          carrier2Button.style.fill = okClima;
+          carrier2Text.style.stroke = '#000';
+          carrier2Text.style.fill = '#FFF';
+        }
 
-        else if(date.datos[0].carrier2 === 50) carrier2Button.style.fill = alertClima;
+        else if(date.datos[0].carrier2 === 50){ 
+          carrier2Button.style.fill = alertClima;
+          carrier2Text.style.stroke = '#000';
+          carrier2Text.style.fill = '#FFF';
+        }
 
-        else if(date.datos[0].carrier2 === 0) carrier2Button.style.fill = preAlertClima;
+        else if(date.datos[0].carrier2 === 0){ 
+          carrier2Button.style.fill = preAlertClima;
+          carrier2Text.style.stroke = '#000';
+          carrier2Text.style.fill = '#000';
+        }
 
-        if(date.datos[0].carrier3 === 100) carrier3Button.style.fill = okClima;
+        if(date.datos[0].carrier3 === 100){ 
+          carrier3Button.style.fill = okClima;
+          carrier3Text.style.stroke = '#000';
+          carrier3Text.style.fill = '#FFF';
+        }
 
-        else if(date.datos[0].carrier3 === 50) carrier3Button.style.fill = alertClima;
+        else if(date.datos[0].carrier3 === 50){ 
+          carrier3Button.style.fill = alertClima;
+          carrier3Text.style.stroke = '#000';
+          carrier3Text.style.fill = '#FFF';
+        }
 
-        else if(date.datos[0].carrier3 === 0) carrier3Button.style.fill = preAlertClima;
+        else if(date.datos[0].carrier3 === 0){ 
+          carrier3Button.style.fill = preAlertClima;
+          carrier3Text.style.stroke = '#000';
+          carrier3Text.style.fill = '#000';
+        }
 
-        if(date.datos[0].carrier4 === 100) carrier4Button.style.fill = okClima;
+        if(date.datos[0].carrier4 === 100){ 
+          carrier4Button.style.fill = okClima;
+          carrier4Text.style.stroke = '#000';
+          carrier4Text.style.fill = '#FFF';
+        }
 
-        else if(date.datos[0].carrier4 === 50) carrier4Button.style.fill = alertClima;
+        else if(date.datos[0].carrier4 === 50){ 
+          carrier4Button.style.fill = alertClima;
+          carrier4Text.style.stroke = '#000';
+          carrier4Text.style.fill = '#FFF';
+        }
 
-        else if(date.datos[0].carrier4 === 0) carrier4Button.style.fill =  preAlertClima;
+        else if(date.datos[0].carrier4 === 0){ 
+          carrier4Button.style.fill =  preAlertClima;
+          carrier4Text.style.stroke = '#000';
+          carrier4Text.style.fill = '#000';
+        }
 
-        if(date.datos[0].carrier5 === 100) carrier5Button.style.fill = okClima;
+        if(date.datos[0].carrier5 === 100){ 
+          carrier5Button.style.fill = okClima;
+          carrier5Text.style.stroke = '#000';
+          carrier5Text.style.fill = '#FFF';
+        }
 
-        else if(date.datos[0].carrier5 === 50) carrier5Button.style.fill = alertClima;
+        else if(date.datos[0].carrier5 === 50){ 
+          carrier5Button.style.fill = alertClima;
+          carrier5Text.style.stroke = '#000';
+          carrier5Text.style.fill = '#FFF'
+        }
 
-        else if(date.datos[0].carrier5 === 0) carrier5Button.style.fill = preAlertClima;
+        else if(date.datos[0].carrier5 === 0){ 
+          carrier5Button.style.fill = preAlertClima;
+          carrier5Text.style.stroke = '#000';
+          carrier5Text.style.fill = '#000';
+        }
       }
     }
   };
@@ -3484,6 +3568,36 @@ fab1empHumAbs.addEventListener("mouseout", (e) => {
   const fab1empEClimaVo = mouseOutfCl(e, fab1empHumAbs);
 });
 
+fab1ClimaTCardT.addEventListener("mouseover", (e) => {
+  const fab1TcardTClimaV = ventanaFlotanteClima(
+    'fab1_taller_cardas_clima',
+    'temperatura',
+    fab1ClimaTCardT,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaTCardT.addEventListener("mouseout", (e) => {
+  const fab1TcardTClimaVo = mouseOutfCl(e, fab1ClimaTCardT);
+});
+
+fab1ClimaTCardH.addEventListener("mouseover", (e) => {
+  const fab1TcardHClimaV = ventanaFlotanteClima(
+    'fab1_taller_cardas_clima',
+    'humedad',
+    fab1ClimaTCardH,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab1ClimaTCardH.addEventListener("mouseout", (e) => {
+  const fab1empHClimaVo = mouseOutfCl(e, fab1ClimaTCardH);
+});
+
 fab1FiltroBatan.addEventListener("mouseover", (e)=> {
   const fab1batanFiltV = ventanaFlotanteFiltro(
     'fab1_batan_filtro',
@@ -3525,6 +3639,54 @@ fab1FiltroPrensa.addEventListener("mouseover", (e) => {
 fab1FiltroPrensa.addEventListener("mouseout", (e) => {
   const fab1prensaFiltroVo = mouseOutfCl(e, fab1FiltroPrensa);
 });
+
+
+fab9ClimaExtT.addEventListener("mouseover", (e) => {
+  const fab9ExtClimaV = ventanaFlotanteClima(
+    'fab9_exterior_clima',
+    'temperatura',
+    fab9ClimaExtT,
+    e
+  );
+    /*console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);*/
+});
+
+fab9ClimaExtT.addEventListener("mouseout", (e) => {
+  const fab9ClimaExtClimaVo = mouseOutfCl(e, fab9ClimaExtT);
+});
+
+
+fab9ClimaExtH.addEventListener("mouseover", (e) => {
+  const fab9ExtClimaV = ventanaFlotanteClima(
+    'fab9_exterior_clima',
+    'humedad',
+    fab9ClimaExtH,
+    e
+  );
+    console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);
+});
+
+fab9ClimaExtH.addEventListener("mouseout", (e) => {
+  const fab9ExtClimaVo = mouseOutfCl(e, fab9ClimaExtH);
+});
+
+fab9ClimaExtE.addEventListener("mouseover", (e) => {
+  const fab9ExtClimaV = ventanaFlotanteClima(
+    'fab9_exterior_clima',
+    'entalpia',
+    fab9ClimaExtE,
+    e
+  );
+    console.log(`X: ${e.clientX}`);
+    console.log(`Y: ${e.clientY}`);
+});
+
+fab9ClimaExtE.addEventListener("mouseout", (e) => {
+  const fab9ClimaExtClimaVo = mouseOutfCl(e, fab9ClimaExtE);
+});
+
 
 
 detecPant();
